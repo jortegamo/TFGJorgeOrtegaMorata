@@ -8,3 +8,5 @@ meteor-platform
 insecure
 mike:mocha
 mizzao:bootstrap-3
+underscore
+iron:router
