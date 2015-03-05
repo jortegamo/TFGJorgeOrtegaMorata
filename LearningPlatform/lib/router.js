@@ -3,3 +3,5 @@ Router.configure({
 });
 
 Router.route('/', {name: 'mainPage'});
+
+Router.route('/submit',{name: 'postSubmit'});
