@@ -1,41 +1,30 @@
 <template name="postSubmit">
 	<div id="pageContent" class="container-fluid">
-	<!--formulario para introducir titulo.
-	<form class="form-horizontal" style="margin-top: 2em">
-      	<div class="form-group">
-      		<label for="title" class="col-sm-1 control-label">TITLE</label>
-      		<div class="col-lg-6">
-  				<input name="title" type="text" class="form-control" placeholder="Please enter a Title" aria-describedby="sizing-addon2">
-	  		</div>
-	  	</div>
-	</form>-->
-		
-			<div id="editor-panel">
-				<div id="editor-container" class="well">
-					<button id="config-editor-button" type="button" class="btn btn-warning btn-sm pull-right">
+		<div id="editor-panel">
+			<div id="editor-container" class="well">
+				<button id="config-editor-button" type="button" class="btn btn-warning btn-sm pull-right">
+					<span class="glyphicon glyphicon-cog"></span>
+				</button>
+				<div>
+					<div id="editor"></div>
+				</div>
+				<div id="config-record-menu">
+					<button id="multmedia-config" type="button" class="btn btn-default  btn-sm" >
+						<span class="glyphicon glyphicon-facetime-video"></span>
 						<span class="glyphicon glyphicon-cog"></span>
 					</button>
-					<div>
-						<div id="editor"></div>
-					</div>
-					<div id="config-record-menu">
-						<button id="multmedia-config" type="button" class="btn btn btn-default btn-sm">
-							<span class="glyphicon glyphicon-facetime-video"></span>
-							<span class="glyphicon glyphicon-cog"></span>
-						</button>
-						<button id="record-button" type="button" class="btn btn-lg btn-danger">
-							Start Recording
-						</button>
+					<button id="record-button" type="button" class="btn btn-lg btn-danger" >
+						Start Recording
+					</button>
 						
 						
-						<button id="help-button" type="button" class="btn btn-info btn-sm pull-right">
-							<span class="glyphicon glyphicon-question-sign"></span>
-						</button>
-					</div>
+					<button id="help-button" type="button" class="btn btn-info btn-sm pull-right">
+						<span class="glyphicon glyphicon-question-sign"></span>
+					</button>
 				</div>
-				
 			</div>
-		
+				
+		</div>
 	</div>
-
 </template>
+

@@ -149,6 +149,21 @@ body{
   margin-top: 38em;
 }
 
+#modes:hover,
+#themes:hover{
+  background-color: #3F8B73;
+}
+
+
+.popover {
+  background-color:#D8E4E5;
+}
+
+.selected-green{
+  background-color: #3F8B73;
+}
+
+
 
 
 
