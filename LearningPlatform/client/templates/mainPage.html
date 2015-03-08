@@ -1,28 +1,54 @@
 <template name="mainPage">
-  <div id="pageContent" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	<h1 class="page-header">Dashboard</h1>
-
-          <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
+  <div id="pageContent" class="container-fluid">
+	 <div id="wellcome" class="container-fluid">
+   </div>
+   <div id="sign-entry" class="container-fluid">
+     <div id="enter-menu">
+      <p id="sign-msg">Please, enter & join!</p>
+      <a id="enterButton" role="button" class="btn btn-lg btn-danger" data-toggle="modal" data-target="#loginForm">
+            Enter
+      </a>
+      {{>loginForm}}
+    </div>
+   </div>
+   <div id="main-content" class="container-fluid">
+    <div class="page-header">
+     <h3>Features</h3>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <img src="pairProgramming.png">
+          <div class="caption">
+            <h3>Pair Programming</h3>
+            <p>...</p>
+            <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
           </div>
-        </div>
+       </div>
+      </div>
+      <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <img src="learnPlat.png">
+          <div class="caption">
+            <h3>Code Learning</h3>
+            <p>...</p>
+            <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+          </div>
+       </div>
+      </div>
+      <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <img src="recorderCode.png">
+          <div class="caption">
+            <h3>Code Recording</h3>
+            <p>...</p>
+            <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+          </div>
+       </div>
+      </div>
+    </div>
+   </div>
+   <div id="footer">
+   </div>
+  </div>
 </template>
