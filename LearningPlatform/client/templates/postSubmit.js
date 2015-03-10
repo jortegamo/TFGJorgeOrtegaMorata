@@ -1,5 +1,5 @@
 //variable global para el elemento ACE.editor.
-var editor;
+editor = "";
 
 Template.postSubmit.events = {
     
@@ -49,7 +49,6 @@ Template.postSubmit.rendered = function(){
 	editor = ace.edit("editor");
 	editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/javascript");
-
     //variables de sesión para establecer la configuración multimedia.
     Session.set("cam-enabled",false);
     Session.set("mic-enabled",true);

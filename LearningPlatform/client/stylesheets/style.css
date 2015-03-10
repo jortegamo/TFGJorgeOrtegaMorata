@@ -198,7 +198,7 @@ body{
 }
 
 .navbar-inverse{
-  opacity: 0.;
+  opacity: 0.8;
 }
 
 #footer{
@@ -221,10 +221,13 @@ body{
   font-family: Courier, monospace;
   font-size: 2em;
 }
+.pp > img{
+  background-color: #8fd696;
+}
 
 .thumbnail > img{
+  border: 2px solid white;
   border-radius: 10em;
-  background-color: #8fd696;
   box-shadow: 0px 5px 5px grey;
 }
 

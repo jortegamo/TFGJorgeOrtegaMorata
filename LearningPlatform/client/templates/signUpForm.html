@@ -1,0 +1,28 @@
+<template name="signUpForm">
+ <form>
+  <div class="form-group">
+  	<label for="username">User Name</label>
+    <input name="username" type="text" class="form-control" id="username" placeholder="Enter a User Name">
+  </div>
+
+  <div class="form-group">
+  	<label for="email">Email Address (optional)</label>
+    <input name= "email" type="email" class="form-control" id="email" placeholder="Enter a User Name">
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input name="password" type="password" class="form-control" id="password" placeholder="Password">
+  </div>
+
+  <div class="form-group">
+    <label for="repassword">Repeat Password</label>
+    <input name="repassword" type="password" class="form-control" id="repassword" placeholder="Password">
+  </div>
+
+  <div style="text-align: center; margin-top: 1em">
+    <input value="signUp" type="submit" class="btn btn-primary"/>
+  </div>
+  <a href="" id="back">Sign In</a>
+ </form>
+</template>
