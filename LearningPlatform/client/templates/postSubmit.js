@@ -49,6 +49,61 @@ Template.postSubmit.rendered = function(){
 	editor = ace.edit("editor");
 	editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/javascript");
+
+    editor2 = ace.edit("editor2");
+    editor2.setTheme("ace/theme/twilight");
+    editor2.getSession().setMode("ace/mode/javascript");
+    editor2.setReadOnly(true);
+    editor2.focus();
+    //vamos a probar los eventos del editor y tratamos de reproducirlos en el segundo editor.
+    //eventos
+
+    editor.getSession().on('change', function(e) {
+        switch (e.data.action){
+            case "removeText":
+                var rmRange = e.data.range;
+                var doc = editor2.getSession().getDocument();
+                doc.remove(rmRange);
+                break;
+            case "insertText":
+                editor2.insert(e.data.text);
+                break;
+            case "removeLines":
+                var rmRange = e.data.range;
+                var doc = editor2.getSession().getDocument();
+                doc.remove(rmRange);
+                break;
+        }   
+    });
+
+    editor.getSession().selection.on('changeCursor', function(e) {
+        var selection = editor.getSession().selection;
+        var selection2 = editor2.getSession().selection;
+        if(!selection.isEmpty()){
+            console.log("he entrado en el correcto");
+            var cursor = selection.getCursor();
+            selection2.moveCursorTo(cursor.row,cursor.column);
+            var range = selection.getRange();
+            selection2.selectTo(range.start.row,range.start.column);
+        }else{
+            selection2.clearSelection();
+            var cursor = selection.getCursor();
+            selection2.moveCursorTo(cursor.row,cursor.column);
+        }
+    });
+    
+
+
+
+
+
+
+
+
+
+
+
+
     //variables de sesión para establecer la configuración multimedia.
     Session.set("cam-enabled",false);
     Session.set("mic-enabled",true);

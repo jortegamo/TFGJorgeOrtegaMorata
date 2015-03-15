@@ -123,6 +123,18 @@ body{
         height: 36em;
 
 }
+
+#editor2 {
+        border-top: 2px solid white;
+        border-bottom: 1px solid white;
+        margin-top: 3em;
+        position: absolute;
+        width: 55em;
+        margin-left: -1.5em;
+        height: 36em;
+
+}
+
 #editor-container{
   width: 47.5em;
   margin-top: 5em;
@@ -235,4 +247,9 @@ body{
   border: none;
   margin-left: 0em;
   margin-right: 0em;
+}
+
+.errormsg{
+  text-align: center;
+  color: #A52A2A;
 }
