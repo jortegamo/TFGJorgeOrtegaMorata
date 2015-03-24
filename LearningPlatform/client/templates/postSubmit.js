@@ -1,5 +1,6 @@
 //variable global para el elemento ACE.editor.
 editor = "";
+//array de documentos en el estado que corresponde.
 var docs = [];
 
 var Doc = function(title){
@@ -117,22 +118,40 @@ Template.postSubmit.events = {
         Session.set("titleAct","");
     },
 
-    'click #save': function(){
-        Session.set("stop",false);
-        SC.connect(function(){
+    'submit form': function(e){
+        //aqui compongo el objeto grabacion y lo guardo en la base de datos.
+        //el titulo no tiene porqué ser unico.
+        //pero debe de tener un título.
+        success = true;
+        e.preventDefault();
+        var title = $(e.target).find("[name=title]").val();
+        if (!title ){
+            success = false;
+            $("#inputTitle").addClass("has-error");
+            $("#inputTitle").append('<p class="errormsg">Record must have a title!</p>');
+        }else{
+            $("#inputTitle").removeClass("has-error");
+            $(".errormsg").remove();
+        }
+        var description = $(e.target).find("[name=description]").val();
+        console.log(title);
+        console.log(description);
+
+        if (success){ //solo si se ha guardado correctamente. (solo depende del titulo).
+            $('#savePanel').modal('hide');
+            $('#discard').click(); //para dejar todo como estaba
+
+            SC.connect(function(){ //upload para soundcloud.
                 SC.recordUpload({
                     track: {
-                        title: "prueba recording",
+                        title: title,
                         sharing: "public"
                     }
                 },function(track){
                     console.log(track);
                 });
-        });
-
-        
-
-
+            });
+        }
     },
 
     'click #addDoc': function(){
@@ -160,7 +179,7 @@ Template.postSubmit.events = {
             });
         }
     },
-    //revisar los avlores almacenados cambian.
+    //revisar los valores almacenados cambian.
     'click .doc-elem': function(e){
         var titleAct = Session.get("titleAct");
         var title = $(e.target).find('.doc-title').text();
@@ -368,5 +387,3 @@ Template.postSubmit.rendered = function(){
     });
     console.log("he terminado la reproduccion");
 }*/
-
-

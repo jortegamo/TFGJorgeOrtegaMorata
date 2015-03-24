@@ -2,7 +2,7 @@ var widget;
 var vol;
 Template.post.helpers({
 	track: function(){
-		return "https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F"+ 197361868 +"&show_artwork=false&show_comments=false"
+		return "https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F"+ 197505219 +"&show_artwork=false&show_comments=false"
 	},
 	notPlaying: function(){
 		return !Session.get("playing");
@@ -83,5 +83,23 @@ Template.post.rendered = function(){
 	  	Session.set("playing",false);
 	  	$('#editor-player').addClass('notPlaying');
 	  })
+	  widget.bind(SC.Widget.Events.PLAY_PROGRESS,function(){
+	  	widget.getPosition(function(pos){
+	  		console.log(pos);
+	  		playRecord(editor,pos);
+	  	})
+	  });
+	  widget.bind(SC.Widget.Events.SEEK,function(){
+	  	console.log("el usuario ha hecho seek");
+	  });
+	  widget.bind(SC.Widget.Events.ERROR,function(){
+	  	alert("ha abido un error al cargar el widget!")
+	  })
     });
+}
+
+function playRecord(editor,pos){
+	//esta es la funcion en la que ejecutare las funciones toDo almacenadas 
+	//en la lista de reproduccion de eventos del editor
+	console.log("voy a ejecutar en el editor!");
 }
