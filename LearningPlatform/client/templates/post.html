@@ -1,0 +1,53 @@
+<template name="post">
+	<div id="player" class="row container-fluid">
+		<a id="help" href=""><span class="glyphicon glyphicon-question-sign pull-right" style="margin-top: 0.5em"></span></a>
+		<div class="col-md-8 container-fluid">
+			<div id="editorplayer">
+				<div id="editor-player" class="notPlaying"></div>
+			</div>
+			{{#if notPlaying}}
+			<a id="play-button" role="button" class="btn btn-danger btn-lg" type="button" href=""><span class="glyphicon glyphicon-play"></span></a>
+			{{/if}}
+		</div>
+		<div class="col-md-4 container-fluid">
+			<div id="sc-info-container">
+				<div id="widget-container">
+					<iframe id="sc-widget" width="90%" height="166" scrolling="no" frameborder="no" src="{{track}}" >
+					</iframe>
+				</div>
+				<div class="post-info">
+					<div id="sound-options">
+						<a id="mute-volume" href="" role="button" type="button"><span class="glyphicon glyphicon-volume-off"></span></a>
+						<a id="down-volume" href="" role="button" type="button"><span class="glyphicon glyphicon-volume-down"></span></a>
+						<a id="up-volume" href="" role="button" type="button"><span class="glyphicon glyphicon-volume-up"></span></a>
+					</div>
+				</div>
+				{{#if notPlaying}}
+					<a id="reply-button" role="button" class="btn btn-danger btn-md" type="button" href="">
+						<span class="glyphicon glyphicon-plus"></span> Create Reply</a>
+				{{/if}}
+			</div>
+		</div>
+	</div>
+	<div id="post-collections" class="row container-fluid">
+		<div class="col-md-7">
+			<div id="title-post" class="listCol">
+				<h3 class="title">{{title}}</h3>
+				
+			</div>
+			<div id="comments-col" class="listCol">
+				<h4 class="section-col-title">Comments</h4>
+				<div id="input-comment" class="container-fluid">
+					{{#if currentUser}}
+					{{else}}
+						<div id="signInRequired"><p>Please signIn to write a comment!</p></div>
+					{{/if}}
+				</div>
+			</div>
+		</div>
+		<div id="reply-col" class="col-md-4 listCol">
+		<h4 class="section-col-title">Replies</h4>
+		</div>  
+	</div>
+	<div id="footer"></div> 
+</template>

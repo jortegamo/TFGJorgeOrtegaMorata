@@ -123,10 +123,16 @@ Template.postSubmit.events = {
                 SC.recordUpload({
                     track: {
                         title: "prueba recording",
-                        sharing: "private"
+                        sharing: "public"
                     }
+                },function(track){
+                    console.log(track);
                 });
         });
+
+        
+
+
     },
 
     'click #addDoc': function(){
