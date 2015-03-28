@@ -149,6 +149,23 @@ Template.postSubmit.events = {
                     }
                 },function(track){
                     console.log(track);
+                    var record = {
+                        title: title,
+                        description: description,
+                        track_id: track.id,
+                        author: 'unknown',
+                        createdAt: new Date(),
+                        RC: {} 
+                    }
+                    Meteor.call('insertRecord',record,function(err,result){
+                        if(err){
+                            console.log("error al guardar el record");
+                        }
+                        if (result){
+                            Router.go('post', {_id: result._id});
+                        }
+                    })
+                    
                 });
             });
         }

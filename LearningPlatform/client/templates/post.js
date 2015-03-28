@@ -2,13 +2,13 @@ var widget;
 var vol;
 Template.post.helpers({
 	track: function(){
-		return "https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F"+ 197505219 +"&show_artwork=false&show_comments=false"
+		return "https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F"+ this.track_id +"&show_artwork=false&show_comments=false"
 	},
 	notPlaying: function(){
 		return !Session.get("playing");
 	},
 	title: function(){
-		return "Titulo del post"
+		return this.title;
 	}
 });
 
@@ -47,6 +47,7 @@ Template.post.events({
 })
 
 Template.post.rendered = function(){
+	console.log(this.data);
 	Session.set("playing",false);
 	$("#player").hide();
 	$("#player").fadeIn(1000);

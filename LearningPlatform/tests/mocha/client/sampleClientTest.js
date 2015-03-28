@@ -1,5 +1,5 @@
 if (!(typeof MochaWeb === 'undefined')){
-  MochaWeb.testOnly(function(){
+  /*MochaWeb.testOnly(function(){
     describe("loginForms", function(){
       var modalShown = false;
 
@@ -33,5 +33,5 @@ if (!(typeof MochaWeb === 'undefined')){
       });
 
     });
-  });
+  });*/
 }
