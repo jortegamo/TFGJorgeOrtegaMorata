@@ -12,10 +12,18 @@
         <li><a href="">@Nav item again</a></li>
         <li><a href="">@One more nav</a></li>
       </ul>
-      <div id="box-user">
-        <img id="userImage" src="/usericon.png"/>
-        <p>username</p>
-        <a href="" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-cog"></span></a>
-      </div>
+        
+        <div id="box-user">
+          {{#if currentUser}}
+            <img id="userImage" src="/usericon.png"/>
+            <p>username</p>
+            <a id="logoutButton" href="" class="btn btn-danger btn-xs">exit <span class="glyphicon glyphicon glyphicon-log-out"></span></a>
+          {{else}}
+            {{#if notMain}}
+              <button class="btn btn-success btn-md" data-toggle="modal" data-target="#loginForm" style="margin-top: 2em">SignIn</button>
+            {{/if}}
+          {{/if}}
+        </div>
+      
     </div>
 </template>

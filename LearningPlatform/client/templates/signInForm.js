@@ -28,6 +28,7 @@ Template.signInForm.events({
 						break;
 				}
 			}else{
+				$('#loginForm').modal('hide');
 				console.log("usuario logueado");
 			}
 		});

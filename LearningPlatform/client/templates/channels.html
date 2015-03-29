@@ -3,7 +3,11 @@
 		<div class="page-title row container-fluid">
   			<div class="col-lg-6">
     			<div class="title-col">
-  					<h2 class="title">Channels<a href="{{pathFor 'postSubmit'}}" type="buton" class="pull-right" role="button"><span class="btn btn-danger btn-sm">add</span></a></h2>
+  					<h2 class="title">Channels
+  					{{#if currentUser}}
+  						<a href="{{pathFor 'postSubmit'}}" type="buton" class="pull-right" role="button"><span class="btn btn-danger btn-sm">add</span></a>
+  					{{/if}}
+  					</h2>
 				</div>
   			</div><!-- /.col-lg-6 -->
   			<div class="col-lg-6">

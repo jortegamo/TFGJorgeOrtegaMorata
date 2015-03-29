@@ -1,9 +1,64 @@
 <template name="mainPage">
   <div id="pageContent" class="container-fluid">
   {{#if currentUser}}
-	   <div><h1>hola</h1></div>
+	   {{>startPage}}
   {{else}}
-    {{>startPage}}
+    	<img id="main-img" src="main.png"/>
+    	<div id="enter-menu" style="text-align: center">
+      		<p id="sign-msg">Please, enter & join!</p>
+      		<a id="enterButton" role="button" class="btn btn-lg btn-danger" data-toggle="modal" data-target="#loginForm">
+            	Enter
+      		</a>
+
+      	</div>
+    	<div id="footer"></div>
   {{/if}}
   </div>
+</template>
+
+<template name="signInForm">
+    <form>
+          <div id="inputUsername" class="form-group">
+            <label for="username">User Name</label>
+            <input type="text" name="username" class="form-control" id="username" placeholder="Enter a User Name">
+          </div>
+
+          <div id="inputPassword" class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+          </div>
+          <ul style= "list-style: none; text-align: right">
+            <li><a href="" id="forgot">forgot Password</a></li>
+            <li><a href="" id="signUp">Create Account</a></li>
+          </ul>
+          <div style="text-align: center">
+            <input type="submit" value="SignIn" class="btn btn-success" />
+          </div>
+         </form>
+</template>
+
+<template name="loginForm">
+<div class="modal fade" id="loginForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog" style="width: 30em">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Sign In or Sign Up</h4>
+      </div>
+      <div class="modal-body" style="text-align: left">
+        
+        {{#if signUp}}
+          {{>signUpForm}}
+        {{else}}
+          {{#if forgotPassword}}
+            {{>forgotPasswordForm}}
+          {{else}}
+            {{>signInForm}}
+          {{/if}}
+        {{/if}}
+        
+      </div>
+    </div>
+  </div>
+</div>
 </template>
