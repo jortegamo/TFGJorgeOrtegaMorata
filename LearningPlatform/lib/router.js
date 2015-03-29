@@ -15,3 +15,5 @@ Router.route('/post/:_id',{
 Router.route('/redirect',{name: 'redirect'});
 
 Router.route('/records',{name: 'records'});
+
+Router.route('/channels',{name: 'channels'});

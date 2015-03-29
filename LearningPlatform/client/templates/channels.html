@@ -1,9 +1,9 @@
-<template name="records">
+<template name="channels">
 	<div class="pageContainer container-fluid">
 		<div class="page-title row container-fluid">
   			<div class="col-lg-6">
     			<div class="title-col">
-  					<h2 class="title">Records<a href="{{pathFor 'postSubmit'}}" type="buton" class="pull-right" role="button"><span class="btn btn-danger btn-sm">add</span></a></h2>
+  					<h2 class="title">Channels<a href="{{pathFor 'postSubmit'}}" type="buton" class="pull-right" role="button"><span class="btn btn-danger btn-sm">add</span></a></h2>
 				</div>
   			</div><!-- /.col-lg-6 -->
   			<div class="col-lg-6">
@@ -17,19 +17,19 @@
    				</div>
   			</div><!-- /.col-lg-6 -->
 		</div><!-- /.row -->
-		<div id="records-list">
-			{{#each records}}
-				{{>record}}
+		<div id="channels-list">
+			{{#each channels}}
+				{{>channel}}
 			{{/each}}
 		</div>
 	</div>
 </template>
 
-<template name="record">
-	<div class="record-entry container-fluid">
+<template name="channel">
+	<div class="channel-entry container-fluid">
 		<div class="row">
 			<div class="col-lg-2">
-				<img style="margin-left: -0.5em" src="/record-icon-entry.png"/>
+				<img style="margin-left: -0.5em" src="/channel-icon-entry.png"/>
 			</div>
 			<div class="col-lg-7">
 				<h4>{{title}}</h4>
@@ -38,15 +38,10 @@
 			</div>
 			<div class="col-lg-3">
 				<p>
-					<span id="file-count" class="count glyphicon glyphicon-file pull-right" style="margin-top: 7em"
-					>{{docs_count}}
-					</span>
-					<span id="votes-count" class="count glyphicon glyphicon-heart pull-right" style="margin-top: 7em">{{votes}}
-					</span>
-					<span id="comments-count" class="count glyphicon glyphicon-comment pull-right" style="margin-top: 7em">{{comments_count}}
-					</span>
-					<span id="replies-count" class="count glyphicon glyphicon-share-alt pull-right" style="margin-top: 7em">{{replies_count}}
-					</span>
+					<span id="records-count" class="count glyphicon glyphicon-list pull-right" style="margin-top: 7em"
+					>0</span>
+					<span id="votes-count" class="count glyphicon glyphicon-heart pull-right" style="margin-top: 7em">0</span>
+					<span id="comments-count" class="count glyphicon glyphicon-comment pull-right" style="margin-top: 7em">0</span>
 				</p>
 			</div>
 		</div>

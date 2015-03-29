@@ -37,12 +37,31 @@ Template.records.events({
 			var cmd = val.split(':')[0].replace(" ", "");
 			var searchParam = val.split(':').slice(1);
 			Session.set("search",[cmd,searchParam]);
+			$('#search').popover('hide');
 		}
 
+	},
+
+	'click input': function(){
+		$('#search').popover('show');
 	}
 });
 
+Template.records.rendered = function(){
+	$('#file-count').tooltip({placement: 'bottom', title: 'documents'})
+	$('#replies-count').tooltip({placement: 'top', title: 'replies'})
+	$('#votes-count').tooltip({placement: 'top', title: 'votes'})
+	$('#comments-count').tooltip({placement: 'bottom', title: 'comments'})
+	$('h2 a').tooltip({placement: 'left', title: 'create a new Record'});
+	$('#search').popover({
+		placement: 'bottom',
+		title: 'search comands',
+		trigger: 'focus',
+		content: 'aksdjfñalksjdfñlaksjdfñlaksdjñkdljfañlksjd',
+		container: '#search'
+	})
 
+}
 
 Template.records.created = function(){
 	Session.set('search',null);

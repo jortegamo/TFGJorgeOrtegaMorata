@@ -139,7 +139,7 @@ Template.postSubmit.events = {
 
         if (success){ //solo si se ha guardado correctamente. (solo depende del titulo).
             $('#savePanel').modal('hide');
-            $('#discard').click(); //para dejar todo como estaba
+            
 
             SC.connect(function(){ //upload para soundcloud.
                 SC.recordUpload({
@@ -155,14 +155,21 @@ Template.postSubmit.events = {
                         track_id: track.id,
                         author: 'unknown',
                         createdAt: new Date(),
+                        docs_count: docs.length,
+                        votes: 0,
+                        comments_count: 0,
+                        replies_count: 0,
                         RC: {} 
                     }
+                    $('#discard').click(); //para dejar todo como estaba
                     Meteor.call('insertRecord',record,function(err,result){
                         if(err){
                             console.log("error al guardar el record");
                         }
                         if (result){
-                            Router.go('post', {_id: result._id});
+                            Meteor.setTimeout(function(){
+                                Router.go('post', {_id: result._id});
+                            },3000)
                         }
                     })
                     
