@@ -1,6 +1,6 @@
 Template.sidebar.helpers({
-	notMain: function(){
-		return Session.get('notMainPage');
+	username: function(){
+		return Meteor.user().username;
 	}
 })
 

@@ -8,6 +8,10 @@ html,body{
   height:100%;
 
 }
+
+.pac-container {
+  z-index: 2 !important;
+}
 /* Hide for mobile, show later */
 .sidebar {
   display: none;
@@ -90,8 +94,8 @@ html,body{
 }
 /*#f5f5f5*/
 #pageContent{
+  padding: 0;
   background-color: rgba(0, 0, 0, 0.8);
-  height:100%;
 	margin-top: 0em;
   margin-left: 13em;
 }
@@ -101,7 +105,7 @@ body{
 	
 }
 
-#logo >img{
+.logo >img{
 	padding: -0.2em;
 	margin-top: -0.9em;
 	margin-left: -0.6em;
@@ -218,7 +222,9 @@ body{
 }
 
 #footer{
-  height: 7em;
+  height: 9em;
+  background-color: #B03A27;
+  bottom: 0;
 }
 
 #sign-entry{
@@ -410,6 +416,7 @@ body{
 }
 
 #sc-info-container{
+  z-index: -1;
   text-align: center;
   margin-top: 0.5em;
   margin-left: -2.5em;
@@ -512,8 +519,7 @@ body{
   border-top: 1px solid black;
   padding-top: 0.5em;
   text-align: center;
-  margin-top: 10em;
-  margin-bottom: 0em;
+  bottom:0;
   margin-left: -2.5em;
   width: 14.2em;
   height: 9em;
@@ -544,7 +550,7 @@ body{
   width: 100%;
   background-color: rgba(208, 206, 213, 1);
   box-shadow: 0px 5px 10px #575353;
-  z-index: 100;
+  z-index: 1;
 }
 
 .page-title h2{
@@ -604,8 +610,80 @@ body{
 }
 
 #main-img{
-  width: 79.5em;
-  margin-left: -2.25em;
+  width: 100%;
   margin-bottom: 0.75em;
   box-shadow: 0px 3px 5px rgb(32, 32, 34);
+}
+
+#enter-menu{
+  padding-bottom: 3em;
+  margin-bottom: 0.7em;
+}
+#notifications{
+  position: fixed;
+  margin-top: 4em;
+  margin-left: 72%;
+  z-index: 40000;
+}
+.notification{
+  position: fixed;
+  display: block;
+  border-radius: 0.5em;
+  margin-bottom: 2em;
+  margin-top: 1em;
+  padding: 0.5em;
+  width: 25em;
+  background-image: url('/notification.png');
+  opacity: 0;
+  margin-left: 100%;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px rgb(32, 32, 34);
+}
+
+.notification-in{
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -o-transition: 0.5s;
+  transition: 0.5s;
+  opacity: 1;
+  margin-left: -1%;
+  -webkit-animation-name: shake;
+  -webkit-animation-delay: 0.5s;
+  -webkit-animation-duration: 0.5s;
+}
+
+.notification-out{
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -o-transition: 0.5s;
+  transition: 0.5s;
+  opacity: 0;
+  margin-left: 100%;
+}
+
+.content-notification{
+  padding: 0.5em;
+  padding-top: 0.7em;
+  background-color: white;
+}
+
+
+#close-not{
+  color: grey;
+  padding: 0;
+}
+#close-not:hover{
+  color: black;
+}
+
+@-webkit-keyframes shake{
+  0% { -webkit-transform: translate(-3px, 0) }
+  10% { -webkit-transform: translate(4px, 0) }
+  25% { -webkit-transform: translate(-2px, 0) }
+  50% { -webkit-transform: translate(3px, 0) }
+  75% { -webkit-transform: translate(-1px,0) }
+  50% { -webkit-transform: translate(2px, 0) }
+  
 }

@@ -26,4 +26,3 @@ Template.loginForm.rendered = function(){
 		Session.set("forgot",false);
 	});
 }
-
