@@ -1,5 +1,13 @@
 <template name="post">
 	<div id="player" class="row container-fluid">
+		{{#if docAct}}
+			<div id="icon-doc">
+				<span>#</span>
+			</div>
+			<div id="docAct">
+				<h5>{{docAct}}</h5>
+			</div>
+		{{/if}}
 		<a id="help" href=""><span class="glyphicon glyphicon-question-sign pull-right" style="margin-top: 0.5em"></span></a>
 		<div class="col-md-8 container-fluid">
 			<div id="editorplayer">
@@ -22,6 +30,8 @@
 						<a id="up-volume" href="" role="button" type="button"><span class="glyphicon glyphicon-volume-up"></span></a>
 					</div>
 				</div>
+				<a id="parentRecord" role="button" class="btn btn-primary btn-md" type="button" href="">
+						<span class="glyphicon glyphicon-eye-open"></span> View Parent</a>
 				{{#if notPlaying}}
 					<a id="reply-button" role="button" class="btn btn-danger btn-md" type="button" href="">
 						<span class="glyphicon glyphicon-plus"></span> Create Reply</a>
@@ -31,22 +41,60 @@
 	</div>
 	<div id="post-collections" class="row container-fluid">
 		<div class="col-md-7">
+
 			<div id="title-post" class="listCol">
-				<h3 class="title">{{title}}</h3>
-				
-			</div>
-			<div id="comments-col" class="listCol">
-				<h4 class="section-col-title">Comments</h4>
-				<div id="input-comment" class="container-fluid">
-					{{#if currentUser}}
-					{{else}}
-						<div id="signInRequired"><p>Please signIn to write a comment!</p></div>
-					{{/if}}
+				<div class="row">
+					<div class="col-md-10">
+						<h3 class="title">{{title}}</h3>
+					</div>
+					<div class="col-md-2">
+						<span id="files-count" class="glyphicon glyphicon-file" style="padding-left: 0.3em; margin-top: 0.5em; margin-left: 0.5em">{{docs_count}}
+						</span>
+						<span id="votes-count" class="glyphicon glyphicon-heart" style="padding-left: 0.3em">{{votes}}</span>
+					</div>
 				</div>
+
+				<div class="row" style="margin-bottom: 0.3em">
+					<div class="col-md-2">
+						<img class="authorImage" src="/usericon.png"/>
+					</div>
+					<div class="col-md-10">
+						<p>{{author}}</p>
+						<a href="" class="btn btn-success btn-sm">explore</a>
+						<span id="dislike" class="span-vote glyphicon glyphicon-heart-empty pull-right"></span>
+						<span id="like" class="span-vote glyphicon glyphicon-heart pull-right"></span>
+					</div>
+				</div>
+				<div class="post-details">
+					<p><strong>{{createdAt}}</strong></p>
+					<p>{{description}}</p>
+					<p>{{channel}}</p>
+				</div>
+				<div style="text-align:center; margin-bottom: -0.3em; border-top: 1px solid #DAD5D5; padding-top: 0.3em; margin-left: 1em; margin-right: 1em">
+					<a id="showDetails" href="" class="btn btn-default btn-sm"><span class="glyphicon {{ arrowDetails }}"></span></a>
+				</div>
+			</div>
+
+
+			<div id="comments-col" class="listCol container-fluid">
+				<h4 class="section-col-title">Comments ({{comments_count}})</h4>
+					{{#if currentUser}}
+						<div class="row">
+							<div class="col-md-2">
+								<img class="userImgComment" src="/usericon.png"/>
+							</div>
+							<div class="col-md-10">
+								<textarea id="input-comment" placeholder="publish a comment for this record!"></textarea>
+								<a id="publish-comment" href="" class="btn btn-primary btn-sm pull-right" style="margin-right: 0.5em">Publish</a>
+							</div>
+						</div>
+					{{else}}
+						<p style="color: grey">Please signIn to write a comment!</p>
+					{{/if}}
 			</div>
 		</div>
 		<div id="reply-col" class="col-md-4 listCol">
-		<h4 class="section-col-title">Replies</h4>
+		<h4 class="section-col-title">Replies ({{replies_count}})</h4>
 		</div>  
 	</div>
 </template>

@@ -62,9 +62,10 @@ Template.postSubmit.events = {
     'click #config-editor-button': function(){
         $("#themes").click(function(){
             $(".theme").click(function(){
+                var arrayDocs = (Session.get('recording')) ? docsRC : docs;
                 editor.setTheme("ace/theme/" + this.text);
                 var titleAct = Session.get("titleAct");
-                var doc = _(docs).find(function(doc){return doc.title == titleAct;});
+                var doc = _(arrayDocs).find(function(doc){return doc.title == titleAct;});
                 if(doc){
                     doc.theme = "ace/theme/" + this.text; //cambio el theme
                     if(Session.get('recording')){
@@ -80,9 +81,10 @@ Template.postSubmit.events = {
 
         $("#modes").click(function(){
             $(".mode").click(function(){
+                var arrayDocs = (Session.get('recording')) ? docsRC : docs;
                 editor.getSession().setMode("ace/mode/" + this.text);
                 var titleAct = Session.get("titleAct");
-                var doc = _(docs).find(function(doc){return doc.title == titleAct;});
+                var doc = _(arrayDocs).find(function(doc){return doc.title == titleAct;});
                 if(doc){
                     doc.mode = "ace/mode/" + this.text; //cambio el mode
                     if(Session.get('recording')){
@@ -106,7 +108,7 @@ Template.postSubmit.events = {
                 //esto es importante puesto que el valor de un documento solo se actualiza 
                 //al cambiar a otro.
                 if (title){ //si hay algun documento seleccionado actualizo su valor antes de grabar.
-                    var docAct = _(docs).find(function(doc){doc.title == title;});
+                    var docAct = _(docs).find(function(doc){return doc.title == title;});
                     docAct.value = editor.getValue();
 
                     _(docs).each(function(doc){ //copio los documentos.
@@ -115,6 +117,15 @@ Template.postSubmit.events = {
                         ndoc.mode = doc.mode;
                         docsRC.push(ndoc);
                     });
+                    console.log('he creado la primera funcion');
+                    functions.push({
+                        time: new Date() - new Date(), //se ejecutará la primera.
+                        type: 'session',
+                        arg: title
+                    });
+
+                    console.log(docs);
+                    console.log(docsRC);
 
                     SC.record({ //solo se permite grabar si tienes un documento seleccionado.
                         start: function(){
@@ -128,21 +139,22 @@ Template.postSubmit.events = {
 
                 }else{
                     $('#docs-editor').popover({
-                        placement: "up",
-                        html: true,
                         content: '<p>Sorry, you must select a document to start Recording!</p>',
-                        trigger: "click"
+                        html: true,
+                        placement: "top",
+                        trigger: 'click',
                     });
                     $('#docs-editor').popover('show');
-                    $(".doc-elem").click(function(){$('#docs-editor').popover('destroy')});
+                    $('#docs-editor').click(function(){ $('#docs-editor').popover('destroy')});
                 }
                 
             }else{
+                console.log('he entrado en la cond correcta');
                 $('#addDoc').popover({
                     content: '<p>Sorry, create a new doc to start Recording!</p>',
                     html: true,
-                    trigger: "click",
-                    placement: "right"
+                    placement: "right",
+                    trigger: 'click'
                 });
                 $('#addDoc').popover('show');
                 $('#title-doc-input').click(function(){$('#addDoc').popover('destroy')});
@@ -207,18 +219,26 @@ Template.postSubmit.events = {
                         track_id: track.id,
                         author: (Meteor.userId())? Meteor.users.findOne(Meteor.userId).username : 'unknown',
                         createdAt: new Date(),
-                        docsStart: docs,
-                        docsFinal: docsRC,
                         docs_count: docs.length,
                         votes: 0,
                         comments_count: 0,
                         replies_count: 0,
                         RC: functions //aqui almaceno la lista de funciones para la reproducción.
                     }
-                    $('#discard').click(); //para dejar todo como estaba
+                    
                     Meteor.call('insertRecord',record,function(err,result){
                         if(err){
                             console.log("error al guardar el record");
+                        }
+                        if (result){
+                            console.log('voy a guardar los documentos');
+                            Meteor.call('insertDocs',docs,result._id,true,function(err){
+                                if(err) console.log(err);
+                            });
+                            Meteor.call('insertDocs',docsRC,result._id,false,function(err){
+                                if(err) console.log(err);
+                                $('#discard').click(); //para dejar todo como estaba
+                            });
                         }
                     });
                     
@@ -253,13 +273,11 @@ Template.postSubmit.events = {
             $('#title-doc-input').popover({
                 content: '<p>Sorry, docs must have a title and must be uniq!</p>',
                 html: true,
-                trigger: "click",
-                placement: "bottom"
+                placement: "bottom",
+                trigger: 'click'
             });
             $('#title-doc-input').popover('show');
-            $('#title-doc-input').click(function(){
-                $('#title-doc-input').popover('destroy');
-            });
+            $('#title-doc-input').click(function(){$('#title-doc-input').popover('destroy')});
         }
     },
     //revisar los valores almacenados cambian.
@@ -297,8 +315,7 @@ Template.postSubmit.events = {
             functions.push({
                 time: new Date() - date,
                 type: 'session',
-                arg: title,
-                toDo: 'Session.set("titleAct",title);' //cambiaria la sesión en la reproduccion.
+                arg: title
             });
         }
 
@@ -312,16 +329,9 @@ Tracker.autorun(function(){
         console.log("esta grabando y voy a crear los eventos del editor");
         date = new Date(); //actualizo la fecha de inicio de grabación.
         console.log("he actualizado la fecha de inicio");
-        functions = []; //inicializo la lista de funciones. (necesario global para poder guardar en el objeto RC).
-        console.log("functions inicializadas");
         
         //situamos el inicio de la reproduccion con el documento seleccionado al inicio de la grabación.
-        functions.push({
-            time: date, //se ejecutará la primera.
-            type: 'session',
-            arg: Session.get('titleAct'),
-            toDo: 'Session.set("titleAct",title)'
-        });
+        
 
         //eventos del editor
 
@@ -397,7 +407,8 @@ Template.postSubmit.rendered = function(){
 	editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/javascript");
     editor.setShowPrintMargin(false);
-
+    editor.autoIndent = false;
+    functions = []; //inicializo la lista de funciones. (necesario global para poder guardar en el objeto RC).
     /*editor2 = ace.edit("editor2");
     editor2.setTheme("ace/theme/twilight");
     editor2.getSession().setMode("ace/mode/javascript");
@@ -438,7 +449,6 @@ Template.postSubmit.rendered = function(){
         trigger: "click",
         placement: "left"
     });
-
 };
 
 //funcion que relaiza la reproduccion de la grabacion en el editor.
