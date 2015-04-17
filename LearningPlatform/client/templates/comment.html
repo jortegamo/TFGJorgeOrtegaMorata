@@ -1,0 +1,60 @@
+<template name="comment">
+	<div class="comment">
+		<span class="replies_count glyphicon glyphicon-share-alt pull-right">{{replies_count}}</span>
+		<span class="votes_count glyphicon glyphicon-heart pull-right" style="margin-right: 0.5em">{{votes}}</span>
+		<div class="row">
+			<div class="col-md-2" style="margin-right: -2em">
+				<img class="userImgComment" src="/usericon.png"/>
+			</div>
+			<div class="col-md-10">
+				<p class="author">{{author}} </p>
+				<p style="font-size: 12px; color: grey"><span class="glyphicon glyphicon-time"></span> {{createAt}}<span  class="dislike span-vote glyphicon glyphicon-heart-empty pull-right"></span>
+				<span class="like span-vote glyphicon glyphicon-heart pull-right"></span></p>
+				<div class="comment-message">
+					<p>{{message}}</p>	
+				</div>
+				<p>{{#if currentUser}}<a href="" type="button" role="button" class="createReplyComment btn btn-danger btn-xs">create Reply</a>{{/if}}
+				{{#if hasReplies}}
+					<a href="" type="button" role="button" class="showReplies btn btn-warning btn-xs">show Replies</a>
+				{{/if}}</p>
+				<div class="input-reply-comment">
+					<div class="row">
+						<div class="col-md-1" style="margin-right: 1em">
+							<img class="userImgCommentReply" src="/usericon.png"/>
+						</div>
+						<div class="col-md-10">
+							<textarea class="input-reply" style="padding-left: 0.3em" placeholder="publish a reply for this comment!"></textarea>
+							<a href="" class="publish-replay btn btn-success btn-xs pull-right">publish</a>
+							<a href="" class="cancel-input-reply btn btn-default btn-xs pull-right">cancel</a>
+						</div>
+					</div>
+				</div>
+				<div class="replies-comment-list">
+					{{#each replayList}}
+						{{> replyComment}}
+					{{/each}}
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</template>
+
+<template name="replyComment">
+	<div class="reply-comment">
+		<div class="row">
+			<div class="col-md-1" style="margin-right: 1em">
+				<img class="userImgCommentReply" src="/usericon.png"/>
+			</div>
+			<div class="col-md-10">
+				<p class="author">{{author}} </p>
+				<p style="font-size: 10px; color: grey">
+					<span class="glyphicon glyphicon-time"></span> {{createAt}}
+				</p>
+				<div class="comment-message">
+					<p>{{message}}</p>	
+				</div>
+			</div>
+		</div>
+	</div>
+</template>

@@ -10,7 +10,8 @@ Router.route('/post/:_id',{
 	name: 'post',
 	data: function(){ return Records.findOne(this.params._id);},
 	waitOn: function(){ return [Meteor.subscribe('documentsByRC',this.params._id),
-								Meteor.subscribe('records')]}
+								Meteor.subscribe('records'),
+								Meteor.subscribe('commentsRC',this.params._id)]}
 });
 
 Router.route('/redirect',{name: 'redirect'});

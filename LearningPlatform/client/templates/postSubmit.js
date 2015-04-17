@@ -348,7 +348,7 @@ Tracker.autorun(function(){
                 });
                 break;
             case "insertText":
-                //editor2.insert(e.data.text);
+                console.log(e.data);
                 functions.push({
                     time: new Date() - date,
                     arg: e.data.text,
@@ -407,7 +407,6 @@ Template.postSubmit.rendered = function(){
 	editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/javascript");
     editor.setShowPrintMargin(false);
-    editor.autoIndent = false;
     functions = []; //inicializo la lista de funciones. (necesario global para poder guardar en el objeto RC).
     /*editor2 = ace.edit("editor2");
     editor2.setTheme("ace/theme/twilight");

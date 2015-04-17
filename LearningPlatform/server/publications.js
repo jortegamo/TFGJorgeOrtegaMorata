@@ -9,3 +9,7 @@ Meteor.publish('channels',function(){
 Meteor.publish('documentsByRC',function(record_id){
 	return DocumentsByRC.find({record: record_id});
 });
+
+Meteor.publish('commentsRC',function(record_id){
+	return CommentsRC.find({record: record_id});
+});

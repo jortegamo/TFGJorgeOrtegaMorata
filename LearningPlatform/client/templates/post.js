@@ -1,6 +1,6 @@
 var widget;
 var vol;
-var RC; //lista de reproduccion.
+RC = []; //lista de reproduccion.
 listPending = []; //lista de funciones pendientes.
 docs = []; //array en el que se van a ir actualizando los documentos.
 docActual = ""; //titulo del documento actual.
@@ -76,16 +76,33 @@ Template.post.events({
 		}
 		Session.set('shownDetails',!Session.get('shownDetails'));
 	},
-	'click #like': function(){
+	'click #title-post .like': function(){
 		Records.update(this._id,{$inc: {votes: 1}});
 	},
-	'click #dislike': function(){
+	'click #title-post .dislike': function(){
 		Records.update(this._id,{$inc: {votes: -1}});
 	},
 	'click #publish-comment': function(){
 		console.log('he hecho publish');
 		var message = $('#input-comment').val();
-		$('#input-comment').val("");
+		$('#input-comment').val(""); //restablezco el valor.
+		console.log(this._id);
+		if (message != ""){ //si no es nulo lo almaceno.
+			var comment = {
+				author: Meteor.user().username,
+				message: message,
+				createAt: new Date(),
+				record: this._id,
+				replies_count: 0,
+				votes: 0
+			};
+			Records.update(this._id,{$inc: {comments_count: 1}});
+			Meteor.call('insertComment',comment,function(err){
+				if(err){
+					console.log(err.reason);
+				}
+			});
+		}
 	}
 })
 
@@ -115,12 +132,12 @@ Template.post.rendered = function(){
 		title: 'documents'
 	});
 
-	$('#like').tooltip({
+	$('.like').tooltip({
 		placement: 'left',
 		title: 'like'
 	});
 
-	$('#dislike').tooltip({
+	$('.dislike').tooltip({
 		placement: 'bottom',
 		title: 'dislike'
 	});
@@ -133,10 +150,9 @@ Template.post.rendered = function(){
     editor.container.style.pointerEvents="none";
 	editor.setOptions({
     	readOnly: true,
-    	showFoldWidgets: false,
-    	showGutter: false
+    	showGutter: false,
 	});
-	editor.autoIndent = false;
+	
 
 
     RC = this.data.RC; //lista de reproducción.
@@ -271,6 +287,11 @@ Template.post.rendered = function(){
 	}
 };
 
+Template.commentsList.helpers({
+	comments: function(){
+		return CommentsRC.find({reply: {$exists: false}},{sort: {createAt: -1}}); //solo los que no son respuesta a otros comentarios.
+	}
+})
 /*
 Nota: en el momento en el que cambia la sesion de title act ay que ejecutar lo mismo que en postSubmit.js cuando se selecciona un nuevo documento.
 Nota: en el momento en el que el usuario hace seek deben reestablecerse los documentos al estado inicial. Esto es importante!!!
