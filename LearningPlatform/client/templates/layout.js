@@ -6,5 +6,18 @@ Template.layout.events({
 	'click #show': function(){
 		$('.notification').removeClass('notification-out');
 		$('.notification').addClass('notification-in');
+	},
+	'click #showNotifications': function(){
+		if($('.sidebarNotifications').hasClass('slide')){
+			$('.sidebarNotifications').removeClass('slide');
+		}else{
+			$('.sidebarNotifications').addClass('slide');
+		}
 	}
-})
+});
+
+Template.layout.rendered = function(){
+	if (Meteor.UserId()){
+		//Meteor.subscribe('notifications','uploads');
+	}
+}

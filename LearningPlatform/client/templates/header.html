@@ -15,7 +15,13 @@
           <ul class="nav navbar-nav">
             <li><a href="{{pathFor 'postSubmit'}}">New</a></li>
             <li><a href="{{pathFor 'records'}}">Records</a></li>
+            
           </ul>
+          {{#if currentUser}}
+            <ul class="nav navbar-nav navbar-right">
+              <li class="pull-right"><a id="showNotifications" href=""><span class="glyphicon glyphicon-list"></span></a></li>
+            </ul>
+          {{/if}}
         </div><!--/.nav-collapse -->
       </div>
     </nav>

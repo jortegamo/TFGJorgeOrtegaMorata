@@ -34,6 +34,81 @@ html,body{
     height: 100%;
   }
 
+.sidebarNotifications{
+  position: fixed;
+  top: 3.6em;
+  bottom: 0;
+  right: -20em;
+  z-index: 1000;
+  display: block;
+  padding: 0;
+  padding-top: 1em;
+  height: 100%;
+  width: 20em;
+  transition:right 0.3s;
+  background-color: rgba(32, 32, 34, 0.98);
+  border-left: 1px solid #171616;
+}
+
+.footer-sidebarNot{
+  border-top: 1px solid #414040;
+  padding-top: 0.5em;
+  text-align: center;
+  bottom:0;
+  width: 20em;
+  height: 6em;
+  background-color: rgba(32, 32, 34, 1);
+  position: absolute;
+}
+
+.selectContent{
+  text-align: center;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #414040;
+  background-color: rgba(32, 32, 34, 1);
+}
+
+.selectContent .notif{
+  margin-left: -0.3em;
+  border-top-right-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+}
+
+.selectContent .upload{
+  margin-left: 0.3em;
+  border-top-left-radius: 0.5em;
+  border-bottom-left-radius: 0.5em;
+}
+
+.selectContent .select{
+  display: inline-block;
+  width: 9em;
+  text-align: center;
+  background-color: grey;
+  padding-right: 0.3em;
+  padding-left: 0.3em;
+  padding-top: 0.2em;
+  cursor: pointer;
+}
+
+.selectContent p{
+  line-height: 0.5em;
+  margin-left: -0.1em;
+}
+
+.selectContent .active{
+  background-color: rgba(208, 206, 213, 0.8);
+  border-left: 1px solid grey;
+}
+
+.content-sidebarNot{
+  height: 82%;
+}
+
+.slide{
+  right: 0;
+}
+
 /* Sidebar navigation */
 .nav-sidebar {
   overflow-y: auto;
