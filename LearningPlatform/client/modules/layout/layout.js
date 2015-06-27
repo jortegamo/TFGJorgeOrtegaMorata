@@ -17,7 +17,4 @@ Template.layout.events({
 });
 
 Template.layout.rendered = function(){
-	if (Meteor.UserId()){
-		//Meteor.subscribe('notifications','uploads');
-	}
 }

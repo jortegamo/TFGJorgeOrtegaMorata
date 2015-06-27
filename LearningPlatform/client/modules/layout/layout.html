@@ -21,14 +21,21 @@
      </div>
     <div class="container-fluid">
     	<div class="row">
-      		{{> sidebar}}
           {{#if currentUser}}
-            {{> sidebarNotifications}}
+            <div class="col-sm-3 col-md-2 sidebar">
+              {{> sidebar}}
+            </div>
+            
+            <div class="col-md-10">
+              {{> yield}}
+            </div>
+          {{else}}
+      		  {{> yield}}
           {{/if}}
-      		{{> yield}}
       		<div id="footer">
-      			<div style="margin-left: 50%">
-        			<button class='toggleButton' id="show">show</button>
+      			<div>
+        			<!--<button class='toggleButton' id="show">show</button>-->
+              <p>© 2015 <a href="/">DuckFlight</a>. All rights reserved.</p>
      			</div>
       		</div>
     	</div>
