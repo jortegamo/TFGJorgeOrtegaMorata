@@ -13,9 +13,7 @@ var validateCreateUser = function(user,errors){
 Meteor.methods({
 	signUp: function(user){
 		var errors = {};
-		console.log("quieren crear un nuevo usuario!!");
 		if (validateCreateUser(user,errors)){
-			console.log("he validado el usuario!!");
 			Accounts.createUser(
 				{username: user.username, 
 				password: user.password,

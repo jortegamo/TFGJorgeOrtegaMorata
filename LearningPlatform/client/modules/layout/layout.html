@@ -1,5 +1,4 @@
 <template name="layout">
-    {{> header}}
     <!--<div id="notifications">
       	<div class="notification container-fluid">
         	<div class="content-notification container-fluid">
@@ -19,26 +18,11 @@
         	</div>
       	</div>
      </div>-->
-    <div class="container-fluid">
-    	<div class="row">
-          {{#if currentUser}}
-            <div class="col-sm-3 col-md-2 sidebar">
-              {{> sidebar}}
-            </div>
-            
-            <div class="col-md-10">
-              {{> yield}}
-            </div>
-          {{else}}
-      		  {{> yield}}
-          {{/if}}
-      		<div id="footer">
-      			<div>
-        			<!--<button class='toggleButton' id="show">show</button>-->
-              <p>© 2015 <a href="/">DuckFlight</a>. All rights reserved.</p>
-     			</div>
-      		</div>
-    	</div>
+    <div id="main-wrapper">
+        {{#if currentUser}}
+            {{> sidebar }}
+        {{/if}}
+        {{> yield }}
+        {{>loginForm }}
     </div>
-    {{>loginForm}}
 </template>

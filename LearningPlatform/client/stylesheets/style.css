@@ -638,22 +638,7 @@ body{
   text-align: center;
 }
 
-#box-user{
-  border-top: 1px solid black;
-  padding-top: 0.5em;
-  text-align: center;
-  bottom:0;
-  margin-left: -2.5em;
-  width: 14.2em;
-  height: 9em;
-  background-color: rgba(32, 32, 34, 1);
-  position: absolute;
-}
-#userImage{
-  border-radius: 3em;
-  height: 4em;
-  border: 5px solid black;
-}
+
 
 .pageContainer{
   margin-top: 3em;

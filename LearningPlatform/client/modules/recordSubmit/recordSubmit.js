@@ -228,7 +228,7 @@ Template.postSubmit.events = {
                     
                     Meteor.call('insertRecord',record,function(err,result){
                         if(err){
-                            console.log("error al guardar el record");
+                            console.log("error");
                         }
                         if (result){
                             console.log('voy a guardar los documentos');

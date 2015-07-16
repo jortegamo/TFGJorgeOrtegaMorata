@@ -6,11 +6,11 @@
 
 meteor-platform
 insecure
-mizzao:bootstrap-3
 underscore
 iron:router
 mizzao:sharejs-ace
 accounts-base
 accounts-password
 fourseven:scss
-materialize:materialize
+mizzao:bootstrap-3
+reywood:font-awesome-sass

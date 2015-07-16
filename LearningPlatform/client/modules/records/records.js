@@ -38,7 +38,7 @@ Template.records.helpers({
 Template.records.events({
 	
 	'click .record-entry': function(){
-		Router.go('post',{_id: this._id}); //voy a la pagina principal del post.
+		Router.go('record',{_id: this._id}); //voy a la pagina principal del record.
 	},
 
 	'keydown input, click #search': function(e){ //se ha realizado alguna busqueda.

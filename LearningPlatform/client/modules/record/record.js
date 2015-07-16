@@ -12,9 +12,9 @@ var Doc = function(title){
     this.mode = "ace/mode/javascript"; //por defecto
     this.theme = "ace/theme/twilight"; //por defecto
     this.value = "";
-}
+};
 
-Template.post.helpers({
+Template.record.helpers({
 	track: function(){
 		return "https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F"+ this.track_id +"&show_artwork=false&show_comments=false"
 	},
@@ -39,7 +39,7 @@ Template.post.helpers({
 	}
 });
 
-Template.post.events({
+Template.record.events({
 	'click #play-button': function(e){
 		e.preventDefault();
 		widget.play();
@@ -106,8 +106,7 @@ Template.post.events({
 	}
 })
 
-Template.post.rendered = function(){
-	//me subscribo a los documentos de este record.
+Template.record.rendered = function(){
 
 	console.log(this.data);
 	Session.set("playing",false);
@@ -289,11 +288,11 @@ Template.post.rendered = function(){
 
 Template.commentsList.helpers({
 	comments: function(){
-		return CommentsRC.find({reply: {$exists: false}},{sort: {createAt: -1}}); //solo los que no son respuesta a otros comentarios.
+		return Comments.find({reply: {$exists: false}},{sort: {createAt: -1}}); //solo los que no son respuesta a otros comentarios.
 	}
-})
+});
 /*
-Nota: en el momento en el que cambia la sesion de title act ay que ejecutar lo mismo que en postSubmit.js cuando se selecciona un nuevo documento.
+Nota: en el momento en el que cambia la sesion de title act ay que ejecutar lo mismo que en recordSubmit.js cuando se selecciona un nuevo documento.
 Nota: en el momento en el que el usuario hace seek deben reestablecerse los documentos al estado inicial. Esto es importante!!!
 Nota: si el usuario no da al play y quiere crear una respuesta parte de los documentos en el estado final de la grabación.
 Nota: si el usuario termina de ver la grabación y quiere crear respuesta es como si no hubiera dado al play y por tanto parte de 

@@ -1,25 +1,85 @@
 <template name="sidebar">
-    
-      <p class = "section-title"><a href="{{pathFor 'channels'}}">CHANNELS</a></p>
-      <ul class="nav nav-sidebar">
-        <li class="active"><a href="#">#Overview</a></li>
-        <li><a href="#">#Reports</a></li>
-        
-      </ul>
-      <p class = "section-title"><a href="">TEAMS</a></p>
-      <ul class="nav nav-sidebar">
-        <li><a href="">@Nav item</a></li>
-        <li><a href="">@Nav item again</a></li>
-        <li><a href="">@One more nav</a></li>
-      </ul>
-        
-        <div id="box-user">
-          {{#if currentUser}}
-            <img id="userImage" src="/usericon.png"/>
-            <p>{{ username }}</p>
-            <a id="logoutButton" href="" class="btn btn-danger btn-xs">exit <span class="glyphicon glyphicon glyphicon-log-out"></span></a>
-          {{else}}
-              <button class="btn btn-success btn-md" data-toggle="modal" data-target="#loginForm" style="margin-top: 2em">SignIn</button>
-          {{/if}}
+    <div id="sidebar-wrapper">
+        <div id="box-site">
+            <a href="/"><img src="/duck_icon.ico"/></a>
+            <a class="site-title" href="/">DuckFlight</a>
+
         </div>
+        <div id="tab-sidebar">
+            <ul>
+                <li id="menu-tab" class="tab active"><i class="fa fa-bars"></i></li>
+                <li class="tab"><i class="fa fa-info"></i></li>
+            </ul>
+        </div>
+        {{#if menuTab}}
+            <div id="sidebar-menu">
+                <div class="sidebar-section">
+
+                    <p id="sidebar-channels-browse" class="section-title active">
+                        <i class="fa fa-desktop ikon-section"></i>
+                        <span>CHANNELS</span>
+                        <i class="fa fa-plus-circle pull-right"></i>
+                    </p>
+
+                    <ul class="nav-sidebar">
+                        <li class="active"><span># Meteor</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
+                        <li><span># Javascript</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
+                        <li><span># AngularJS</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
+                    </ul>
+
+                    <a href="#" class="more" data-target="#popup-channels">+ View More</a>
+
+                </div>
+
+                <div class="sidebar-section">
+
+                    <p id="sidebar-teams-browse" class="section-title">
+                        <i class="fa fa-users ikon-section"></i>
+                        <span>TEAMS</span>
+                        <i class="fa fa-plus-circle pull-right"></i>
+                    </p>
+
+                    <ul class="nav-sidebar">
+                        <li><span>@ DuckFlight</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
+                        <li><span>@ CodeMasters</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
+                    </ul>
+
+                    <a href="#" class="more" data-target="#popup-teams">+ View More...</a>
+
+                </div>
+
+                <div class="sidebar-section">
+
+                    <p id="sidebar-teams-browse" class="section-title">
+                        <i class="fa fa-book ikon-section"></i>
+                        <span>LESSONS</span>
+                        <i class="fa fa-plus-circle pull-right"></i>
+                    </p>
+
+                    <ul class="nav-sidebar">
+                        <li><span>& Learn Meteor</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
+                        <li><span>& Learn Angular</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
+                    </ul>
+
+                    <a href="#" class="more" data-target="#popup-teams">+ View More...</a>
+
+                </div>
+
+            </div>
+        {{else}}
+            <div class="sidebar-information">
+                <p>soy la info</p>
+            </div>
+        {{/if}}
+        <div id="box-user">
+            {{#if currentUser}}
+                <a href="#"><img id="userImage" src="https://yt3.ggpht.com/-cQIaM86rQdQ/AAAAAAAAAAI/AAAAAAAAAAA/aXc9iUELvf8/s100-c-k-no/photo.jpg"/></a>
+                <p>{{ username }}</p>
+                <a id="logoutButton" href="#">sign out <span class="fa fa-sign-out"></span></a>
+            {{else}}
+                <button class="btn btn-success btn-md" data-toggle="modal" data-target="#loginForm" style="margin-top: 2em">SignIn</button>
+            {{/if}}
+        </div>
+    </div>
+
 </template>
