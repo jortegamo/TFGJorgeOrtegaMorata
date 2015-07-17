@@ -5,9 +5,31 @@
   padding-top: 108px;
   padding-bottom: 75px;
   top: 0;
-  z-index: 2;
+  left: 0;
+  z-index: 1000;
   background-color: #4d394b;
-  box-shadow: 0px 4px 5px black;
+  box-shadow: 0px 4px 5px #373636;
+  transition: all .5s ease;
+
+  &.unactive{
+    left: -240px;
+    transition: all .5s ease;
+  }
+
+}
+
+#close-sidebar{
+  position: fixed;
+  height: 100%;
+  visibility: hidden;
+  z-index: 500;
+
+  &.active{
+    width: 100%;
+    visibility: visible;
+    background: rgba(0,0,0,.4);
+    cursor: pointer;
+  }
 }
 
 
