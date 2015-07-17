@@ -1,27 +1,5 @@
 <template name="header">
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class=" logo navbar-brand" href="/"><img src="/duck_icon.ico"/></a>
-          <a id="siteTittle" class="navbar-brand" href="/">DuckFlight</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-              {{#if currentUser}}
-              <li class="pull-right"><a id="showNotifications" href=""><span class="glyphicon glyphicon-list"></span></a></li>
-              {{else}}
-              <li class="pull-right login-btn"><a role="button" data-toggle="modal" data-target="#loginForm">Join Us</a></li>
-              <li class="pull-right"><a id="help" href="">Help</a></li>
-              <li class="pull-right"><a id="about" href="">About</a></li>
-              {{/if}}
-            </ul>
-        </div><!--/.nav-collapse -->
-      </div>
+	<nav class="duckflight-navbar">
+
     </nav>
 </template>

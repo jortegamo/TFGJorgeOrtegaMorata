@@ -22,7 +22,10 @@
         {{#if currentUser}}
             {{> sidebar }}
         {{/if}}
-        {{> yield }}
+        <div id="page-wrapper">
+            {{> header}}
+            {{> yield }}
+        </div>
         {{>loginForm }}
     </div>
 </template>

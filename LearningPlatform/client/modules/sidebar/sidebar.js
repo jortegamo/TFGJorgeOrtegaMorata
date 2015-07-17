@@ -1,6 +1,7 @@
 Template.sidebar.helpers({
 	username: function(){
-		return Meteor.user().username;
+		var username = Meteor.user().username;
+		return (username.length > 16) ? username.slice(0,16) + '...' : username;
 	},
 	menuTab: function(){
 		return Session.get('menu-active');

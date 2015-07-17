@@ -13,3 +13,15 @@ a{
 	text-decoration: none;
   }
 }
+
+.absolute-top{
+  position: absolute;
+  width: 100%;
+  top: 0;
+}
+
+.absolute-bottom{
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}

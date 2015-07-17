@@ -1,35 +1,26 @@
 <template name="channels">
-	<div class="pageContainer container-fluid">
-		<div class="page-title row container-fluid">
-  			<div class="col-lg-6">
-    			<div class="title-col">
+	<div class="container-fluid">
+		<div class="page-header row">
+  			<div class="col-xs-12">
   					<h2 class="title">Channels
   					{{#if currentUser}}
   						<a href="{{pathFor 'postSubmit'}}" type="buton" class="pull-right" role="button"><span class="btn btn-danger btn-sm">add</span></a>
   					{{/if}}
   					</h2>
-				</div>
-  			</div><!-- /.col-lg-6 -->
-  			<div class="col-lg-6">
-  				<div class="box-search">
-    			<div class="input-group ">
-    				<span class="input-group-btn">
-        				<a id="search" type="button" role="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
-      				</span>
-      				<input type="text" class="form-control" placeholder="Search for...">
-   				</div><!-- /input-group -->
-   				</div>
-  			</div><!-- /.col-lg-6 -->
+                <div class="">
+                    <div class="input-group ">
+                        <span class="input-group-btn">
+                            <a id="search" type="button" role="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
+                        </span>
+                        <input type="text" class="form-control" placeholder="Search for...">
+                    </div><!-- /input-group -->
+                </div>
+  			</div>
 		</div><!-- /.row -->
-		<div id="channels-list">
-			{{#each channels}}
-				{{>channel}}
-			{{/each}}
-		</div>
 	</div>
 </template>
 
-<template name="channel">
+<!--<template name="channel">
 	<div class="channel-entry container-fluid">
 		<div class="row">
 			<div class="col-lg-2">
@@ -50,4 +41,4 @@
 			</div>
 		</div>
 	</div>
-</template>
+</template>-->

@@ -1,14 +1,13 @@
 <template name="sidebar">
     <div id="sidebar-wrapper">
-        <div id="box-site">
+        <div id="box-site" class="absolute-top">
             <a href="/"><img src="/duck_icon.ico"/></a>
             <a class="site-title" href="/">DuckFlight</a>
-
         </div>
-        <div id="tab-sidebar">
+        <div id="tab-sidebar" class="absolute-top">
             <ul>
                 <li id="menu-tab" class="tab active"><i class="fa fa-bars"></i></li>
-                <li class="tab"><i class="fa fa-info"></i></li>
+                <li class="tab"><i class="fa fa-bell"></i></li>
             </ul>
         </div>
         {{#if menuTab}}
@@ -22,12 +21,12 @@
                     </p>
 
                     <ul class="nav-sidebar">
-                        <li class="active"><span># Meteor</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
-                        <li><span># Javascript</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
-                        <li><span># AngularJS</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
+                        <li class="active"><span># Meteor</span></li>
+                        <li><span># Javascript</span></li>
+                        <li><span># AngularJS</span></li>
                     </ul>
 
-                    <a href="#" class="more" data-target="#popup-channels">+ View More</a>
+                    <a href="#" class="more" data-target="#popup-channels">+ View More...</a>
 
                 </div>
 
@@ -40,8 +39,8 @@
                     </p>
 
                     <ul class="nav-sidebar">
-                        <li><span>@ DuckFlight</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
-                        <li><span>@ CodeMasters</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
+                        <li><span>@ DuckFlight</span></li>
+                        <li><span>@ CodeMasters</span></li>
                     </ul>
 
                     <a href="#" class="more" data-target="#popup-teams">+ View More...</a>
@@ -50,32 +49,117 @@
 
                 <div class="sidebar-section">
 
-                    <p id="sidebar-teams-browse" class="section-title">
+                    <p id="sidebar-lessons-browse" class="section-title">
                         <i class="fa fa-book ikon-section"></i>
                         <span>LESSONS</span>
                         <i class="fa fa-plus-circle pull-right"></i>
                     </p>
 
                     <ul class="nav-sidebar">
-                        <li><span>& Learn Meteor</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
-                        <li><span>& Learn Angular</span><i class="remove glyphicon glyphicon-remove-circle pull-right"></i></li>
+                        <li><span>& Learn Meteor</span></li>
+                        <li><span>& Learn Angular</span></li>
                     </ul>
 
                     <a href="#" class="more" data-target="#popup-teams">+ View More...</a>
 
                 </div>
-
             </div>
         {{else}}
-            <div class="sidebar-information">
-                <p>soy la info</p>
+            <div id="sidebar-notifications">
+                <div class="notifications-section">
+
+                    <p class="notifications-section-title active">
+                        <i class="fa fa-desktop ikon-section"></i>
+                        <span>CHANNELS</span>
+                        <span class="counter">7</span>
+                        <i class="pull-right rem-ikon fa fa-trash-o"></i>
+                    </p>
+
+                    <ul class="notifications-list">
+                        <li class="notification-card">1</li>
+                        <li class="notification-card">2</li>
+                        <li class="notification-card">3</li>
+                        <li class="notification-card">4</li>
+                    </ul>
+
+                </div>
+                <div class="notifications-section">
+
+                    <p class="notifications-section-title active">
+                        <i class="fa fa-users ikon-section"></i>
+                        <span>TEAMS</span>
+                        <span class="counter">13</span>
+                        <i class="pull-right rem-ikon fa fa-trash-o"></i>
+                    </p>
+
+                    <ul class="notifications-list">
+                        <li class="notification-card">1</li>
+                        <li class="notification-card">2</li>
+                        <li class="notification-card">3</li>
+                        <li class="notification-card">4</li>
+                    </ul>
+
+                </div>
+                <div class="notifications-section">
+
+                    <p class="notifications-section-title active">
+                        <i class="fa fa-book ikon-section"></i>
+                        <span>LESSONS</span>
+                        <span class="counter">4</span>
+                        <i class="pull-right rem-ikon fa fa-trash-o"></i>
+                    </p>
+
+                    <ul class="notifications-list">
+                        <li class="notification-card">1</li>
+                        <li class="notification-card">2</li>
+                        <li class="notification-card">3</li>
+                        <li class="notification-card">4</li>
+                    </ul>
+
+                </div>
+                <div class="notifications-section">
+
+                    <p class="notifications-section-title active">
+                        <i class="fa fa-comments ikon-section"></i>
+                        <span>MESSAGES</span>
+                        <span class="counter">5</span>
+                        <i class="pull-right rem-ikon fa fa-trash-o"></i>
+                    </p>
+
+                    <ul class="notifications-list">
+                        <li class="notification-card">1</li>
+                        <li class="notification-card">2</li>
+                        <li class="notification-card">3</li>
+                        <li class="notification-card">4</li>
+                    </ul>
+
+                </div>
+                <div class="notifications-section">
+
+                    <p class="notifications-section-title active">
+                        <i class="fa fa-user-plus ikon-section"></i>
+                        <span>FRIENDSHIP</span>
+                        <span class="counter">5</span>
+                        <i class="pull-right rem-ikon fa fa-trash-o"></i>
+                    </p>
+
+                    <ul class="notifications-list">
+                        <li class="notification-card">1</li>
+                        <li class="notification-card">2</li>
+                        <li class="notification-card">3</li>
+                        <li class="notification-card">4</li>
+                    </ul>
+
+                </div>
             </div>
         {{/if}}
-        <div id="box-user">
+        <div id="box-user" class="absolute-bottom">
             {{#if currentUser}}
-                <a href="#"><img id="userImage" src="https://yt3.ggpht.com/-cQIaM86rQdQ/AAAAAAAAAAI/AAAAAAAAAAA/aXc9iUELvf8/s100-c-k-no/photo.jpg"/></a>
-                <p>{{ username }}</p>
-                <a id="logoutButton" href="#">sign out <span class="fa fa-sign-out"></span></a>
+                <div>
+                    <a href="#"><img id="userImage" src="https://yt3.ggpht.com/-cQIaM86rQdQ/AAAAAAAAAAI/AAAAAAAAAAA/aXc9iUELvf8/s100-c-k-no/photo.jpg"/></a>
+                    <p>{{ username }}</p>
+                    <p><i id="logoutButton" class="pull-right fa fa-sign-out"></i></p>
+                </div>
             {{else}}
                 <button class="btn btn-success btn-md" data-toggle="modal" data-target="#loginForm" style="margin-top: 2em">SignIn</button>
             {{/if}}
