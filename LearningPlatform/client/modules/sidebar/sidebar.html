@@ -8,21 +8,25 @@
         <div id="tab-sidebar" class="absolute-top">
             <ul>
                 <li id="menu-tab" class="tab active"><i class="fa fa-bars"></i></li>
-                <li class="tab"><i class="fa fa-bell"></i></li>
+                <li class="tab">
+                    <i class="fa fa-bell"></i>
+                    <span class="notifications-total-counter">43</span>
+                </li>
             </ul>
         </div>
         {{#if menuTab}}
             <div id="sidebar-menu">
+
                 <div class="sidebar-section">
 
                     <p id="sidebar-channels-browse" class="section-title active">
                         <i class="fa fa-desktop ikon-section"></i>
                         <span>CHANNELS</span>
-                        <i class="fa fa-plus-circle pull-right"></i>
+                        <a><i class="fa fa-plus-circle pull-right"></i></a>
                     </p>
 
                     <ul class="nav-sidebar">
-                        <li class="active"><span># Meteor</span></li>
+                        <li><span># Meteor</span></li>
                         <li><span># Javascript</span></li>
                         <li><span># AngularJS</span></li>
                     </ul>
@@ -36,7 +40,7 @@
                     <p id="sidebar-teams-browse" class="section-title">
                         <i class="fa fa-users ikon-section"></i>
                         <span>TEAMS</span>
-                        <i class="fa fa-plus-circle pull-right"></i>
+                        <a><i class="fa fa-plus-circle pull-right"></i></a>
                     </p>
 
                     <ul class="nav-sidebar">
@@ -53,7 +57,7 @@
                     <p id="sidebar-lessons-browse" class="section-title">
                         <i class="fa fa-book ikon-section"></i>
                         <span>LESSONS</span>
-                        <i class="fa fa-plus-circle pull-right"></i>
+                        <a><i class="fa fa-plus-circle pull-right"></i></a>
                     </p>
 
                     <ul class="nav-sidebar">
@@ -62,6 +66,20 @@
                     </ul>
 
                     <a href="#" class="more" data-target="#popup-teams">+ View More...</a>
+
+                </div>
+                <div class="sidebar-section">
+
+                    <p id="sidebar-records-browse" class="section-title active">
+                        <i class="fa fa-film ikon-section"></i>
+                        <span>RECORDS</span>
+                        <a href="{{pathFor 'recordSubmit'}}"><i class="fa fa-plus-circle pull-right"></i></a>
+                    </p>
+
+                    <ul class="nav-sidebar">
+                        <li><span>My records</span></li>
+                        <li><span>Last played</span></li>
+                    </ul>
 
                 </div>
             </div>
@@ -107,6 +125,23 @@
                         <i class="fa fa-book ikon-section"></i>
                         <span>LESSONS</span>
                         <span class="counter">4</span>
+                        <i class="pull-right rem-ikon fa fa-trash-o"></i>
+                    </p>
+
+                    <ul class="notifications-list">
+                        <li class="notification-card">1</li>
+                        <li class="notification-card">2</li>
+                        <li class="notification-card">3</li>
+                        <li class="notification-card">4</li>
+                    </ul>
+
+                </div>
+                <div class="notifications-section">
+
+                    <p class="notifications-section-title active">
+                        <i class="fa fa-film ikon-section"></i>
+                        <span>RECORDS</span>
+                        <span class="counter">2</span>
                         <i class="pull-right rem-ikon fa fa-trash-o"></i>
                     </p>
 

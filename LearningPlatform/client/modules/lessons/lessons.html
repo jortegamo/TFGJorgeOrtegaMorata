@@ -1,5 +1,5 @@
-<template name="channels">
-	<nav class="page-nav-header">
+<template name="lessons">
+    <nav class="page-nav-header">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xs-4">
@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-	</nav>
+    </nav>
     <div class="content-wrapper">
         <div class="content">
             <div class="container-fluid">
@@ -39,11 +39,11 @@
                 </div>
                 <div class="row text-center content-body">
                     <div class="col-xs-12">
-                       {{#if results}}
-                           results
-                       {{else}}
-                           No results
-                       {{/if}}
+                        {{#if results}}
+                            results
+                        {{else}}
+                            No results
+                        {{/if}}
                     </div>
                 </div>
             </div>
@@ -51,26 +51,3 @@
 
     </div>
 </template>
-
-<!--<template name="channel">
-	<div class="channel-entry container-fluid">
-		<div class="row">
-			<div class="col-lg-2">
-				<img style="margin-left: -0.5em" src="/channel-icon-entry.png"/>
-			</div>
-			<div class="col-lg-7">
-				<h4>{{title}}</h4>
-				<p><strong>author: </strong><span>{{author}}</span></p>
-				<p><strong>channel: </strong><span>{{author}}</span></p>
-			</div>
-			<div class="col-lg-3">
-				<p>
-					<span id="records-count" class="count glyphicon glyphicon-list pull-right" style="margin-top: 7em"
-					>0</span>
-					<span id="votes-count" class="count glyphicon glyphicon-heart pull-right" style="margin-top: 7em">0</span>
-					<span id="comments-count" class="count glyphicon glyphicon-comment pull-right" style="margin-top: 7em">0</span>
-				</p>
-			</div>
-		</div>
-	</div>
-</template>-->

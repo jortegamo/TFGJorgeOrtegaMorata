@@ -1,6 +1,6 @@
 Template.sidebar.helpers({
 	username: function(){
-		var username = 'TopTrendingVideoNow'//Meteor.user().username;
+		var username = Meteor.user().username;
 		return (username.length > 16) ? username.slice(0,16) + '...' : username;
 	},
 	menuTab: function(){
@@ -9,9 +9,11 @@ Template.sidebar.helpers({
 })
 
 Template.sidebar.events({
+
 	'click #logoutButton': function(){
 		Meteor.logout();
 	},
+
 	'click .tab': function(e){
 		$('.tab').removeClass('active');
 		$(e.currentTarget).addClass('active');
@@ -21,16 +23,41 @@ Template.sidebar.events({
 			Session.set('menu-active',false);
 		}
 	},
+
 	'click #close-sidebar': function(e){
 		$(e.currentTarget).removeClass('active');
 		$('#sidebar-wrapper').addClass('unactive');
+	},
+	'click .section-title': function(e){
+		var elemId = e.currentTarget.id;
+
+		switch(elemId){
+			case 'sidebar-channels-browse':
+				Router.go('channels')
+				break;
+			case 'sidebar-teams-browse':
+				Router.go('teams')
+				break;
+			case 'sidebar-lessons-browse':
+				Router.go('lessons')
+				break;
+			case 'sidebar-records-browse':
+				Router.go('records')
+				break;
+		}
 	}
+
 });
 
 Template.sidebar.rendered = function(){
 	console.log('hola');
 	Session.set('menu-active',true);
 	console.log(Session.get('menu-active'))
+	$('#sidebar-channels-browse span').tooltip({placement: 'top', title: 'browse all channels'});
+	$('#sidebar-teams-browse span').tooltip({placement: 'top', title: 'browse all teams'});
+	$('#sidebar-lessons-browse span').tooltip({placement: 'top', title: 'browse all lessons'});
+	$('#sidebar-records-browse span').tooltip({placement: 'top', title: 'browse all records'});
+	$('.more').tooltip({placement: 'right', title: 'browse in profile'});
 
 	/* sidebar display events */
 	function closeSidebar(){
@@ -48,18 +75,18 @@ Template.sidebar.rendered = function(){
 
 	function openHandler(){
 		$(window).resize(function(){
-			if($(window).width() > 600) openSidebar();
+			if($(window).width() > 990) openSidebar();
 		});
 	}
 
 	function closeHandler(){
 		$(window).resize(function(){
-			if($(window).width() <= 600) closeSidebar();
+			if($(window).width() <= 990) closeSidebar();
 		});
 	}
 
 	function initialzeSidebar (){
-		($(window).width()<= 600) ? closeSidebar() : openSidebar();
+		($(window).width()<= 990) ? closeSidebar() : openSidebar();
 	}
 	/* end sidebar display events */
 

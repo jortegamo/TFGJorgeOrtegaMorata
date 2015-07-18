@@ -1,54 +1,103 @@
 <template name="records">
-	<div class="pageContainer container-fluid">
-		<div class="page-title row container-fluid">
-  			<div class="col-lg-6">
-    			<div class="title-col">
-  					<h2 class="title">Records<a href="{{pathFor 'postSubmit'}}" type="buton" class="pull-right" role="button"><span class="btn btn-danger btn-sm">add</span></a></h2>
-				</div>
-  			</div><!-- /.col-lg-6 -->
-  			<div class="col-lg-6">
-  				<div class="box-search">
-    			<div class="input-group ">
-    				<span class="input-group-btn">
-        				<a id="search" type="button" role="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
-      				</span>
-      				<input type="text" class="form-control" placeholder="Search for...">
-   				</div><!-- /input-group -->
-   				</div>
-  			</div><!-- /.col-lg-6 -->
-		</div><!-- /.row -->
-		<div id="records-list">
-			{{#each records}}
-				{{>recordItem}}
-			{{/each}}
-		</div>
-	</div>
+    <nav class="page-nav-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="title">
+                        <h3>{{ pageTitle }}</h3>
+                    </div>
+                </div>
+
+                <div class="col-xs-8 actions">
+                    <button class="button-create inline"><i class="fa fa-plus"></i></button>
+                    <div class="search-box-header inline">
+                        <i class="fa fa-search"></i>
+                        <input type="text" placeholder="Search">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row content-navbar">
+                    <div class="col-xs-12">
+                        <div class="display-options">
+                            <ul>
+                                <li><i id="list" class="display-option active fa fa-th-list"></i></li>
+                                <li><i id="large" class="display-option fa fa-th-large"></i></li>
+                            </ul>
+                        </div>
+                        <div class="filter-options">
+                            <ul class="tab-page">
+                                <li id="recent-filter" class="filter active"><span>Recent</span></li>
+                                <li id="popular-filter" class="filter"><span>Popular</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-center content-body">
+                    <div class="col-xs-12 text-center">
+                        <div class="list-flex">
+                            {{#if listMode}}
+                                {{#each records}}
+                                    {{>recordItemHorizontal}}
+                                {{/each}}
+                            {{else}}
+                                {{#each records}}
+                                    {{>recordItemVertical}}
+                                {{/each}}
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
-<template name="recordItem">
-	<div class="record-entry container-fluid">
-		<div class="row">
-			<div class="col-lg-2">
-				<img style="margin-left: -0.5em" src="/record-icon-entry.png"/>
-			</div>
-			<div class="col-lg-7">
-				<h4>{{title}}</h4>
-				<p><strong>author: </strong><span>{{author}}</span></p>
-				<p><strong>channel: </strong><span>{{author}}</span></p>
-			</div>
-			<div class="col-lg-3">
-				<p>
-					<span id="file-count" class="count glyphicon glyphicon-file pull-right" style="margin-top: 7em"
-					>{{docs_count}}
-					</span>
-					<span id="votes-count" class="count glyphicon glyphicon-heart pull-right" style="margin-top: 7em">{{votes}}
-					</span>
-					<span id="comments-count" class="count glyphicon glyphicon-comment pull-right" style="margin-top: 7em">{{comments_count}}
-					</span>
-					<span id="replies-count" class="count glyphicon glyphicon-share-alt pull-right" style="margin-top: 7em">{{replies_count}}
-					</span>
-				</p>
-			</div>
-		</div>
-	</div>
+<template name="recordItemHorizontal">
+    <div class="row text-left duckflight-card record-card-horizontal">
+        <div class="card-image col-md-7 col-xs-8">
+            <div class="image-hover"><i class="fa fa-play-circle"></i></div>
+            <img src="https://typekit.files.wordpress.com/2012/09/sourcecodesplash.png?w=600&h=370"/>
+        </div>
+        <div class="card-caption col-md-5 col-xs-4">
+            <ul>
+                <li class="card-title">{{title}}</li>
+                <li>by <span class="card-author">{{author}}</span></li>
+                <li class="card-counters">
+                    <span>{{dateFrom createdAt}} · </span>
+                    <span class="comments-count fa fa-comments"></span><span class="counter">{{comments_count}}</span>
+                    <span class="votes-count fa fa-heart"></span><span class="counter">{{votes}}</span>
+                    <span class="file-count fa fa-file"></span><span class="counter">{{docs_count}}</span>
+                    <span class="replies-count fa fa-mail-reply"></span><span class="counter">{{replies_count}}</span>
+                </li>
+                <li class="card-description">{{shortDescription description 50}}</li>
+            </ul>
+        </div>
+    </div>
+</template>
+
+<template name="recordItemVertical">
+    <div class="text-left duckflight-card record-card-vertical">
+        <div class="card-image">
+            <div class="image-hover"><i class="fa fa-play-circle"></i></div>
+            <img src="https://typekit.files.wordpress.com/2012/09/sourcecodesplash.png?w=600&h=370"/>
+        </div>
+        <div class="card-caption">
+            <ul>
+                <li class="card-title">{{title}}</li>
+                <li>by <span class="card-author">{{author}}</span></li>
+                <li class="card-counters text-center">
+                    <span class="card-date">{{dateFrom createdAt}} · </span>
+                    <span class="comments-count fa fa-comments"></span><span class="counter">{{comments_count}}</span>
+                    <span class="votes-count fa fa-heart"></span><span class="counter">{{votes}}</span>
+                    <span class="file-count fa fa-file"></span><span class="counter">{{docs_count}}</span>
+                    <span class="replies-count fa fa-mail-reply"></span><span class="counter">{{replies_count}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
 </template>

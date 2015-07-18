@@ -38,6 +38,7 @@ Router.route('/channels',{
 
 Router.route('/channels/submit',{name: 'channelSubmit'});
 
+
 Router.route('/channel/:_id',{
 	name: 'channel',
 	data: function(){return Channels.findOne(this.params._id);},
@@ -47,6 +48,19 @@ Router.route('/channel/:_id',{
 		return subscriptions;
 	}
 });
+
+//Teams
+Router.route('/teams',{
+	name: 'teams'
+});
+
+//Teams
+Router.route('/lessons',{
+	name: 'lessons'
+});
+
+
+
 
 //profile
 

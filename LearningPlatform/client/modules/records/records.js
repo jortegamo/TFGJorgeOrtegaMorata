@@ -16,24 +16,17 @@ var searchParser = function(search){
 
 
 Template.records.helpers({
+	pageTitle: function(){
+		var title = 'Records';
+		return ellipsis(title,27);
+	},
 	records: function(){
-		if (Session.get("search")){
-			var search = Session.get('search');
-			switch (search[0]){
-				case 'author':
-				return Records.find({author: search[1]},{sort: {createdAt: -1}});
-				break;
-				case 'title':
-				return Records.find({title: search[1]},{sort: {createdAt: -1}});
-				break;
-				case 'channel':
-				return Records.find({channel: search[1]},{sort: {createdAt: -1}});
-				break;
-			}
-		}
 		return Records.find({},{sort: {createdAt: -1}});
+	},
+	listMode: function(){
+		return Session.get('horizontalMode');
 	}
-})
+});
 
 Template.records.events({
 	
@@ -41,8 +34,8 @@ Template.records.events({
 		Router.go('record',{_id: this._id}); //voy a la pagina principal del record.
 	},
 
-	'keydown input, click #search': function(e){ //se ha realizado alguna busqueda.
-		if (e.keyCode == 13 | e.type == 'click'){
+	'keydown input': function(e){ //se ha realizado alguna busqueda.
+		if (e.keyCode == 13){
 			var sParsed = searchParser ($('input').val());
 			if (sParsed){
 				Session.set('search',sParsed);
@@ -50,30 +43,67 @@ Template.records.events({
 				Session.set('search',null);
 			}
 			$('input').val("");
-			$('#search').popover('hide');
 		}
 	},
 
 	'click input': function(){ //al intentar buscar se muestra al ayudante.
 		$('#search').popover('show');
+	},
+	'click .display-option': function(e){
+		var elem = e.currentTarget;
+		$('.display-option').removeClass('active');
+		$(elem).addClass('active');
+		if (elem.id == 'list'){
+			Session.set('horizontalMode',true);
+		}else{
+			Session.set('horizontalMode',false);
+		}
+	},
+	'click .filter': function(e){
+		var elem = e.currentTarget;
+		$('.filter').removeClass('active');
+		$(elem).addClass('active');
+	},
+	'click .button-create': function(){
+		Router.go('recordSubmit');
 	}
 });
 
 Template.records.rendered = function(){
-	$('#file-count').tooltip({placement: 'bottom', title: 'documents'})
-	$('#replies-count').tooltip({placement: 'top', title: 'replies'})
-	$('#votes-count').tooltip({placement: 'top', title: 'votes'})
-	$('#comments-count').tooltip({placement: 'bottom', title: 'comments'})
-	$('h2 a').tooltip({placement: 'left', title: 'create a new Record'});
-	$('#search').popover({
-		placement: 'bottom',
-		title: 'search comands',
-		trigger: 'focus',
-		content: 'aksdjfñalksjdfñlaksjdfñlaksdjñkdljfañlksjd',
-		container: '#search'
-	});
-}
+	Session.set('horizontalMode',true);
+
+	$('.button-create').tooltip({placement: 'bottom', title: 'create a new Record'});
+};
 
 Template.records.created = function(){
 	Session.set('search', null);
+}
+
+Template.recordItemHorizontal.helpers({
+	shortDescription: function(description,max){
+		return ellipsis(description,max);
+	},
+	dateFrom: function(d){
+		return smartDate(d);
+	}
+});
+
+Template.recordItemHorizontal.rendered = function(){
+	$('.file-count').tooltip({placement: 'bottom', title: 'documents'});
+	$('.replies-count').tooltip({placement: 'top', title: 'replies'});
+	$('.votes-count').tooltip({placement: 'top', title: 'votes'});
+	$('.comments-count').tooltip({placement: 'bottom', title: 'comments'});
+}
+
+Template.recordItemVertical.helpers({
+	dateFrom: function(d){
+		return smartDate(d);
+	}
+});
+
+Template.recordItemVertical.rendered = function(){
+	$('.file-count').tooltip({placement: 'bottom', title: 'documents'});
+	$('.replies-count').tooltip({placement: 'top', title: 'replies'});
+	$('.votes-count').tooltip({placement: 'top', title: 'votes'});
+	$('.comments-count').tooltip({placement: 'bottom', title: 'comments'});
 }
