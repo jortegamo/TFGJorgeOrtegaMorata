@@ -63,6 +63,10 @@ Router.route('/lessons',{
 
 
 //profile
+Router.route('/profile/:_id',{
+	name: 'profile',
+	data: function(){return {_id: this.params._id}}
+})
 
 //teams
 

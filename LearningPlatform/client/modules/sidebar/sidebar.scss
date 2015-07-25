@@ -42,7 +42,6 @@
 #box-site{
   padding: 15px 15px 10px;
   background: #DD4242;
-
   img{
     height: 45px;
     width: 45px;
@@ -58,6 +57,7 @@
     font-family: roboto, sans-serif;
     font-style: italic;
     letter-spacing: .5pt;
+    text-decoration: none;
   }
 }
 
@@ -241,6 +241,10 @@
   background-color: #292626;
   font-family: roboto, sans-serif;
   font-weight: 300;
+
+  .profile-link{
+    cursor: pointer;
+  }
 
   #logoutButton{
     padding: 5px;

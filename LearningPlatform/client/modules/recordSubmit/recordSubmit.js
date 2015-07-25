@@ -20,7 +20,7 @@ var Doc = function(title){
     this.value = "";
 }
 
-Template.postSubmit.helpers ({
+Template.recordSubmit.helpers ({
 
     'recording': function(){ 
         return Session.get("recording"); 
@@ -31,7 +31,7 @@ Template.postSubmit.helpers ({
     }
 });
 
-Template.postSubmit.events = {
+Template.recordSubmit.events = {
     
     'click #multmedia-config': function(){
         $("#micro-button").click(function(){
@@ -402,7 +402,7 @@ Tracker.autorun(function(){
     } //--</if>
 });
 
-Template.postSubmit.rendered = function(){
+Template.recordSubmit.rendered = function(){
 	editor = ace.edit("editor");
 	editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/javascript");

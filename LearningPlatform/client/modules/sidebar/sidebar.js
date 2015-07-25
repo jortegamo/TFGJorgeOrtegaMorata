@@ -6,7 +6,7 @@ Template.sidebar.helpers({
 	menuTab: function(){
 		return Session.get('menu-active');
 	}
-})
+});
 
 Template.sidebar.events({
 
@@ -45,19 +45,16 @@ Template.sidebar.events({
 				Router.go('records')
 				break;
 		}
+	},
+
+	'click .profile-link, click .more': function(){
+		Router.go('profile',{_id: Meteor.user()._id});
 	}
 
 });
 
 Template.sidebar.rendered = function(){
-	console.log('hola');
 	Session.set('menu-active',true);
-	console.log(Session.get('menu-active'))
-	$('#sidebar-channels-browse span').tooltip({placement: 'top', title: 'browse all channels'});
-	$('#sidebar-teams-browse span').tooltip({placement: 'top', title: 'browse all teams'});
-	$('#sidebar-lessons-browse span').tooltip({placement: 'top', title: 'browse all lessons'});
-	$('#sidebar-records-browse span').tooltip({placement: 'top', title: 'browse all records'});
-	$('.more').tooltip({placement: 'right', title: 'browse in profile'});
 
 	/* sidebar display events */
 	function closeSidebar(){

@@ -30,7 +30,7 @@ Template.records.helpers({
 
 Template.records.events({
 	
-	'click .record-entry': function(){
+	'click .image-hover i, click .card-title': function(){
 		Router.go('record',{_id: this._id}); //voy a la pagina principal del record.
 	},
 
@@ -64,7 +64,7 @@ Template.records.events({
 		$('.filter').removeClass('active');
 		$(elem).addClass('active');
 	},
-	'click .button-create': function(){
+	'click .button-circle': function(){
 		Router.go('recordSubmit');
 	}
 });
@@ -72,7 +72,7 @@ Template.records.events({
 Template.records.rendered = function(){
 	Session.set('horizontalMode',true);
 
-	$('.button-create').tooltip({placement: 'bottom', title: 'create a new Record'});
+	$('.button-circle').tooltip({placement: 'bottom', title: 'create a new Record'});
 };
 
 Template.records.created = function(){

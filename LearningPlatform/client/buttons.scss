@@ -1,0 +1,53 @@
+/*BUTTONS*/
+.button-circle{
+  color: white;
+  padding: 5px 10px;
+  border-radius: 50%;
+  border: none;
+  font-size: 14px;
+  font-weight: 100;
+  background: #F25252;
+  box-shadow: 0px 2px 2px grey;
+  i{vertical-align: middle;}
+  &:focus{
+    outline: 0px;
+  }
+  &:hover{
+    background: #F76363;
+  }
+}
+
+.button-counter{
+  ul{
+    margin: auto;
+    background: #FBFAFA;
+    list-style: none;
+    padding-left: 0;
+    color: #2E2D2D;
+    border-radius: 5px;
+    li{
+      padding-left: 4px;
+      font-size: 14px;
+      display: inline-block;
+      i{
+        margin-right: -5px;
+        cursor: text;
+        margin-top: 1px;
+      }
+      &.text{
+        padding: 4px 5px;
+        i{margin-right: 3px;}
+        cursor: pointer;
+        background: #F25252;
+        color: white;
+        font-size: 14px;
+        border-bottom-right-radius: 5px;
+        border-top-right-radius: 5px;
+      }
+    }
+  }
+  &:hover .text{background: #F76363;}
+}
+
+
+/*END BUTTONS*/
