@@ -1,6 +1,6 @@
 Template.forgotPasswordForm.events({
-	"click #back": function(){
-		Session.set("forgot",false);
+	'click a': function(){
+		Session.set('formType','signInForm');
 	},
 	"submit form": function(e){
 		e.preventDefault();

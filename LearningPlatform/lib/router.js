@@ -1,17 +1,23 @@
 Router.configure({
-  layoutTemplate: 'layout'
+  	layoutTemplate: 'layout',
+	waitOn: function(){
+		return Meteor.subscribe('userById',Meteor.userId());
+	}
 });
 
-Router.route('/', {name: 'mainPage'});
+Router.route('/', {
+	name: 'mainPage',
+	waitOn: function(){return Meteor.subscribe('allUsers');}
+});
 
 Router.route('/redirect',{name: 'redirect'});
 
 
-//Records
+//RECORDS
 
 Router.route('/records',{
 	name: 'records',
-	waitOn: function(){ return Meteor.subscribe('records')}
+	waitOn: function(){ return [Meteor.subscribe('records'),Meteor.subscribe('allUsers')]; }
 });
 
 Router.route('/records/submit',{name: 'recordSubmit'});
@@ -29,14 +35,16 @@ Router.route('/record/:_id',{
 });
 
 
-//Channels
+//CHANNELS
 
 Router.route('/channels',{
 	name: 'channels',
-	waitOn: function(){ return Meteor.subscribe('channels')} 
+	waitOn: function(){ return [Meteor.subscribe('channels'),Meteor.subscribe('allUsers')]; }
 });
 
-Router.route('/channels/submit',{name: 'channelSubmit'});
+Router.route('/channels/submit',{
+	name: 'channelSubmit'
+});
 
 
 Router.route('/channel/:_id',{
@@ -49,25 +57,88 @@ Router.route('/channel/:_id',{
 	}
 });
 
-//Teams
+//TEAMS
 Router.route('/teams',{
-	name: 'teams'
+	name: 'teams',
+	waitOn: function(){return [Meteor.subscribe('teams'),Meteor.subscribe('allUsers')]; }
 });
 
-//Teams
+Router.route('/teams/submit',{
+	name: 'teamSubmit'
+});
+
+Router.route('/team/:_id',{
+	name: 'team',
+	data: function(){return Teams.findOne(this.params._id);},
+	waitOn: function(){
+		//subscriptions
+	}
+});
+
+
+//LESSONS
 Router.route('/lessons',{
-	name: 'lessons'
+	name: 'lessons',
+	waitOn: function(){ [Meteor.subscribe('lessons'),Meteor.subscribe('allUsers')]; }
 });
 
+Router.route('/lessons/submit',{
+	name: 'lessonSubmit'
+});
 
-
-
-//profile
-Router.route('/profile/:_id',{
-	name: 'profile',
-	data: function(){return {_id: this.params._id}}
+Router.route('/lesson/:_id',{
+	name: 'lesson',
+	data: function(){
+		console.log(Lessons.findOne(this.params._id));
+		console.log(this.params._id)
+		return Lessons.findOne(this.params._id);},
+	waitOn: function(){
+		return [Meteor.subscribe('lesson', this.params._id),
+				Meteor.subscribe('allUsers'),
+				Meteor.subscribe('recordsByLesson', this.params._id),
+				Meteor.subscribe('lessonSections', this.params._id)];
+	}
 })
 
-//teams
+
+
+//PROFILE
+Router.route('/profile/:_id',{
+	name: 'profile',
+	data: function(){
+		return {user_id: this.params._id, section: Session.get('currentSection')};
+	},
+	waitOn: function(){
+		return [Meteor.subscribe('allUsers'),
+				Meteor.subscribe('channelsByUser',this.params._id),
+				Meteor.subscribe('lessonsByUser',this.params._id),
+				Meteor.subscribe('teamsByUser',this.params._id),
+				Meteor.subscribe('recordsByUser',this.params._id),
+				Meteor.subscribe('conversationsByUser',this.params._id),
+				Meteor.subscribe('contactsByUser',this.params._id),
+				Meteor.subscribe('requestsByUser',this.params._id)];
+
+	}
+});
+
+Router.route('/profile/:_id/edit',{
+	name: 'profileEdit',
+	data: function() {
+		return {user_id: this.params._id};
+	},
+	waitOn: function(){
+		return Meteor.subscribe('allUsers');
+	}
+});
+
+//CONVERSATIONS
+
+Router.route('/conversation/:_id',{
+	name: 'conversation',
+	data: function(){return Conversations.findOne(this.params._id);},
+	waitOn: function(){
+		return Meteor.subscribe('conversationById',this.params._id);
+	}
+});
 
 

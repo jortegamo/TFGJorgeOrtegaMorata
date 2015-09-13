@@ -1,0 +1,102 @@
+<template name="teams">
+    <nav class="page-nav-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="title">
+                        <h3>{{ pageTitle }}</h3>
+                    </div>
+                </div>
+
+                <div class="col-xs-8 actions">
+                    <button class="button-circle inline"><i class="fa fa-plus"></i></button>
+                    <div class="search-box-header inline">
+                        <i class="fa fa-search"></i>
+                        <input type="text" placeholder="Search">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row content-navbar">
+                    <div class="col-xs-12">
+                        <div class="display-options">
+                            <ul>
+                                <li><i id="list" class="display-option active fa fa-th-list"></i></li>
+                                <li><i class="display-option fa fa-th-large"></i></li>
+                            </ul>
+                        </div>
+                        <div class="filter-options">
+                            <ul class="tab-page">
+                                <li id="recent-filter" class="filter active"><span>Recent</span></li>
+                                <li id="popular-filter" class="filter"><span>Popular</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-center content-body">
+                    <div class="col-xs-12 text-center">
+                        <div class="list-flex">
+                            {{#if listMode}}
+                                {{#each teams}}
+                                    {{>teamItemHorizontal}}
+                                {{/each}}
+                            {{else}}
+                                {{#each teams}}
+                                    {{>teamItemVertical}}
+                                {{/each}}
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</template>
+
+<template name="teamItemHorizontal">
+    <div class="row text-left duckflight-card record-card-horizontal fade-in">
+        <div class="card-image col-md-7 col-xs-8">
+            <div class="image-hover"><i class="fa fa-users"></i></div>
+            <img src="https://typekit.files.wordpress.com/2012/09/sourcecodesplash.png?w=600&h=370"/>
+        </div>
+        <div class="card-caption col-md-5 col-xs-4">
+            <ul>
+                <li class="card-title">{{title}}</li>
+                <li>by <span class="card-author">{{authorName}}</span></li>
+                <li class="card-counters">
+                    <span>{{dateFrom createdAt}} · </span>
+                    <span class="projects-count fa fa-archive"></span><span class="counter">{{projects_count}}</span>
+                    <span class="users-count fa fa-user"></span><span class="counter">{{users_count}}</span>
+                    <span class="votes-count fa fa-heart"></span><span class="counter">{{votes_count}}</span>
+                </li>
+                <li class="card-description">{{shortDescription description 50}}</li>
+            </ul>
+        </div>
+    </div>
+</template>
+
+<template name="teamItemVertical">
+    <div class="text-left duckflight-card record-card-vertical fade-in">
+        <div class="card-image">
+            <div class="image-hover"><i class="fa fa-users"></i></div>
+            <img src="https://typekit.files.wordpress.com/2012/09/sourcecodesplash.png?w=600&h=370"/>
+        </div>
+        <div class="card-caption">
+            <ul>
+                <li class="card-title">{{title}}</li>
+                <li>by <span class="card-author">{{authorName}}</span></li>
+                <li class="card-counters text-center">
+                    <span class="card-date">{{dateFrom createdAt}} · </span>
+                    <span class="projects-count fa fa-archive"></span><span class="counter">{{projects_count}}</span>
+                    <span class="users-count fa fa-user"></span><span class="counter">{{users_count}}</span>
+                    <span class="votes-count fa fa-heart"></span><span class="counter">{{votes_count}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</template>

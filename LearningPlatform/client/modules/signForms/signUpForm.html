@@ -1,28 +1,48 @@
 <template name="signUpForm">
- <form>
-  <div id= "inputUsername" class="form-group">
-  	<label class="control-label" for="username">User Name</label>
-    <input name="username" type="text" class="form-control" id="username" placeholder="Enter a User Name">
-  </div>
+     <form class="awesome-form sign-form">
+         <div class="form-group">
+             <div class="row">
+                 <div id= "inputUsername" class="col-xs-12 form-field">
+                     <label class="control-label" for="username">User Name</label>
+                     <input name="username" type="text" class="form-control" id="username" required>
+                 </div>
+             </div>
+         </div>
+         <div class="form-group">
+             <div class="row">
+                 <div id="inputEmail" class="col-xs-12 form-field">
+                     <label class="control-label" for="email">Email Address (optional)</label>
+                     <input name= "email" type="email" class="form-control" id="email">
+                 </div>
+             </div>
+         </div>
+         <div class="form-group">
+             <div class="row">
+                 <div id="inputPassword" class="col-xs-12 form-field">
+                     <label class="control-label" for="password">Password</label>
+                     <input name="password" type="password" class="form-control" id="password" required>
+                 </div>
+             </div>
+         </div>
+         <div class="form-group">
+             <div class="row">
+                 <div id="inputRepassword" class="col-xs-12 form-field">
+                     <label class="control-label" for="repassword">Repeat Password</label>
+                     <input name="repassword" type="password" class="form-control" id="repassword" required>
+                 </div>
+             </div>
+         </div>
 
-  <div id="inputEmail" class="form-group">
-  	<label class="control-label" for="email">Email Address (optional)</label>
-    <input name= "email" type="email" class="form-control" id="email" placeholder="Enter a User Name">
-  </div>
+         <a href=""><i class="fa fa-angle-double-left"></i> back</a>
 
-  <div id="inputPassword" class="form-group">
-    <label class="control-label" for="password">Password</label>
-    <input name="password" type="password" class="form-control" id="password" placeholder="Password">
-  </div>
+        <div class="form-group">
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <button class="submit-button" type="submit"><i class="fa fa-plus"></i> Sign Up</button>
+                </div>
+            </div>
+        </div>
 
-  <div id="inputRepassword" class="form-group">
-    <label class="control-label" for="repassword">Repeat Password</label>
-    <input name="repassword" type="password" class="form-control" id="repassword" placeholder="Password">
-  </div>
 
-  <div style="text-align: center; margin-top: 1em">
-    <input value="signUp" type="submit" class="btn btn-primary"/>
-  </div>
-  <a href="" id="back">Sign In</a>
- </form>
+     </form>
 </template>

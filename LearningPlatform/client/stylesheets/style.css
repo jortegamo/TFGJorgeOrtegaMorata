@@ -391,6 +391,12 @@ body{
 .errormsg{
   text-align: center;
   color: #A52A2A;
+  background: #E1A5A5;
+  border-radius: 3px;
+  padding: 5px;
+  margin: auto;
+  margin-top: 5px;
+
 }
 
 

@@ -1,10 +1,10 @@
 Template.signInForm.events({
 	"click #signUp": function(){
-		Session.set("signUp",true);
+		Session.set("formType",'signUpForm');
 	},
 
 	"click #forgot": function(){
-		Session.set("forgot", true)
+		Session.set("formType", 'forgotPasswordForm');
 	},
 
 	"submit form": function(e){
@@ -20,11 +20,11 @@ Template.signInForm.events({
 				switch(err.reason){
 					case 'Incorrect password': 
 						$("#inputPassword").addClass("has-error");
-						$("#inputPassword").append('<p class="errormsg">Incorrect Password</p>');
+						$("#inputPassword").append('<p class="errormsg"><i class="fa fa-exclamation-triangle"></i> Incorrect Password</p>');
 						break;
 					case 'User not found':
 						$("#inputUsername").addClass("has-error");
-						$("#inputUsername").append('<p class="errormsg">Incorrect Username</p>');
+						$("#inputUsername").append('<p class="errormsg"><i class="fa fa-exclamation-triangle"></i> Incorrect Username</p>');
 						break;
 				}
 			}else{

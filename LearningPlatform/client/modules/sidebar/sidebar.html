@@ -22,7 +22,7 @@
                     <p id="sidebar-channels-browse" class="section-title active">
                         <i class="fa fa-desktop ikon-section"></i>
                         <span>CHANNELS</span>
-                        <a><i class="fa fa-plus-circle pull-right"></i></a>
+                        <a href="{{pathFor 'channelSubmit'}}"><i class="fa fa-plus-circle pull-right"></i></a>
                     </p>
 
                     <ul class="nav-sidebar">
@@ -31,7 +31,7 @@
                         <li><span># AngularJS</span></li>
                     </ul>
 
-                    <a class="more" data-target="#popup-channels">+ View More...</a>
+                    <a id="channelsTabContent" class="more">+ View More...</a>
 
                 </div>
 
@@ -40,7 +40,7 @@
                     <p id="sidebar-teams-browse" class="section-title">
                         <i class="fa fa-users ikon-section"></i>
                         <span>TEAMS</span>
-                        <a><i class="fa fa-plus-circle pull-right"></i></a>
+                        <a  href="{{pathFor 'teamSubmit'}}"><i class="fa fa-plus-circle pull-right"></i></a>
                     </p>
 
                     <ul class="nav-sidebar">
@@ -48,7 +48,7 @@
                         <li><span>@ CodeMasters</span></li>
                     </ul>
 
-                    <a class="more" data-target="#popup-teams">+ View More...</a>
+                    <a id="teamsTabContent" class="more">+ View More...</a>
 
                 </div>
 
@@ -57,7 +57,7 @@
                     <p id="sidebar-lessons-browse" class="section-title">
                         <i class="fa fa-book ikon-section"></i>
                         <span>LESSONS</span>
-                        <a><i class="fa fa-plus-circle pull-right"></i></a>
+                        <a href="{{pathFor 'lessonSubmit'}}"><i class="fa fa-plus-circle pull-right"></i></a>
                     </p>
 
                     <ul class="nav-sidebar">
@@ -65,7 +65,7 @@
                         <li><span>& Learn Angular</span></li>
                     </ul>
 
-                    <a class="more" data-target="#popup-teams">+ View More...</a>
+                    <a id="lessonsTabContent" class="more">+ View More...</a>
 
                 </div>
                 <div class="sidebar-section">
@@ -77,7 +77,7 @@
                     </p>
 
                     <ul class="nav-sidebar">
-                        <li><span>My records</span></li>
+                        <li id="my-records"><span>My records</span></li>
                         <li><span>Last played</span></li>
                     </ul>
 
@@ -192,7 +192,7 @@
         <div id="box-user" class="absolute-bottom">
             {{#if currentUser}}
                 <div>
-                    <a class="profile-link"><img id="userImage" src="https://yt3.ggpht.com/-cQIaM86rQdQ/AAAAAAAAAAI/AAAAAAAAAAA/aXc9iUELvf8/s100-c-k-no/photo.jpg"/></a>
+                    <a class="profile-link"><img id="userImage" src={{avatar}}></a>
                     <p class="profile-link">{{ username }}</p>
                     <p><i id="logoutButton" class="pull-right fa fa-sign-out"></i></p>
                 </div>

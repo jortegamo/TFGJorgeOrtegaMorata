@@ -1,0 +1,262 @@
+.wrapper{
+  height: 100%;
+  padding-bottom: 30px;
+}
+
+.content-tab-wrapper{
+  margin-top: 20px;
+  padding: 0px 15px;
+  font-family: roboto, sans-serif;
+  font-weight: 200;
+  font-size: 16px;
+  min-width: 754px;
+  .item-list{
+    .title{
+      font-size: 15px;
+    }
+    width: 100%;
+    padding-bottom: 15px;
+  }
+}
+@keyframes fade-in{
+  0%{opacity: 0.5;}
+  100%{opacity: 1;}
+}
+.fade-in{
+  animation-name: fade-in;
+  animation-duration: 1s;
+}
+
+.conversation-item{
+  border-bottom: 1pt solid #E4E4E4;
+  margin: 0px 10px;
+  padding: 10px 5px 15px 0px;
+  img{
+    border-radius: 50%;
+    height: 65px;
+    width: 65px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  .reply-button{
+    padding: 5px 10px;
+    background: #DEE0E1;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #4E4F4F;
+    &:hover{
+      background: #E6E8EA;
+    }
+  }
+  .message{
+    padding-left: 0px;
+    font-size: 14px;
+    font-weight: 500;
+    span{
+      color: #9A9C9A;
+      font-weight: 100;
+      font-size: 12px;
+      margin-left: 5px;
+    }
+    .author{
+      font-size: 14px;
+      font-weight: 500;
+      color: #333333;
+      cursor: pointer;
+    }
+    .subject{
+      font-size: 14px;
+      font-weight: 400;
+      background: #DEE0E1;
+      padding: 5px;
+      color: #666767;
+    }
+    .status{
+      font-size: 14px;
+      color: #636463;
+      i{
+        font-size: 16px;
+        color: #BFEFCA;
+      }
+    }
+    .arrow{
+      position: absolute;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right: 10px solid #F2F3F3;
+      left: -8px;
+    }
+    .message-content{
+      position: relative;
+      font-size: 13px;
+      font-weight: 100;
+      padding: 10px;
+      color: #686968;
+      text-align: justify;
+      background: #F2F3F3;
+      border-radius: 10px;
+      margin-bottom: 5px;
+    }
+  }
+  &.pending{
+    .message .status i{
+      color: #F77575;
+    }
+  }
+  &.viewed{
+    .message .status i{
+      color: #A1D1FD;
+    }
+  }
+}
+
+.contact-item{
+  width: 100%;
+  font-size: 14px;
+  padding: 10px 5px 15px 0px;
+  margin: 0px 10px;
+  border-bottom: 1pt solid #E4E4E4;
+  font-weight: 500;
+
+  img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-top: 5px;
+  }
+  img, .author{ cursor: pointer;}
+
+  .contact-body{
+    padding: 0px;
+    .status{
+      font-weight: 100;
+      margin-left: 5px;
+      color: #838282;
+    }
+    p{
+      color: #333333;
+      margin: auto;
+      padding: 0px 5px;
+    }
+    .action-button{
+      padding: 2px 10px;
+      background: #DEE0E1;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #4E4F4F;
+      font-size: 12px;
+      margin-left: 5px;
+      &:hover{
+        background: #E6E8EA;
+      }
+    }
+    .date{
+      color: #9A9C9A;
+      font-weight: 100;
+      font-size: 12px;
+      margin-left: 5px;
+    }
+    .description{
+      padding: 5px 10px;
+      background: #F2F3F3;
+      color: #686968;
+      font-size: 12px;
+      border-radius: 5px;
+    }
+    .author:hover{
+      color: #F34343;
+    }
+  }
+
+  &.online{
+    .status i{
+      color: #81F8A9;
+    }
+  }
+  &.outline{
+    .status i{
+      color: #F77575;
+    }
+  }
+}
+
+.request-item{
+  font-size: 14px;
+  padding: 10px 5px 15px 0px;
+  margin: 0px 10px;
+  border-bottom: 1pt solid #E4E4E4;
+  font-weight: 500;
+
+  img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-top: 10px;
+    cursor: pointer;
+    &.applicant-avatar{
+      border-radius: 5px;
+      margin-top: 5px;
+      width: 40px;
+      height: 40px;
+    }
+  }
+  .request-body{
+    padding: 0px;
+    p{
+      color: #333333;
+      margin: auto;
+      padding: 5px;
+    }
+    .username{cursor: pointer;}
+    .date{
+      color: #9A9C9A;
+      font-weight: 100;
+      font-size: 12px;
+      margin-left: 5px;
+    }
+    .status{
+      font-weight: 100;
+      margin-left: 5px;
+      color: #838282;
+    }
+    .arrow{
+      position: absolute;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right: 10px solid #F2F3F3;
+      left: -8px;
+    }
+    .message-content{
+      p{color: #686968;}
+      position: relative;
+      font-size: 13px;
+      font-weight: 100;
+      padding: 10px;
+      text-align: justify;
+      background: #F2F3F3;
+      border-radius: 10px;
+      margin-bottom: 5px;
+    }
+    .action-button{
+      margin-left: 5px;
+      padding: 2px 10px;
+      background: #DEE0E1;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #4E4F4F;
+      font-size: 12px;
+      &:hover{
+        background: #E6E8EA;
+      }
+    }
+  }
+  &.pending .status i{
+    color: #F77575;
+  }
+  &.accepted .status i{
+    color: #BFEFCA;
+  }
+  &.refused .status i{
+    color: #DE9D34;
+  }
+}

@@ -1,0 +1,172 @@
+<template name="lesson">
+    <div class="content-wrapper type-2">
+        <div class="page-banner">
+            <div>
+                <div class="container-fluid">
+                    <div class="page-banner-content">
+                        <div class="row">
+                            <div class="col-xs-12 banner-header">
+                                <p class="banner-title"><i class="fa fa-book"></i> {{title}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 banner-info text-center">
+                                <div class="box-info">
+                                    <div class="creator-box">
+                                        <img class="avatar" src="{{avatar}}">
+                                        <p class="author">{{username}}</p>
+                                    </div>
+                                    <span class="date"><i class="fa fa-clock-o"> {{dateFrom createdAt}}</i></span>
+                                    <div class="counters-box">
+                                        <span id="sections-count"><i class="fa fa-bookmark"></i> {{sections_count}}</span>
+                                        <span id="comments-count"><i class="fa fa-comments"></i> {{comments_count}}</span>
+                                        <span id="votes-count"><i class="fa fa-heart"></i> {{votes_count}}</span>
+                                        <span id="users-count"><i class="fa fa-user"></i> {{users_count}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-9 banner-description-box">
+                                <div class="description">
+                                    <p>{{description}}</p>
+                                    {{#if isNotOwner}}
+                                        <div class="buttons">
+                                            <span class="enrol-button"><i class="fa fa-sign-in"></i> enroll here</span>
+                                        </div>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-xs-12">
+                                {{> navbarBanner tabs=tabNamesArray }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="content-tab-wrapper">
+            <div class="content">
+                <div class="container-fluid">
+                    {{> Template.dynamic template=sectionActive}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</template>
+
+<template name="sectionsTabContent">
+    <div class="row content-navbar">
+        <div class="col-xs-12">
+            <div class="filter-options">
+                <ul class="tab-page">
+                    <li id="sections-filter" class="filter"><span>Sections</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row content-body">
+        <div class="col-xs-12">
+            <div class="list row">
+                {{#each sections}}
+                    {{>sectionItem}}
+                {{/each}}
+            </div>
+            {{#if isOwner}}
+                <div class="form-section">
+                    <p><i class="fa fa-plus-circle"></i> Create a new section</p>
+                    <form>
+                        <input type="text" placeholder="write a title for a new section">
+                        <div class="button-input-inline">
+                            <span class=""><i class="fa fa-plus"></i> add</span>
+                        </div>
+                    </form>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+</template>
+
+<template name="usersTabContent">
+    <div class="row content-navbar">
+        <div class="col-xs-12">
+            <div class="filter-options">
+                <ul class="tab-page">
+                    <li id="users-filter" class="filter"><span>Users enrolled</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row content-body">
+        <div class="col-xs-12">
+            <div class="row list">
+                {{#each users}}
+                    {{>userItem}}
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="settingsTabContent">
+    <div class="row content-navbar">
+        <div class="col-xs-12">
+            <div class="filter-options">
+                <ul class="tab-page">
+                    <li id="settings-filter" class="filter"><span>Settings</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row text-center content-body">
+        <div class="col-xs-12 text-center">
+            <!-- settings -->
+        </div>
+    </div>
+</template>
+
+<template name="userItem">
+    <div class="col-xs-4 userItem fade-in">
+        <img class="avatar" src="{{avatar}}">
+        <span class="username">{{username}}</span>
+    </div>
+</template>
+
+<template name="sectionItem">
+    <div class="sectionItem col-xs-12 fade-in">
+        <div class="row section-header">
+            <p class="">
+                <span class="index"><i class="fa fa-bookmark"></i> Section {{order}}</span>
+                <span>{{title}}</span>
+                {{#if isOwner}}
+                    <span class="pull-right option config-section"><i class="fa fa-cog"></i></span>
+                    <span class="pull-right option delete-section"><i class="fa fa-trash"></i></span>
+                    <span class="pull-right section-button"><i class="fa fa-plus"></i> new track</span>
+                {{/if}}
+                <span class="pull-right section-button"><i class="fa fa-play"></i> play all</span>
+                <span class="pull-right counter counter-tracks"><i class="fa fa-film"></i> 0</span>
+
+            </p>
+        </div>
+        <div class="row section-tracks">
+            {{#each tracks}}
+                {{>trackItem}}
+            {{/each}}
+        </div>
+    </div>
+</template>
+
+<template name="trackItem">
+    <div class="trackItem col-xs-12 fade-in">
+        <span class="display"><i class="fa fa-play"></i></span>
+        <span class="info">{{title}}</span>
+        <span class="pull-right counter"><i class="fa fa-comments"></i> 0</span>
+        <span class="pull-right counter"><i class="fa fa-heart"></i> 0</span>
+        <span class="pull-right counter"><i class="fa fa-eye"></i> 0</span>
+    </div>
+
+</template>

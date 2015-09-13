@@ -1,0 +1,37 @@
+<template name="signInForm">
+    <form class="awesome-form sign-form">
+        <div class="form-group">
+            <div class="row">
+                <div id="inputUsername" class="col-xs-12 form-field">
+                    <label for="username">User Name</label>
+                    <input type="text" name="username" id="username" required>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div id="inputPassword" class="col-xs-12 form-field">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul style= "list-style: none; text-align: right">
+                        <li><a href="" id="forgot"><i class="fa fa-key"></i> forgot Password</a></li>
+                        <li><a href="" id="signUp"><i class="fa fa-plus"></i> create Account</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <button class="submit-button" type="submit"><i class="fa fa-sign-in"></i> Sign In</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</template>

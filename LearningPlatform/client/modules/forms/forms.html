@@ -1,0 +1,261 @@
+<template name="formAwesome">
+    {{> Template.dynamic template=formType}}
+</template>
+<template name="formProfileEdit">
+    <form class="awesome-form form-editable">
+        <!--avatar-->
+        <section id="avatar-section">
+            <p class="title-section">Avatar <span class="edit-button"><i class="fa fa-pencil"></i> edit</span></p>
+            <div class="edited-block text-center">
+                <img class="avatar avatar-img" src="{{avatar}}"/>
+                <img class="avatar avatar-img-medium" src="{{avatar}}"/>
+                <img class="avatar avatar-img-circle" src="{{avatar}}"/>
+            </div>
+            <div class="edit-block">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="checkbox-list">
+                            <div class="checkbox-item">
+                                <label><i class="fa fa-circle-o"></i> default</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label class="checkbox-awesome"><i class="fa fa-circle-o"></i> url</label>
+                                <input type="text" autocomplete="off" placeholder="insert a url" disabled/>
+                            </div>
+                            <div class="checkbox-item">
+                                <label><i class="fa fa-circle-o"></i> file</label>
+                                <input type="file" placeholder="file" disabled/>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="actions text-center">
+                    <span class="action-button save">save</span>
+                    <span class="action-button discard">discard</span>
+                </div>
+            </div>
+        </section>
+        <!--banner-->
+        <section id="banner-section">
+            <p class="title-section">Banner <span class="edit-button"><i class="fa fa-pencil"></i> edit</span></p>
+            <div class="edited-block">
+                <img class="banner-img" src="{{banner}}"/>
+            </div>
+            <div class="edit-block">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="checkbox-list">
+                            <div class="checkbox-item">
+                                <label><i class="fa fa-circle-o"></i> default</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label><i class="fa fa-circle-o"></i> url</label>
+                                <input type="text" autocomplete="off" placeholder="insert a url" disabled/>
+                            </div>
+                            <div class="checkbox-item">
+                                <label><i class="fa fa-circle-o"></i> file</label>
+                                <input type="file" placeholder="file" disabled/>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="actions text-center">
+                    <span class="action-button save">save</span>
+                    <span class="action-button discard">discard</span>
+                </div>
+            </div>
+        </section>
+
+        <!--description-->
+        <section id="description-section">
+            <p class="title-section">Description <span class="edit-button"><i class="fa fa-pencil"></i> edit</span></p>
+            <div class="edited-block">
+                {{#if description}}
+                    <p>{{description}}</p>
+                {{else}}
+                    <p>No description</p>
+                {{/if}}
+
+            </div>
+            <div class="edit-block">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12 form-field no-label">
+                            <textarea name="description" style="resize: none"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="actions text-center">
+                    <span class="action-button save">save</span>
+                    <span class="action-button discard">discard</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="form-group">
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <button class="submit-button" type="submit">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</template>
+<!-- Editor config and create form -->
+<template name="formDoc">
+    <form class="awesome-form form-editor">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 form-field">
+                    <label>Title</label>
+                    <input name="title" autocomplete="off" type="text" required/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 form-field">
+                    <p class="section-form">Languages</p>
+                    <div>
+                        <ul>
+                            <li class="lang">behaviour</li>
+                            <li class="lang">coffee</li>
+                            <li class="lang">css</li>
+                            <li class="lang">folding</li>
+                            <li class="lang">html</li>
+                            <li class="lang">javascript</li>
+                            <li class="lang">json</li>
+                            <li class="lang">lua</li>
+                            <li class="lang">php</li>
+                            <li class="lang">xml</li>
+                            <li class="lang">xquery</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 form-field">
+                    <p class="section-form">Themes</p>
+                    <div>
+                        <ul>
+                            <li class="theme">ambiance</li>
+                            <li class="theme">chaos</li>
+                            <li class="theme">chrome</li>
+                            <li class="theme">clouds</li>
+                            <li class="theme">clouds_midnight</li>
+                            <li class="theme">cobalt</li>
+                            <li class="theme">dawn</li>
+                            <li class="theme">eclipse</li>
+                            <li class="theme">github</li>
+                            <li class="theme">monokai</li>
+                            <li class="theme">tomorrow</li>
+                            <li class="theme">terminal</li>
+                            <li class="theme">twilight</li>
+                            <li class="theme">xcode</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <button type="submit">save</button>
+                    <button id="cancel">cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</template>
+
+<!-- CHANNEL FORM -->
+<template name="channelForm">
+    <form class="awesome-form">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 form-field">
+                    <label>Title</label>
+                    <input name="title" autocomplete="off" type="text" required/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 form-field">
+                    <label>Description</label>
+                    <textarea name="description" style="resize: none"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <button class="submit-button" type="submit">Done</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</template>
+
+<!-- LESSON FORM -->
+<template name="lessonForm">
+    <form class="awesome-form">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 form-field required">
+                    <label>Title</label>
+                    <input name="title" autocomplete="off" type="text" required/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 form-field">
+                    <label>Description</label>
+                    <textarea name="description" style="resize: none"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <button class="submit-button" type="submit">Done</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</template>
+
+<!-- TEAM FORM-->
+<template name="teamForm">
+    <form class="awesome-form">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 form-field">
+                    <label>Title</label>
+                    <input name="title" autocomplete="off" type="text" required/>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12 form-field">
+                    <label>Description</label>
+                    <textarea name="description" style="resize: none"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <button class="submit-button" type="submit">Done</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</template>
+

@@ -5,6 +5,9 @@ Template.sidebar.helpers({
 	},
 	menuTab: function(){
 		return Session.get('menu-active');
+	},
+	avatar: function(){
+		return Meteor.users.findOne(Meteor.userId()).avatar;
 	}
 });
 
@@ -12,6 +15,7 @@ Template.sidebar.events({
 
 	'click #logoutButton': function(){
 		Meteor.logout();
+		Router.go('/')
 	},
 
 	'click .tab': function(e){
@@ -47,7 +51,18 @@ Template.sidebar.events({
 		}
 	},
 
-	'click .profile-link, click .more': function(){
+	'click .profile-link':function(){
+		Session.set('currentProfileId',Meteor.userId());
+		Router.go('profile',{_id: Meteor.user()._id});
+	},
+
+	'click .more': function(e){
+		Session.set('currentSection', e.currentTarget.id);
+		Router.go('profile',{_id: Meteor.user()._id});
+	},
+
+	'click #my-records': function(e){
+		Session.set('currentSection','recordsTabContent');
 		Router.go('profile',{_id: Meteor.user()._id});
 	}
 

@@ -21,11 +21,13 @@
     <div id="main-wrapper">
         {{#if currentUser}}
             {{> sidebar }}
+            <div id="page-wrapper">
+                {{> header}}
+                {{> yield }}
+            </div>
+        {{else}}
+            {{> yield}}
+            {{> loginModal }}
         {{/if}}
-        <div id="page-wrapper">
-            {{> header}}
-            {{> yield }}
-        </div>
-        {{>loginForm }}
     </div>
 </template>

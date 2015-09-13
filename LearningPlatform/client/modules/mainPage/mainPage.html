@@ -1,109 +1,47 @@
 <template name="mainPage">
-  <div id="pageContent" class="container-fluid">
   {{#if currentUser}}
 	   {{>startPage}}
   {{else}}
+      <div id="main-page-wrapper">
+          <div id="main-page-content">
+              <div class="container-fluid">
+                  <div class="row text-center">
+                      <div class="col-xs-12">
+                          <div class="main-box">
+                              <img id="main-logo" src="/duck_icon.ico"/>
+                              <h3>DuckFlight</h3>
+                              <h4>The definitive live site for developers</h4>
+                          </div>
+                          <button data-toggle="modal" data-target="#loginForm">Sign In</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div id="footer-page">
+              <div class="container-fluid">
+                  <div class="row">
+                      <div class="col-xs-4">
+                          Features
+                          <ul>
+                              <li>Team Manager</li>
+                              <li>Rec on Editor</li>
+                              <li>Lessons & Tutorials</li>
+                          </ul>
+                      </div>
+                      <div class="col-xs-4">
+                          Integrations
+                          <ul>
+                              <li>GitHub</li>
+                              <li>SoundCloud</li>
+                              <li>PivotalTracker</li>
+                          </ul>
+                      </div>
+                      <div class="col-xs-4">
 
-    <div id="main-panel">
-      <div>
-        <img class="img-responsive" src="s1.jpg">
-      </div>
-      <div class="panel-info main-msg">
-          <h1> >_ The definitive live site for developers</h1>
-      </div>
-      <div class="panel-info second-msg">
-          <h1> Enjoy coding! :)</h1>
-      </div>
-    </div>
-
-    	<div id="menu-features" style="text-align:center">
-      	<p id="features-header">Features</p>
-        <div class="feature-logo">
-          <img id="rc" src="Studio-Mic-icon.png" class="icon-feature codeRec">
-          <div class="arrow-up-feature"></div>
-        </div>
-        <div class="feature-logo">
-          <img id="pp" src="friends.png" class="icon-feature pairProgram">
-          <div class="arrow-up-feature"></div>
-        </div>
-        <div class="feature-logo">
-          <img id="t" src="student-icon.png" class="icon-feature tutorials">
-          <div class="arrow-up-feature"></div>
-        </div>
-        <div class="feature-logo">
-          <img id="n" src="bell-icon.png" class="icon-feature noti">
-          <div class="arrow-up-feature"></div>
-        </div>
-      </div>
-
-      <div class="feature-description-content">
-        <div class="nav-pag">
-          <div class="circle-nav">
-            <div class="nav-fill-circle"></div>
+                      </div>
+                  </div>
+              </div>
           </div>
-          <div class="circle-nav">
-            <div class="nav-fill-circle"></div>
-          </div>
-          <div class="circle-nav">
-            <div class="nav-fill-circle"></div>
-          </div>
-          <div class="circle-nav">
-            <div class="nav-fill-circle"></div>
-          </div>
-          <div class="circle-nav">
-            <div class="nav-fill-circle"></div>
-          </div>
-        </div>
       </div>
-
   {{/if}}
-
-  </div>
-</template>
-
-<template name="signInForm">
-    <form>
-          <div id="inputUsername" class="form-group">
-            <label for="username">User Name</label>
-            <input type="text" name="username" class="form-control" id="username" placeholder="Enter a User Name">
-          </div>
-
-          <div id="inputPassword" class="form-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" class="form-control" id="password" placeholder="Password">
-          </div>
-          <ul style= "list-style: none; text-align: right">
-            <li><a href="" id="forgot">forgot Password</a></li>
-            <li><a href="" id="signUp">Create Account</a></li>
-          </ul>
-          <div style="text-align: center">
-            <input type="submit" value="SignIn" class="btn btn-success" />
-          </div>
-         </form>
-</template>
-
-<template name="loginForm">
-<div class="modal fade" id="loginForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog" style="width: 30em">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">Sign In or Sign Up</h4>
-      </div>
-      <div class="modal-body" style="text-align: left">
-
-        {{#if signUp}}
-          {{>signUpForm}}
-        {{else}}
-          {{#if forgotPassword}}
-            {{>forgotPasswordForm}}
-          {{else}}
-            {{>signInForm}}
-          {{/if}}
-        {{/if}}
-        
-      </div>
-    </div>
-  </div>
-</div>
 </template>

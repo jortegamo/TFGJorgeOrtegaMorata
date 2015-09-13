@@ -1,0 +1,52 @@
+.modal-duckflight{
+  .modal-dialog{
+    width: 400px;
+    .modal-content{
+      border-radius: 5px;
+      .modal-header{
+        img{
+          height: 40px;
+          widht: 40px;
+          padding: 2px;
+          background: white;
+          border-radius: 50%;
+          margin-right: 10px;
+          vertical-align: bottom;
+        }
+        background: #FB5B5B;
+        border-bottom: 1px solid #D95454;
+        .modal-title{
+          display: inline-block;
+          color: white;
+          font-family: roboto, sans-serif;
+          font-weight: 100;
+          font-size: 20px;
+        }
+      }
+      .modal-body{
+        padding: 0px;
+      }
+    }
+  }
+  .sign-form{
+    .form-field{
+      label{
+        color: #837272;
+      }
+      input{
+        text-indent: 5px;
+        border-color: #837272;
+      }
+    }
+    ul{
+      margin: 0px;
+      li{margin-top: 5px;}
+    }
+    a{
+      color: #977979;
+      &:hover{
+        color: #AD8A8A;
+      }
+    }
+  }
+}
