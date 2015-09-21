@@ -26,9 +26,9 @@
                     </p>
 
                     <ul class="nav-sidebar">
-                        <li><span># Meteor</span></li>
-                        <li><span># Javascript</span></li>
-                        <li><span># AngularJS</span></li>
+                        {{#each channels}}
+                            <li class="channel-item"><span># {{title}}</span></li>
+                        {{/each}}
                     </ul>
 
                     <a id="channelsTabContent" class="more">+ View More...</a>
@@ -44,8 +44,9 @@
                     </p>
 
                     <ul class="nav-sidebar">
-                        <li><span>@ DuckFlight</span></li>
-                        <li><span>@ CodeMasters</span></li>
+                        {{#each teams}}
+                            <li class="team-item"><span>@ {{title}}</span></li>
+                        {{/each}}
                     </ul>
 
                     <a id="teamsTabContent" class="more">+ View More...</a>
@@ -61,8 +62,9 @@
                     </p>
 
                     <ul class="nav-sidebar">
-                        <li><span>& Learn Meteor</span></li>
-                        <li><span>& Learn Angular</span></li>
+                        {{#each lessons}}
+                            <li class="lesson-item"><span>& {{title}}</span></li>
+                        {{/each}}
                     </ul>
 
                     <a id="lessonsTabContent" class="more">+ View More...</a>

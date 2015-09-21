@@ -45,6 +45,8 @@ minimongo@1.0.6
 mizzao:bootstrap-3@3.3.1_1
 mizzao:sharejs@0.7.0
 mizzao:sharejs-ace@1.1.8_1
+mizzao:timesync@0.3.0
+mizzao:user-status@0.6.4
 mobile-status-bar@1.0.2
 momentjs:moment@2.10.3
 mongo@1.0.11

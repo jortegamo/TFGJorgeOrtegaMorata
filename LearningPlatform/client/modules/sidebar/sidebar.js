@@ -8,7 +8,10 @@ Template.sidebar.helpers({
 	},
 	avatar: function(){
 		return Meteor.users.findOne(Meteor.userId()).avatar;
-	}
+	},
+	channels: function(){return Channels.find({author: Meteor.userId()},{sort: {createdAt: -1},$limit: 3})},
+	teams:  function(){return Teams.find({author: Meteor.userId()},{sort: {createdAt: -1},$limit: 3})},
+	lessons:  function(){return Lessons.find({author: Meteor.userId()},{sort: {createdAt: -1},$limit: 3})},
 });
 
 Template.sidebar.events({
@@ -64,6 +67,18 @@ Template.sidebar.events({
 	'click #my-records': function(e){
 		Session.set('currentSection','recordsTabContent');
 		Router.go('profile',{_id: Meteor.user()._id});
+	},
+
+	'click .channel-item': function(){
+		Router.go('channel',{_id: this._id});
+	},
+
+	'click .team-item': function(){
+		Router.go('team',{_id: this._id});
+	},
+
+	'click .lesson-item': function(){
+		Router.go('lesson',{_id: this._id});
 	}
 
 });

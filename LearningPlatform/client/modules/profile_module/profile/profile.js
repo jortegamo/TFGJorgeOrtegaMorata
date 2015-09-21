@@ -40,7 +40,7 @@ Template.profile.helpers({
                 {template: 'teamsTabContent',    name: 'teams', icon: 'fa-users'},
                 {template: 'lessonsTabContent',  name: 'lessons', icon: 'fa-book'},
                 {template: 'recordsTabContent',  name: 'records', icon: 'fa-film'},
-                {template: 'messagesTabContent', name: 'messages', icon: 'fa-envelope-o', ownerOnly: true},
+                {template: 'messagesTabContent', name: 'messages', icon: 'fa-envelope-o', ownerOnly: true, isOwner: Session.get('currentProfileId') === Meteor.userId()},
                 {template: 'contactsTabContent', name: 'contacts', icon: 'fa-user'}];
     }
 });
@@ -127,7 +127,7 @@ Template.profile.rendered = function(){
         'Praesent malesuada leo nisi, eget vehicula augue auctor faucibus. Nam ' +
         'dictum eros nec arcu fermentum ornare. Nunc commodo fermentum aliquet. Vivamus dapibus, ' +
         'diam et sagittis suscipit, tortor velit accumsan nulla, et aliquam nunc ipsum et ex. ',
-        avatar: "http://docencia.etsit.urjc.es/moodle/pluginfile.php/154/user/icon/formal_white/f1",
+        avatar: "http://gsyc.es/~grex/concurso/21/images/pedrodelasheras.jpg",
         state: 'pending',
         replies_count: 29,
         users_count: 2
@@ -159,9 +159,6 @@ Template.profile.destroyed = function(){
 Template.navbarBanner.helpers({
     capitalize: function(s){
         return s.charAt(0).toUpperCase() + s.slice(1);
-    },
-    isOwner: function(){
-        return Session.get('currentProfileId') === Meteor.userId();
     }
 });
 
@@ -189,16 +186,19 @@ Template.navbarBanner.destroyed = function(){
 };
 
 Template.channelsTabContent.helpers({
+    hasItems: function() {
+        return Channels.find({}).count();
+    },
     listMode: function(){
         return Session.get('horizontalMode');
     },
     channels: function(){
         switch(Session.get('currentFilter')){
             case 'recents':
-                return Channels.find({},{sort: {createdAt: -1}});
+                return Channels.find({},{$sort: {createdAt: -1}});
                 break;
-            case 'popular':
-                return Channels.find({},{sort: {votes: -1}});
+            case 'populars':
+                return Channels.find({},{sort: {votes_count: -1}});
                 break;
         }
     }
@@ -234,7 +234,7 @@ Template.recordsTabContent.helpers({
             case 'recents':
                 return Records.find({},{sort: {createdAt: -1}});
                 break;
-            case 'popular':
+            case 'populars':
                 return Records.find({},{sort: {votes: -1}});
                 break;
         }
@@ -270,7 +270,7 @@ Template.teamsTabContent.helpers({
             case 'recents':
                 return Teams.find({},{sort: {createdAt: -1}});
                 break;
-            case 'popular':
+            case 'populars':
                 return Teams.find({},{sort: {votes: -1}});
                 break;
         }
@@ -306,7 +306,7 @@ Template.lessonsTabContent.helpers({
             case 'recents':
                 return Lessons.find({},{sort: {createdAt: -1}});
                 break;
-            case 'popular':
+            case 'populars':
                 return Lessons.find({},{sort: {votes: -1}});
                 break;
         }
@@ -426,7 +426,8 @@ Template.contactItem.helpers({
         return ellipsis (field,max);
     },
     userStatus: function(){
-        return 'online';
+        var contact = _(this.users).filter(function(item){return item !== Session.get('currentProfileId')});
+        return (Meteor.users.findOne(contact[0]).status.online)? 'online' : 'outline';
     },
     isOwner: function(){
         return Session.get('currentProfileId') === Meteor.userId();

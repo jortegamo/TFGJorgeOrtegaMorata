@@ -1,10 +1,15 @@
 Router.configure({
   	layoutTemplate: 'layout',
+	loadingTemplate: 'loading',
 	waitOn: function(){
-		return Meteor.subscribe('userById',Meteor.userId());
+		return [Meteor.subscribe('userById',Meteor.userId()),
+				Meteor.subscribe('sidebarChannels',Meteor.userId()),
+				Meteor.subscribe('sidebarTeams',Meteor.userId()),
+				Meteor.subscribe('sidebarLessons',Meteor.userId())];
 	}
 });
 
+Router.route('/loading',{name: 'loading'})
 Router.route('/', {
 	name: 'mainPage',
 	waitOn: function(){return Meteor.subscribe('allUsers');}
@@ -25,7 +30,7 @@ Router.route('/records/submit',{name: 'recordSubmit'});
 
 Router.route('/record/:_id',{
 	name: 'record',
-	data: function(){ return Records.findOne(this.params._id);},
+	data: function(){return Records.findOne(this.params._id);},
 	waitOn: function(){
 		var subscriptions = [Meteor.subscribe('documentsRecord',this.params._id),
 			 				 Meteor.subscribe('records'),
@@ -47,13 +52,15 @@ Router.route('/channels/submit',{
 });
 
 
-Router.route('/channel/:_id',{
+Router.route('/channels/:_id',{
 	name: 'channel',
-	data: function(){return Channels.findOne(this.params._id);},
+	data: function(){
+		return (this.ready()) ? Channels.findOne(this.params._id) : null;
+	},
 	waitOn: function(){
-		var subscriptions = [Meteor.subscribe('channels'),
-							 Meteor.subscribe('commentsChannel',this.params._id)];
-		return subscriptions;
+		return [Meteor.subscribe('channel',this.params._id),
+				Meteor.subscribe('userByChannel',this.params._id)];
+
 	}
 });
 
@@ -89,14 +96,13 @@ Router.route('/lessons/submit',{
 Router.route('/lesson/:_id',{
 	name: 'lesson',
 	data: function(){
-		console.log(Lessons.findOne(this.params._id));
-		console.log(this.params._id)
 		return Lessons.findOne(this.params._id);},
 	waitOn: function(){
 		return [Meteor.subscribe('lesson', this.params._id),
-				Meteor.subscribe('allUsers'),
 				Meteor.subscribe('recordsByLesson', this.params._id),
-				Meteor.subscribe('lessonSections', this.params._id)];
+				Meteor.subscribe('lessonSections', this.params._id),
+				Meteor.subscribe('usersEnrolled',this.params._id),
+				Meteor.subscribe('usersLesson',this.params._id)];
 	}
 })
 
@@ -109,14 +115,17 @@ Router.route('/profile/:_id',{
 		return {user_id: this.params._id, section: Session.get('currentSection')};
 	},
 	waitOn: function(){
-		return [Meteor.subscribe('allUsers'),
+		return [Meteor.subscribe('userById',this.params._id),
 				Meteor.subscribe('channelsByUser',this.params._id),
 				Meteor.subscribe('lessonsByUser',this.params._id),
 				Meteor.subscribe('teamsByUser',this.params._id),
 				Meteor.subscribe('recordsByUser',this.params._id),
 				Meteor.subscribe('conversationsByUser',this.params._id),
 				Meteor.subscribe('contactsByUser',this.params._id),
-				Meteor.subscribe('requestsByUser',this.params._id)];
+				Meteor.subscribe('usersContacts',this.params._id),
+				Meteor.subscribe('requestsByUser',this.params._id),
+				Meteor.subscribe('requestedUsers',this.params._id),
+				Meteor.subscribe('applicantUsers',this.params._id)];
 
 	}
 });

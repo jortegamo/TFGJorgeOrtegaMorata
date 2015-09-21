@@ -30,7 +30,12 @@
                                     <p>{{description}}</p>
                                     {{#if isNotOwner}}
                                         <div class="buttons">
-                                            <span class="enrol-button"><i class="fa fa-sign-in"></i> enroll here</span>
+                                            {{#if userEnrolled}}
+                                                <span class="enrol-info"><i class="fa fa-check"></i> you're already enrolled in!</span>
+                                            {{else}}
+                                                <span class="enrol-button"><i class="fa fa-sign-in"></i> enroll here</span>
+                                            {{/if}}
+
                                         </div>
                                     {{/if}}
                                 </div>
@@ -71,18 +76,24 @@
     </div>
     <div class="row content-body">
         <div class="col-xs-12">
-            <div class="list row">
-                {{#each sections}}
-                    {{>sectionItem}}
-                {{/each}}
-            </div>
+
+                <div class="list row">
+                    {{#if userEnrolled}}
+                        {{#each sections}}
+                            {{>sectionItem}}
+                        {{/each}}
+                    {{else}}
+                        <p>Please, enroll in to view the lesson's contents!</p>
+                    {{/if}}
+                </div>
+
             {{#if isOwner}}
                 <div class="form-section">
                     <p><i class="fa fa-plus-circle"></i> Create a new section</p>
                     <form>
-                        <input type="text" placeholder="write a title for a new section">
-                        <div class="button-input-inline">
-                            <span class=""><i class="fa fa-plus"></i> add</span>
+                        <input type="text" placeholder="write a title for a new section" required>
+                        <div class="submit-inline-box">
+                            <button class="button-input-inline" type="submit"><i class="fa fa-plus"></i> create</button>
                         </div>
                     </form>
                 </div>
@@ -148,7 +159,7 @@
                     <span class="pull-right section-button"><i class="fa fa-plus"></i> new track</span>
                 {{/if}}
                 <span class="pull-right section-button"><i class="fa fa-play"></i> play all</span>
-                <span class="pull-right counter counter-tracks"><i class="fa fa-film"></i> 0</span>
+                <span class="pull-right counter counter-tracks"><i class="fa fa-film"></i> {{records_count}}</span>
 
             </p>
         </div>

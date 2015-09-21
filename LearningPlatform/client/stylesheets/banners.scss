@@ -38,12 +38,14 @@
         position: absolute;
         bottom: 0;
         right: 0;
-        .enrol-button{
+        span{
           padding: 5px 10px;
           font-size: 14px;
           color: white;
           background: #28C1B1;
           border-radius: 10px;
+        }
+        .enrol-button{
           cursor: pointer;
           &:hover{
             background: #23A497;

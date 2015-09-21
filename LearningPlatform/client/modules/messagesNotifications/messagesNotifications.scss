@@ -1,0 +1,47 @@
+.messages-notifications{
+  position: fixed;
+  z-index: 200;
+  top: 45px;
+  right: 0;
+  padding: 20px 0px;
+  width: 0;
+  border: 1px solid black;
+
+  .notification-alert{
+    position: relative;
+    z-index: 200;
+    padding: 10px 10px 10px 55px;
+    color: white;
+    width: 290px;
+    height: 50px;
+    margin-bottom: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0px 2px 10px black;
+    animation-name: alertNotif;
+    animation-duration: 5s;
+    img{
+      position: absolute;
+      height: 100%;
+      width: 50px;
+      top: 0;
+      left: 0;
+    }
+  }
+}
+
+@keyframes alertNotif{
+  0%,100%{
+    margin-left: 0px;
+    opacity: 0;
+  }
+  10%,90%{
+    margin-left: -300px;
+    opacity: 1;
+  }
+}
+@media (max-width: 990px) {
+  .messages-notifications {
+    top: 45px;
+    transition: all 0.5s ease;
+  }
+}

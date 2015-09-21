@@ -11,13 +11,16 @@ Template.lesson.helpers({
     isNotOwner: function(){
         return this.author !== Meteor.userId();
     },
+    userEnrolled: function(){
+        return UsersEnrolledLesson.findOne({user_id: Meteor.userId()});
+    },
     sectionActive: function(){
         return Session.get('currentSection');
     },
     tabNamesArray: function(){
         return [{template: 'sectionsTabContent', name: 'sections', icon: 'fa-bookmark', initialActive: true},
                 {template: 'usersTabContent',    name: 'users', icon: 'fa-users'},
-                {template: 'settingsTabContent',  name: 'settings', icon: 'fa-cogs',ownerOnly: true}];
+                {template: 'settingsTabContent',  name: 'settings', icon: 'fa-cogs',ownerOnly: true, isOwner: this.author === Meteor.userId()}];
     }
 });
 
@@ -26,19 +29,41 @@ Template.lesson.events({
         Session.set('currentProfileId',this.author);
         Router.go('profile',{_id: this.author});
     },
+    'click .enrol-button': function(e){
+        Meteor.call('insertUserEnrolledLesson',this._id,Meteor.userId(),function(err,res){
+            if(err) console.log('insertUserEnrolledLesson ERROR: ' + err.reason);
+            if(res) console.log(res);
+        });
+    },
     'click .filter': function(e){
         var elem = e.currentTarget;
         $('.filter').removeClass('active');
         $(elem).addClass('active');
+    },
+    'submit form': function(e){
+        e.preventDefault();
+        var sectionTitle = $(e.currentTarget).find('input').val();
+        var section = {
+            title: sectionTitle,
+            order: Sections.find().count(),
+            lesson_id: this._id,
+            createdAt: new Date(),
+            records_count: 0
+        };
+        Meteor.call('insertSection',section,function(err,res){
+            if(err) console.log('insertSection ERROR: ' + err.reason);
+            if(res) console.log(res);
+        });
+        $(e.currentTarget).find('input').val('');
     }
-})
+});
 
 Template.lesson.rendered = function(){
+    Session.set('author',this.data.author);
     $('#sections-count').tooltip({placement: 'left', title: 'sections'});
     $('#comments-count').tooltip({placement: 'bottom', title: 'comments'});
     $('#votes-count').tooltip({placement: 'bottom', title: 'votes'});
     $('#users-count').tooltip({placement: 'right', title: 'users'});
-
 };
 
 
@@ -48,18 +73,10 @@ Template.sectionsTabContent.helpers({
         return Router.current().data().author === Meteor.userId();
     },
     sections: function(){
-        var sections = [];
-        var s1 = {
-            order: 0,
-            title: 'Introduction'
-        };
-        var s2 = {
-            order: 1,
-            title: 'Ruby Basics'
-        };
-        sections.push(s2);
-        sections.push(s1);
-        return  _(_(sections).indexBy('order')).toArray();
+        return  Sections.find({},{sort: {order: 1}});
+    },
+    userEnrolled: function(){
+        return this.author == Meteor.userId() || UsersEnrolledLesson.findOne({user_id: Meteor.userId()});
     }
 });
 
@@ -67,6 +84,7 @@ Template.sectionsTabContent.events({
     'click #sections-filter': function(){
         Session.set('currentFilter','sections-filter');
     }
+
 });
 
 Template.sectionsTabContent.rendered = function(){
@@ -77,7 +95,7 @@ Template.sectionsTabContent.rendered = function(){
 //usersTab
 Template.usersTabContent.helpers({
     users: function(){
-        return Meteor.users.find();
+        return UsersEnrolledLesson.find();
     }
 });
 
@@ -110,11 +128,21 @@ Template.settingsTabContent.rendered = function(){
 };
 
 //Items
+
+Template.userItem.helpers({
+    username: function(){
+        return Meteor.users.findOne(this.user_id).username;
+    },
+    avatar: function(){
+        return Meteor.users.findOne(this.user_id).avatar;
+    }
+});
+
 Template.userItem.events({
     'click .userItem .avatar, click .userItem .username': function(){
-        Session.set('currentProfileId',this._id);
+        Session.set('currentProfileId',this.user_id);
         Session.set('currentSection','channelsTabContent');
-        Router.go('profile',{_id: this._id});
+        Router.go('profile',{_id: this.user_id});
     }
 });
 

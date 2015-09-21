@@ -10,6 +10,8 @@ Template.channelSubmit.events({
         var channel = {
             author: Meteor.userId(),
             title: title,
+            banner: 'channel-banner-bg.jpg',
+            img: 'channel-img-default.jpg',
             description: description,
             createdAt: new Date(),
             records_count: 0,
