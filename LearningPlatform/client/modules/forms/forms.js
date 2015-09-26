@@ -24,8 +24,7 @@ Template.formAwesome.events({
         var label = input.parent().children('label');
         label.addClass('active');
         input.addClass('active');
-    },
-
+    }
 });
 
 Template.formDoc.events({
@@ -56,7 +55,7 @@ Template.formDoc.events({
 
 Template.formProfileEdit.helpers({
     avatar: function(){
-        return Session.get('userObject').avatar;
+        return Session.get('userObject').avatar || Session.get('userObject').img;
     },
     banner: function(){
         return Session.get('userObject').banner;

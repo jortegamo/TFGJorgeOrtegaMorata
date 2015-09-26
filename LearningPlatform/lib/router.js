@@ -59,10 +59,26 @@ Router.route('/channels/:_id',{
 	},
 	waitOn: function(){
 		return [Meteor.subscribe('channel',this.params._id),
-				Meteor.subscribe('userByChannel',this.params._id)];
+				Meteor.subscribe('userByChannel',this.params._id),
+				Meteor.subscribe('commentsByContext',this.params._id),
+				Meteor.subscribe('commentsUsers',this.params._id),
+				Meteor.subscribe('votesChannel',this.params._id),
+				Meteor.subscribe('usersEnrolled',this.params._id),
+				Meteor.subscribe('usersChannel',this.params._id)];
 
 	}
 });
+
+Router.route('/channels/:_id/edit',{
+	name: 'channelEdit',
+	data: function(){
+		return (this.ready()) ? Channels.findOne(this.params._id) : null;
+	},
+	waitOn: function(){
+		return [Meteor.subscribe('channel',this.params._id),
+				Meteor.subscribe('userByChannel',this.params._id)];
+	}
+})
 
 //TEAMS
 Router.route('/teams',{

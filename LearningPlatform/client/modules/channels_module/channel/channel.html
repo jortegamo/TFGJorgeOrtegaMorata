@@ -7,8 +7,8 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="banner-img">
-                                    <img class="channel-img" src="/{{img}}"/>
-                                    <img class="banner-bg-img" src="/{{banner}}"/>
+                                    <img class="channel-img" src="{{img}}"/>
+                                    <img class="banner-bg-img" src="{{banner}}"/>
                                     <div class="footer-creator-box">
                                         <img src="{{avatar}}">
                                         <span class="username"> {{username}}</span>
@@ -24,8 +24,12 @@
                                         </div>
                                     {{else}}
                                         <div class="banner-options">
-                                            <span class="vote-button"><i class="fa fa-heart"></i></span>
-                                            <span class="subscribe-button"><i class="fa fa-plus-square"></i> subscribe</span>
+                                            {{#if userEnrolled}}
+                                                <span class="subscribed-info"><i class="fa fa-check"></i> you're already subscribed!</span>
+                                            {{else}}
+                                                <span class="subscribe-button"><i class="fa fa-plus-square"></i> subscribe</span>
+                                            {{/if}}
+                                            <span class="vote-button {{voted}}"><i class="fa fa-heart-o"></i></span>
                                         </div>
                                     {{/if}}
                                 </div>

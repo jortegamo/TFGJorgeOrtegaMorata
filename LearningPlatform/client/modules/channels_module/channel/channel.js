@@ -4,7 +4,8 @@ Template.channel.helpers({
     },
     tabNamesArray: function(){
         return [{template: 'recordsTabContent',  name: 'records', icon: 'fa-film', initialActive: true},
-                {template: 'commentsTabContent', name: 'comments', icon: 'fa-comments'}];
+                {template: 'commentsTabContent', name: 'comments', icon: 'fa-comments'},
+                {template: 'usersTabContent', name: 'users', icon: 'fa fa-users'}];
     },
     avatar: function(){
         return Meteor.users.findOne(this.author).avatar;
@@ -17,5 +18,62 @@ Template.channel.helpers({
     },
     sectionActive: function(){
         return Session.get('currentSection');
+    },
+    voted: function(){
+       console.log(VotesChannels.find());
+       return (VotesChannels.findOne({user_id: Meteor.userId()}))? 'active' : '';
+    },
+    userEnrolled: function(){
+        return UsersEnrolled.findOne({user_id: Meteor.userId()});
     }
 });
+
+Template.channel.events({
+    'click .channel-img': function(){
+        Router.go('channel',{_id: this._id});
+    },
+    'click .footer-creator-box img, click .footer-creator-box .username': function(){
+        Router.go('profile',{_id: this.author});
+    },
+    'click .vote-button': function(e){
+        $like = $(e.currentTarget);
+
+        if($like.hasClass('active')){
+            $like.removeClass('active');
+            Meteor.call('voteChannel',this._id,Meteor.userId(),-1);
+        }else{
+            $like.addClass('active');
+            Meteor.call('voteChannel',this._id,Meteor.userId(),1);
+        }
+    },
+    'click #edit-channel': function(){
+        Router.go('channelEdit',{_id: this._id});
+    },
+    'submit #form-comment': function(e){
+        e.preventDefault();
+        var text = $(e.currentTarget).find('textarea').val();
+        if (text){
+            var comment = {
+                createdAt: new Date(),
+                author: Meteor.userId(),
+                text: text,
+                contextId: this._id,
+                replies_count: 0,
+                isReply: false
+            };
+            Meteor.call('insertComment',comment);
+            Meteor.call('incrementChannelComment',this._id);
+            $(e.currentTarget).find('textarea').val('');
+        }
+    },
+    'click .subscribe-button': function(){
+        Meteor.call('insertUserEnrolledChannel',this._id, Meteor.userId());
+    }
+});
+
+Template.channel.rendered = function(){
+    $('.records-count').tooltip({placement: 'top', title: 'records'});
+    $('.comments-count').tooltip({placement: 'bottom', title: 'comments'});
+    $('.votes-count').tooltip({placement: 'top', title: 'votes'});
+    $('.subscriptions-count').tooltip({placement: 'bottom', title: 'subscriptions'});
+}

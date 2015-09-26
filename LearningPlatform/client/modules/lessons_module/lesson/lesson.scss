@@ -9,6 +9,8 @@
     background: #EBE9EA;
     margin-bottom: 10px;
     color: grey;
+    opacity: 0.5;
+    transition: all 0.5s ease-in;
     input{
         width: 100%;
         background: transparent;
@@ -35,6 +37,9 @@
         cursor: pointer;
         &:hover{background: #E4E2E2;}
         &:focus{outline: 0px;}
+    }
+    &.active{
+        opacity: 1;
     }
 }
 

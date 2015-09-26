@@ -195,10 +195,10 @@ Template.channelsTabContent.helpers({
     channels: function(){
         switch(Session.get('currentFilter')){
             case 'recents':
-                return Channels.find({},{$sort: {createdAt: -1}});
+                return Channels.find({author: this.user_id},{sort: {createdAt: -1}});
                 break;
             case 'populars':
-                return Channels.find({},{sort: {votes_count: -1}});
+                return Channels.find({author: this.user_id},{sort: {votes_count: -1}});
                 break;
         }
     }
@@ -232,10 +232,10 @@ Template.recordsTabContent.helpers({
     records: function(){
         switch(Session.get('currentFilter')){
             case 'recents':
-                return Records.find({},{sort: {createdAt: -1}});
+                return Records.find({author: this.user_id},{sort: {createdAt: -1}});
                 break;
             case 'populars':
-                return Records.find({},{sort: {votes: -1}});
+                return Records.find({author: this.user_id},{sort: {votes: -1}});
                 break;
         }
     }
@@ -268,10 +268,10 @@ Template.teamsTabContent.helpers({
     teams: function(){
         switch(Session.get('currentFilter')){
             case 'recents':
-                return Teams.find({},{sort: {createdAt: -1}});
+                return Teams.find({author: this.user_id},{sort: {createdAt: -1}});
                 break;
             case 'populars':
-                return Teams.find({},{sort: {votes: -1}});
+                return Teams.find({author: this.user_id},{sort: {votes: -1}});
                 break;
         }
     }
@@ -304,10 +304,10 @@ Template.lessonsTabContent.helpers({
     lessons: function(){
         switch(Session.get('currentFilter')){
             case 'recents':
-                return Lessons.find({},{sort: {createdAt: -1}});
+                return Lessons.find({author: this.user_id},{sort: {createdAt: -1}});
                 break;
             case 'populars':
-                return Lessons.find({},{sort: {votes: -1}});
+                return Lessons.find({author: this.user_id},{sort: {votes: -1}});
                 break;
         }
     }

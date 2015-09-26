@@ -12,7 +12,7 @@ Template.lesson.helpers({
         return this.author !== Meteor.userId();
     },
     userEnrolled: function(){
-        return UsersEnrolledLesson.findOne({user_id: Meteor.userId()});
+        return UsersEnrolled.findOne({user_id: Meteor.userId()});
     },
     sectionActive: function(){
         return Session.get('currentSection');
@@ -35,6 +35,12 @@ Template.lesson.events({
             if(res) console.log(res);
         });
     },
+    'focus .form-section input': function(){
+        $('.form-section').addClass('active');
+    },
+    'blur .form-section input': function(e){
+        $('.form-section').removeClass('active');
+    },
     'click .filter': function(e){
         var elem = e.currentTarget;
         $('.filter').removeClass('active');
@@ -55,6 +61,7 @@ Template.lesson.events({
             if(res) console.log(res);
         });
         $(e.currentTarget).find('input').val('');
+        $(e.currentTarget).find('input').blur();
     }
 });
 
@@ -95,7 +102,7 @@ Template.sectionsTabContent.rendered = function(){
 //usersTab
 Template.usersTabContent.helpers({
     users: function(){
-        return UsersEnrolledLesson.find();
+        return UsersEnrolled.find();
     }
 });
 

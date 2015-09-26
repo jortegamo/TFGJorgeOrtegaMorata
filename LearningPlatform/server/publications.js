@@ -51,6 +51,10 @@ Meteor.publish('channelsByUserRanking',function(user_id){
 	return Channels.find({author: user_id, $orderby: {votes: -1}});
 });
 
+Meteor.publish('votesChannel',function(channel_id){
+	return VotesChannels.find({channel_id: channel_id});
+});
+
 
 
 
@@ -70,12 +74,8 @@ Meteor.publish('documentsRecord',function(record_id){
 
 
 //COMMENTS
-Meteor.publish('commentsRecord',function(record_id){
-	return Comments.find({record: record_id});
-});
-
-Meteor.publish('commentsChannel',function(channel_id){
-	return Comments.find({channel: channel_id});
+Meteor.publish('commentsByContext',function(context_id){
+	return Comments.find({contextId: context_id});
 });
 
 
@@ -204,11 +204,21 @@ Meteor.publish('usersContacts',function(user_id){
 Meteor.publish('usersLesson',function(lesson_id){
 	var usersLessonIds = [];
 	var lessonCursor = Lessons.findOne(lesson_id);
-	_(UsersEnrolledLesson.find({lesson_id: lessonCursor._id}).fetch()).each(function(elem){
+	_(UsersEnrolled.find({context_id: lessonCursor._id}).fetch()).each(function(elem){
 		usersLessonIds.push(elem.user_id);
 	});
 	usersLessonIds.push(lessonCursor.author);
 	return Meteor.users.find({_id: {$in: usersLessonIds}});
+});
+
+Meteor.publish('usersChannel',function(channel_id){
+	var usersChannelIds = [];
+	var channelCursor = Channels.findOne(channel_id);
+	_(UsersEnrolled.find({context_id: channelCursor._id}).fetch()).each(function(elem){
+		usersChannelIds.push(elem.user_id);
+	});
+	usersChannelIds.push(channelCursor.author);
+	return Meteor.users.find({_id: {$in: usersChannelIds}});
 });
 
 Meteor.publish('requestedUsers',function(user_id){
@@ -229,6 +239,15 @@ Meteor.publish('applicantUsers',function(user_id){
 	return Meteor.users.find({_id: {$in: arrayIds}});
 });
 
+Meteor.publish('commentsUsers',function(context_id){
+	var cursor = Comments.find({contextId: context_id});
+	var arrayIds = [];
+	_(cursor.fetch()).each(function(elem){
+		arrayIds.push(elem.author);
+	});
+	return Meteor.users.find({_id: {$in: arrayIds}});
+});
+
 
 
 
@@ -240,7 +259,7 @@ Meteor.publish('contactsByUser',function(user_id){
 //USERS ENROLLED
 
 Meteor.publish('usersEnrolled',function(lesson_id){
-	return UsersEnrolledLesson.find({lesson_id: lesson_id});
+	return UsersEnrolled.find({context_id: lesson_id});
 });
 
 
