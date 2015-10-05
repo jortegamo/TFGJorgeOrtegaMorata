@@ -274,6 +274,11 @@ Meteor.publish('lessonSections',function(lesson_id){
 	return Sections.find({lesson_id: lesson_id});
 });
 
+//AUDIOS
+Meteor.publish('audioRecordings',function(){
+	return AudioRecordings.find();
+});
+
 
 
 

@@ -61,7 +61,7 @@
     <div class="row text-left duckflight-card record-card-horizontal fade-in">
         <div class="card-image col-md-7 col-xs-8">
             <div class="image-hover"><i class="fa fa-play-circle"></i></div>
-            <img src="https://typekit.files.wordpress.com/2012/09/sourcecodesplash.png?w=600&h=370"/>
+            <img src="{{img}}"/>
         </div>
         <div class="card-caption col-md-5 col-xs-4">
             <ul>
@@ -71,7 +71,7 @@
                     <span>{{dateFrom createdAt}} · </span>
                     <span class="file-count fa fa-file"></span><span class="counter">{{docs_count}}</span>
                     <span class="comments-count fa fa-comments"></span><span class="counter">{{comments_count}}</span>
-                    <span class="votes-count fa fa-heart"></span><span class="counter">{{votes}}</span>
+                    <span class="votes-count fa fa-heart"></span><span class="counter">{{votes_count}}</span>
                     <span class="replies-count fa fa-mail-reply"></span><span class="counter">{{replies_count}}</span>
                 </li>
                 <li class="card-description">{{shortDescription description 50}}</li>

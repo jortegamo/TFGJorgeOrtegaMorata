@@ -29,12 +29,6 @@ Template.channel.helpers({
 });
 
 Template.channel.events({
-    'click .channel-img': function(){
-        Router.go('channel',{_id: this._id});
-    },
-    'click .footer-creator-box img, click .footer-creator-box .username': function(){
-        Router.go('profile',{_id: this.author});
-    },
     'click .vote-button': function(e){
         $like = $(e.currentTarget);
 
@@ -45,9 +39,6 @@ Template.channel.events({
             $like.addClass('active');
             Meteor.call('voteChannel',this._id,Meteor.userId(),1);
         }
-    },
-    'click #edit-channel': function(){
-        Router.go('channelEdit',{_id: this._id});
     },
     'submit #form-comment': function(e){
         e.preventDefault();

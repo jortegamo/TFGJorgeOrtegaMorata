@@ -16,7 +16,7 @@ Template.commentsList.helpers({
 
 Template.commentsRepliesList.helpers({
 	replies: function(){
-		return Comments.find({comment_id: this._id});
+		return Comments.find({comment_id: this._id},{sort: {createdAt: -1}});
 	}
 });
 

@@ -33,77 +33,31 @@
                             <div id="editor-recorder"></div>
                         {{else}}
                             <div class="text-center information-start">
-                                <p>Select or create a new document to start recording!</p>
+                                {{#if stop}}
+                                    <p>Recording process is finished. Please save or discard the record!</p>
+                                {{else}}
+                                    <p>Select or create a new document to start recording!</p>
+                                {{/if}}
                             </div>
                         {{/if}}
                     </div>
 
                 </div>
                 <div class="row actions-wrapper">
-                    <div class="text-center col-xs-12">
-                       <button><i class="fa fa-circle"></i> Rec</button>
-                    </div>
+                    {{#if recording}}
+                        {{> recordProgressBar}}
+                    {{else}}
+                        {{#if stop}}
+                            {{> stopBar}}
+                        {{else}}
+                            {{> startRecord}}
+                        {{/if}}
+                    {{/if}}
                 </div>
             </div>
         </div>
     </div>
-	<!--<div class="container-fluid">
-		<div id="editor-panel">
-			<div id="editor-container" class="well container-fluid">
-			<p id="mark">Code Recorder <a id="config-editor-button" type="button" class="btn btn-warning btn-sm pull-right" role="button">
-					<span class="glyphicon glyphicon-cog"></span>
-				</a></p>
-
-				<div class="row square-editor">
-					<div class="col-md-8 editor-container">
-						<div id="editor" class="container-fluid"></div>
-					</div>
-
-					<div class="col-md-4 docs-container"> 
-						<div id="create-doc-bar">
-							<div class="input-group input-group-sm">
-      							<input id="title-doc-input" type="text" class="form-control" placeholder="Add title for new doc...">
-      							<span class="input-group-btn">
-        							<a id="addDoc" class="btn btn-default" type="button" role="button"><span class="glyphicon glyphicon-plus"></span></a>
-      							</span>
-    						</div>
-						</div>
-						<div id="docs-editor">
-						</div>
-					</div>
-				</div>
-
-				<div id="config-record-menu" class="row">
-					<div class="col-md-4">
-					<a id="multmedia-config" type="button" class="btn btn-default  btn-sm" role="button">
-						<span class="glyphicon glyphicon-facetime-video"></span>
-						<span class="glyphicon glyphicon-cog"></span>
-					</a>
-					</div>
-					{{#if recording}}
-						{{> recordProgressBar}}
-					{{else}}
-						{{#if stop}}
-							{{> stopBar}}
-						{{else}}
-							{{> startRecord}}
-						{{/if}}
-					{{/if}}
-						
-					<div class="col-md-4">	
-					<a id="help-button" type="button" class="btn btn-info btn-sm pull-right" role="button">
-						<span class="glyphicon glyphicon-question-sign"></span>
-					</a>
-					</div>
-				</div>
-			</div>
-		</div>	
-		<div>
-			<div id="editor2" class="container-fluid"></div>
-		</div>
-		
-	</div>-->
-	{{>saveForm}}
+	{{>modalSaveRecord}}
 
 </template>
 
@@ -121,59 +75,71 @@
 </template>
 
 <template name="startRecord">
-	<div class="col-md-4">
-		<a id="record-button" type="button" class="btn btn-lg btn-danger" role="button">
-			Start Recording
-		</a>
-	</div>
-</template>
-<template name="stopBar">
-	<div class="col-md-4">
-		<div id="options-stop" class="btn-group" role="group" aria-label="...">
-			<a id="discard" type="button" class="btn btn-lg btn-danger" role="button">
-				Discard
-			</a>
-			<a id="save" type="button" class="btn btn-lg btn-success" data-toggle="modal" data-target="#savePanel" role="button">
-				Save
-			</a>
-  		</div>
-  	</div>
-</template>
-<template name="recordProgressBar">
-	<div class="col-md-4">
-		<div id="record-progress">
-			<p><a id="stop-button" type="button" class="btn btn-md btn-default" role="button"><span class="glyphicon glyphicon-stop"></span></a><span id="timer"></span></p>
-		</div>
-  	</div>
+    <div class="text-center col-xs-12">
+        <button type="button" id="record-button" disabled="{{notSelected}}"><span><i class="fa fa-circle"></i> Rec</span></button>
+    </div>
 </template>
 
-<template name="saveForm">
-	<div class="modal fade" id="savePanel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<template name="recordProgressBar">
+    <div class="text-center col-xs-12">
+        <span class="recording-message"><i class="fa fa-circle"></i> Recording...</span>
+        <button type="button" id="stop-button"><i class="fa fa-stop"></i> Stop</button>
+        <span id="timer">0</span>
+    </div>
+</template>
+
+<template name="stopBar">
+    <div class="text-center col-xs-12">
+        <button type="button" id="save-record" data-toggle="modal" data-target="#savePanel"><span><i class="fa fa-floppy-o"></i> Save</span></button>
+        <button type="button" id="discard-record"><span><i class="fa fa-times"></i> Discard</span></button>
+    </div>
+</template>
+
+
+
+<template name="modalSaveRecord">
+	<div class="modal fade modal-duckflight" id="savePanel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+          <img src="/duck_icon.ico"><h4 class="modal-title" id="exampleModalLabel">Save your record</h4>
       </div>
       <div class="modal-body">
-        <form>
-          <div id="inputTitle" class="form-group">
-            <label for="title" class="control-label">Title:</label>
-            <input id="title" name="title" type="text" class="form-control" placeholder="Enter a title here!">
-          </div>
-          <div class="form-group">
-            <label for="description" class="control-label">Description:</label>
-            <textarea name="description" class="form-control" id="description" style="height: 8em" placeholder="Enter a description (optional)"></textarea>
-          </div>
-          <div style="text-align: center">
-            <input type="submit" value="Save" class="btn btn-success" />
-          </div>
-        </form>
+        {{> formAwesome}}
       </div>
     </div>
   </div>
 </div>
 </template>
 
-<!-- forms create and edit doc -->
+<template name="saveRecordForm">
+    <form id="saveForm" class="awesome-form">
+
+        <div class="form-group">
+            <div class="row">
+                <div id="inputTitle" class="col-xs-12 form-field">
+                    <label for="title" class="control-label">Title</label>
+                    <input id="title" name="title" type="text" class="form-control" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div id="inputTitle" class="col-xs-12 form-field">
+                    <label for="description" class="control-label">Description</label>
+                    <textarea name="description" class="form-control" id="description" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <button class="submit-button" type="submit"><i class="fa fa-floppy-o"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</template>
 

@@ -96,11 +96,14 @@
 .filter-options{
   li{
     margin-right: 5px;
-    cursor: pointer;
     padding: 10px 5px 8px;
-    &:hover, &.active{
-      border-bottom: 2px solid #F25252;
+    &.filter{
+      cursor: pointer;
+      &:hover, &.active{
+        border-bottom: 2px solid #F25252;
+      }
     }
+
   }
 }
 

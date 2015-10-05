@@ -1,4 +1,109 @@
-var widget;
+var audio;
+var interval;
+var progress = function(){
+	var d = new Date(audio.currentTime);
+	var min = (d.getMinutes() > 9)? d.getMinutes(): '0' + d.getMinutes();
+	var sec = (d.getSeconds() > 9)? d.getSeconds(): '0' + d.getSeconds();
+	$('#timer').text(min + ':' + sec);
+	interval = window.setInterval(progress,10);
+};
+
+Template.record.helpers({
+	authorAvatar: function(){
+		return Meteor.users.findOne(this.author).avatar;
+	},
+	username: function(){
+		return Meteor.users.findOne(this.author).username;
+	},
+	dateFrom: function(d){
+		return smartDate(d);
+	},
+	tabNamesArray: function(){
+		return [{template: 'commentsTabContent', name: 'comments', icon: 'fa-comments', initialActive: true},
+			{template: 'repliesTabContent',    name: 'replies', icon: 'fa-reply'}];
+	},
+	playing: function(){
+		return Session.get('playing');
+	}
+});
+
+Template.record.events({
+	'click #play': function(){
+		Session.set('playing',true);
+		audio.play();
+		interval = window.setInterval(function(){
+			var d = new Date(audio.currentTime * 1000);
+			var min = (d.getMinutes() > 9)? '' + d.getMinutes(): '0' + d.getMinutes();
+			var sec = (d.getSeconds() > 9)? '' + d.getSeconds(): '0' + d.getSeconds();
+			$('#timer').text(min + ':' + sec);
+			var progressVal = 100 * audio.currentTime / audio.duration;
+			$('#progress').val(progressVal);
+			$('#played-bar').width(($('#progress').width() * progressVal)/100 + 1);
+		},100);
+	},
+	'click #pause': function(){
+		Session.set('playing',false);
+		audio.pause();
+		window.clearInterval(interval);
+	},
+	'ended audio': function(){
+		console.log('audio ha terminado');
+		Session.set('playing',false);
+		window.clearInterval(interval);
+		$('#timer').text('00:00');
+	},
+	'click #seeker': function(e){
+		audio.currentTime = ($(e.target).val() * audio.duration)/100;
+		$('#progress').val($(e.target).val());
+	},
+	'click #volume': function(e){
+		audio.volume = $(e.target).val()/10;
+	}
+})
+
+Template.record.rendered = function(){
+	Session.set('playing',false);
+	audio = document.getElementsByTagName('audio')[0];
+	audio.volume = 0.4;
+	$('#docs_counter').tooltip({placement: 'left',title: 'docs'});
+	$('#comments_counter').tooltip({placement: 'bottom',title: 'comments'});
+	$('#votes_counter').tooltip({placement: 'bottom',title: 'votes'});
+	$('#replies_counter').tooltip({placement: 'right',title: 'replies'});
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*var widget;
 var vol;
 RC = []; //lista de reproduccion.
 listPending = []; //lista de funciones pendientes.
@@ -299,3 +404,4 @@ Nota: si el usuario termina de ver la grabación y quiere crear respuesta es com
 los documentos en el estado final.
 Nota: si el usuario pausa y quiere crear una respuesta parte de los documentos en el estado correspondiente a ese momento de la grabacion.
 */
+

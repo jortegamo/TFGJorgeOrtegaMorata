@@ -1,105 +1,69 @@
 <template name="record">
-	<div id="player" class="row container-fluid">
-		{{#if docAct}}
-			<div id="icon-doc">
-				<span>#</span>
-			</div>
-			<div id="docAct">
-				<h5>{{docAct}}</h5>
-			</div>
-		{{/if}}
-		<a id="help" href=""><span class="glyphicon glyphicon-question-sign pull-right" style="margin-top: 0.5em"></span></a>
-		<div class="col-md-8 container-fluid">
-			<div id="editorplayer">
-				<div id="editor-player" class="notPlaying"></div>
-			</div>
-			{{#if notPlaying}}
-			<a id="play-button" role="button" class="btn btn-danger btn-lg" type="button" href=""><span class="glyphicon glyphicon-play"></span></a>
-			{{/if}}
-		</div>
-		<div class="col-md-4 container-fluid">
-			<div id="sc-info-container">
-				<div id="widget-container">
-					<iframe id="sc-widget" width="90%" height="166" scrolling="no" frameborder="no" src="{{track}}" >
-					</iframe>
-				</div>
-				<div class="post-info">
-					<div id="sound-options">
-						<a id="mute-volume" href="" role="button" type="button"><span class="glyphicon glyphicon-volume-off"></span></a>
-						<a id="down-volume" href="" role="button" type="button"><span class="glyphicon glyphicon-volume-down"></span></a>
-						<a id="up-volume" href="" role="button" type="button"><span class="glyphicon glyphicon-volume-up"></span></a>
-					</div>
-				</div>
-				<a id="parentRecord" role="button" class="btn btn-primary btn-md" type="button" href="">
-						<span class="glyphicon glyphicon-eye-open"></span> View Parent</a>
-				{{#if notPlaying}}
-					<a id="reply-button" role="button" class="btn btn-danger btn-md" type="button" href="">
-						<span class="glyphicon glyphicon-plus"></span> Create Reply</a>
-				{{/if}}
-			</div>
-		</div>
-	</div>
-	<div id="post-collections" class="row container-fluid">
-		<div class="col-md-7">
+    <div class="content-wrapper type-2">
+        <div class="player-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 text-center header-player">
+                        <i class="fa fa-film"></i> {{title}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-9 player">
+                        <div class="touch-display-layer">
+                            <div class="touch">
+                                <div class="player-actions-wrapper">
+                                    <div class="player-actions">
+                                        <audio src="/Letter.mp3"></audio>
+                                        {{#if playing}}
+                                            <span class="playpaused" id="pause"><i class="fa fa-pause"></i></span>
+                                        {{else}}
+                                            <span class="playpaused" id="play"><i class="fa fa-play"></i></span>
+                                        {{/if}}
+                                        <input id="progress" type="range" min="0" max="100" value="0">
+                                        <input id="seeker" type="range" min="0" max="100" value="0">
+                                        <span id="played-bar"></span>
+                                        <span id="timer">00:00</span>
+                                        <span><i class="fa fa-volume-up"></i></span>
+                                        <input id="volume" type="range" min="0" max="10" value="4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3 sidebar-player text-center">
+                        <div class="box-info">
+                            <div class="creator-box">
+                                <img src="{{authorAvatar}}">
+                                <p>{{username}}</p>
+                            </div>
+                            <span class="date"><i class="fa fa-clock-o"></i> {{dateFrom createdAt}}</span>
+                            <div class="info">
+                                <span id="docs_counter"><i class="fa fa-file"></i> {{docs_count}}</span>
+                                <span id="comments_counter"><i class="fa fa-comments"> {{comments_count}}</i></span>
+                                <span id="votes_counter"><i class="fa fa-heart"></i> {{votes_count}}</span>
+                                <span id="replies_counter"><i class="fa fa-reply"></i> {{replies_count}}</span>
+                            </div>
 
-			<div id="title-post" class="listCol">
-				<div class="row">
-					<div class="col-md-10">
-						<h3 class="title">{{title}}</h3>
-					</div>
-					<div class="col-md-2">
-						<span id="files-count" class="glyphicon glyphicon-file" style="padding-left: 0.3em; margin-top: 0.5em; margin-left: 0.5em">{{docs_count}}
-						</span>
-						<span id="votes-count" class="glyphicon glyphicon-heart" style="padding-left: 0.3em">{{votes}}</span>
-					</div>
-				</div>
-
-				<div class="row" style="margin-bottom: 0.3em">
-					<div class="col-md-2">
-						<img class="authorImage" src="/usericon.png"/>
-					</div>
-					<div class="col-md-10">
-						<p>{{author}}</p>
-						<a href="" class="btn btn-success btn-sm">explore</a>
-						<span class="dislike span-vote glyphicon glyphicon-heart-empty pull-right"></span>
-						<span class="like span-vote glyphicon glyphicon-heart pull-right"></span>
-					</div>
-				</div>
-				<div class="post-details">
-					<p><strong>{{createdAt}}</strong></p>
-					<p>{{description}}</p>
-					<p>{{channel}}</p>
-				</div>
-				<div style="text-align:center; margin-bottom: -0.3em; border-top: 1px solid #DAD5D5; padding-top: 0.3em; margin-left: 1em; margin-right: 1em">
-					<a id="showDetails" href="" class="btn btn-default btn-sm"><span class="glyphicon {{ arrowDetails }}"></span></a>
-				</div>
-			</div>
-
-
-			<div id="comments-col" class="listCol container-fluid">
-				<h4 class="section-col-title">Comments ({{ comments_count }})</h4>
-					<div style="padding-bottom: 1em">
-					{{#if currentUser}}
-						<div class="row">
-							<div class="col-md-2">
-								<img class="userImgComment" src="/usericon.png"/>
-							</div>
-							<div class="col-md-10">
-								<textarea id="input-comment" placeholder="publish a comment for this record!"></textarea>
-								<a id="publish-comment" href="" class="btn btn-primary btn-sm pull-right" style="margin-right: 0.5em">Publish</a>
-							</div>
-						</div>
-					{{else}}
-						<p style="color: grey">Please signIn to write a comment!</p>
-					{{/if}}
-					</div>
-					{{> commentsList }}
-			</div>
-		</div>
-		<div id="reply-col" class="col-md-4 listCol">
-		<h4 class="section-col-title">Replies ({{replies_count}})</h4>
-		</div>  
-	</div>
+                        </div>
+                        <div class="description-box">
+                            <span><i class="fa fa-info-circle"></i> description</span>
+                            <p>{{description}}</p>
+                        </div>
+                        <div class="box-options">
+                            <span id="view_parent"><i class="fa fa-eye"></i></span>
+                            <span id="create_reply"><i class="fa fa-reply"></i></span>
+                            <span id="see_later"><i class="fa fa-clock-o"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-xs-12">
+                        {{> navbarBanner tabs=tabNamesArray }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 

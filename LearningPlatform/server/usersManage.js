@@ -31,7 +31,6 @@ Meteor.methods({
 						  banner: '/banner.jpeg'
 						};
 			Meteor.users.update(id,{$set: params});
-
 			result = [true];
 		}else{
 			result = [false, errors];
@@ -41,4 +40,23 @@ Meteor.methods({
 	userUpdate: function(user_id,params){
 		return Meteor.users.update(user_id,{$set: params});
 	}
+});
+
+Meteor.startup(function(){
+	Accounts.emailTemplates.siteName = "DuckFlight";
+	Accounts.emailTemplates.from = "DuckFlight <accounts@example.com>";
+	Accounts.emailTemplates.verifyEmail.subject = function (user) {
+		return "Welcome to DuckFlight, " + user.profile.name;
+	};
+	Accounts.emailTemplates.resetPassword.subject = function(user){
+		return "Hello " + user;
+	};
+	Accounts.emailTemplates.resetPassword.text = function(user,url){
+		return "To reset your password, simply click the link below:\n\n"
+			+ url;
+	};
+	Accounts.emailTemplates.verifyEmail.text = function (user, url) {
+		return "To activate your account, simply click the link below:\n\n"
+			+ url;
+	};
 });

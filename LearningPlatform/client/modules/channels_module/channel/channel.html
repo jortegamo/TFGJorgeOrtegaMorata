@@ -7,20 +7,20 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="banner-img">
-                                    <img class="channel-img" src="{{img}}"/>
+                                    <a href="{{pathFor 'channel' _id=this._id}}"><img class="channel-img" src="{{img}}"/></a>
                                     <img class="banner-bg-img" src="{{banner}}"/>
                                     <div class="footer-creator-box">
-                                        <img src="{{avatar}}">
-                                        <span class="username"> {{username}}</span>
+                                        <a href="{{pathFor 'profile' _id=this.author}}"><img src="{{avatar}}"></a>
+                                        <a href="{{pathFor 'profile' _id=this.author}}"><span class="username"> {{username}}</span></a>
                                         <span>· <i class="fa fa-clock-o"></i> {{dateFrom createdAt}} · </span>
-                                        <span class="records-count fa fa-film"></span><span class="counter"> {{records_count}}</span>
-                                        <span class="comments-count fa fa-comments"></span><span class="counter"> {{comments_count}}</span>
-                                        <span class="votes-count fa fa-heart"></span><span class="counter"> {{votes_count}}</span>
-                                        <span class="subscriptions-count fa fa-user"></span><span class="counter"> {{users_count}}</span>
+                                        <span class="records-count"><i class="fa fa-film"></i> {{records_count}}</span>
+                                        <span class="comments-count"><i class="fa fa-comments"></i> {{comments_count}}</span>
+                                        <span class="votes-count"><i class="fa fa-heart"></i> {{votes_count}}</span>
+                                        <span class="subscriptions-count"><i class="fa fa-user"></i> {{users_count}}</span>
                                     </div>
                                     {{#if isOwner}}
                                         <div class="banner-edits">
-                                            <span><i id="edit-channel" class="fa fa-pencil pull-right"></i></span>
+                                            <a href="{{pathFor 'channelEdit' _id=this._id}}"><span><i id="edit-channel" class="fa fa-pencil pull-right"></i></span></a>
                                         </div>
                                     {{else}}
                                         <div class="banner-options">

@@ -9,14 +9,13 @@ Router.configure({
 	}
 });
 
-Router.route('/loading',{name: 'loading'})
+Router.route('/loading',{name: 'loading'});
 Router.route('/', {
 	name: 'mainPage',
 	waitOn: function(){return Meteor.subscribe('allUsers');}
 });
 
 Router.route('/redirect',{name: 'redirect'});
-
 
 //RECORDS
 
@@ -32,10 +31,9 @@ Router.route('/record/:_id',{
 	name: 'record',
 	data: function(){return Records.findOne(this.params._id);},
 	waitOn: function(){
-		var subscriptions = [Meteor.subscribe('documentsRecord',this.params._id),
-			 				 Meteor.subscribe('records'),
-							 Meteor.subscribe('commentsRecord',this.params._id)];
-		return subscriptions;
+		return [Meteor.subscribe('documentsRecord',this.params._id),
+				Meteor.subscribe('records'),
+				Meteor.subscribe('commentsByContext',this.params._id)];
 	}
 });
 

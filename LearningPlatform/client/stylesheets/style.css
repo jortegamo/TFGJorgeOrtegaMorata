@@ -482,15 +482,6 @@ body{
   margin-left: 2.5em;
 }
 
-#timer{
-  border-left: 1px solid white;
-  padding-top: -0.5em;
-  margin-left: 0.5em;
-  padding-left: 1.3em;
-  font-size: 1em;
-  color: white;
-}
-
 #record-progress {
   margin-left: 4.5em;
   margin-top: -0.2em;
@@ -499,11 +490,6 @@ body{
   padding-left: 1em;
   padding-top: 0.2em;
   border-radius: 0.4em;
-}
-
-#stop-button{
-  margin-top: 0.3em;
-  margin-bottom: 0.5em;
 }
 
 #player{

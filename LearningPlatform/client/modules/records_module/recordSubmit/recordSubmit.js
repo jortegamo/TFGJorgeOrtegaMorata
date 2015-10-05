@@ -1,23 +1,25 @@
 //variable global para el elemento ACE.editor.
-editor = "";
+var editor = "";
 //array de documentos antes de empezar a grabar.
 var docs;
-
 //array de documentos mientras grabamos.
 var docsRC;
-
 //array de funciones.
 var functions = [];
-
 //correspondera con el inicio de la grabación.
 var date;
+var recorder;
+var currentAudio;
+
+//DOCUMENTOS
+
 
 //constructor para documentos.
-var Doc = function(title,mode,theme){
+var Doc = function(title,mode,theme,value){
     this.title = title;
     this.mode = (mode) ?  "ace/mode/" + mode : "ace/mode/javascript";
     this.theme = (theme)? "ace/theme/" + theme : "ace/theme/twilight";
-    this.value = ""; //por defecto;
+    this.value = value || "";
 };
 
 
@@ -35,15 +37,17 @@ Template.docEntry.events({
     'click .doc-item': function(e){
         $('.doc-item').removeClass('selected');
         $(e.currentTarget).addClass('selected');
-        var arrayDocs = docs.get();
+        var objectDocs = (Session.get('recording'))? docsRC : docs;
+        var arrayDocs = objectDocs.get();
         arrayDocs.forEach(function(doc){if (doc.title == Session.get('titleAct')) doc.value = editor.getValue();});
-        docs.set(arrayDocs);
+        objectDocs.set(arrayDocs);
 
         editor.focus();
         editor.setTheme(this.theme);
         editor.getSession().setMode(this.mode);
         editor.setValue(this.value);
         editor.getSession().selection.clearSelection();
+
 
         Session.set('titleAct',this.title);
 
@@ -54,12 +58,12 @@ Template.docEntry.events({
                 arg: this.title
             });
             functions.push({ //solo si se le aplica a un documento durante la grabacion
-                time: new Date - date,
+                time: new Date() - date,
                 arg: this.mode,
                 toDo: 'editor.getSession().setMode("ace/mode/" + arg)'
             });
             functions.push({ //solo si se le aplica a un documento durante la grabacion
-                time: new Date - date,
+                time: new Date() - date,
                 arg: this.theme,
                 toDo: 'editor.setTheme("ace/theme/" + arg)'
             });
@@ -92,14 +96,14 @@ Template.docEntry.events({
 
 
 Template.docEntry.rendered = function(){
-
     $(this.firstNode).addClass('selected');
     if (!editor){
          editor = ace.edit("editor-recorder");
     }else{
-        var arrayDocs = docs.get();
+        var objectDocs = (Session.get('recording'))? docsRC : docs;
+        var arrayDocs = objectDocs.get();
         arrayDocs.forEach(function(doc){if (doc.title == Session.get('titleAct')) doc.value = editor.getValue();});
-        docs.set(arrayDocs);
+        objectDocs.set(arrayDocs);
     }
 
     editor.setValue('');
@@ -129,6 +133,16 @@ Template.docEntry.rendered = function(){
 
 };
 
+//ACTIONS
+Template.startRecord.helpers({
+    notSelected: function(){return Session.get('titleAct') === '';}
+});
+
+Template.recordProgressBar.rendered = function(){
+    recorder.startProgress($('#timer'));
+};
+
+//SUBMIT TEMPLATE
 Template.recordSubmit.helpers ({
     'recording': function(){ 
         return Session.get("recording"); 
@@ -137,7 +151,7 @@ Template.recordSubmit.helpers ({
         return Session.get("stop");
     },
     hasDocs: function(){
-        return docs.get().length > 0;
+        return docs.get().length > 0 && !Session.get('stop');
     },
     createDoc: function(){
         return Session.get('createDoc');
@@ -153,89 +167,63 @@ Template.recordSubmit.helpers ({
 Template.recordSubmit.events = {
 
     'click #record-button': function(){
-        if (Session.get("recording")){
-            Session.set("recording",false);
-        }else{
-            if(docs.length != 0){ //si no hay algun documento creado es imposible grabar.
-                var title = Session.get('titleAct');
-                //esto es importante puesto que el valor de un documento solo se actualiza 
-                //al cambiar a otro.
-                if (title){ //si hay algun documento seleccionado actualizo su valor antes de grabar.
-                    var docAct = _(docs).find(function(doc){return doc.title == title;});
-                    docAct.value = editor.getValue();
+        var title = Session.get('titleAct');
 
-                    _(docs).each(function(doc){ //copio los documentos.
-                        var ndoc = new Doc (doc.title);
-                        ndoc.theme = doc.theme;
-                        ndoc.mode = doc.mode;
-                        docsRC.push(ndoc);
-                    });
-                    console.log('he creado la primera funcion');
-                    functions.push({
-                        time: new Date() - new Date(), //se ejecutará la primera.
-                        type: 'session',
-                        arg: title
-                    });
+        if(docs.length != 0 && title) { //si no hay algun documento creado es imposible grabar.
+            //esto es importante puesto que el valor de un documento solo se actualiza
+            //al cambiar a otro.si hay algun documento seleccionado actualizo su valor antes de grabar.
+            var arrayDocs = docs.get();
+           _(arrayDocs).each(function (doc) {
+               if(doc.title == title) doc.value = editor.getValue();
+            });
 
-                    console.log(docs);
-                    console.log(docsRC);
+            docs.set(arrayDocs); //actualizo los docs iniciales
 
-                    SC.record({ //solo se permite grabar si tienes un documento seleccionado.
-                        start: function(){
-                            console.log("comienzo la grabacion");
-                            Session.set("recording", true);
-                        },
-                        progress: function(ms, avgPeak){
-                            $("#timer").text(SC.Helper.millisecondsToHMS(ms));
-                        }
-                    });
+            arrayDocs = docsRC.get();
+            _(docs.get()).each(function (doc) { //copio los documentos.
+                arrayDocs.push(new Doc(doc.title, doc.mode.split('/')[2], doc.theme.split('/')[2], doc.value));
+            });
+            docsRC.set(arrayDocs); //actualizo docsRC
 
-                }else{
-                    $('#docs-editor').popover({
-                        content: '<p>Sorry, you must select a document to start Recording!</p>',
-                        html: true,
-                        placement: "top",
-                        trigger: 'click',
-                    });
-                    $('#docs-editor').popover('show');
-                    $('#docs-editor').click(function(){ $('#docs-editor').popover('destroy')});
-                }
-                
-            }else{
-                console.log('he entrado en la cond correcta');
-                $('#addDoc').popover({
-                    content: '<p>Sorry, create a new doc to start Recording!</p>',
-                    html: true,
-                    placement: "right",
-                    trigger: 'click'
-                });
-                $('#addDoc').popover('show');
-                $('#title-doc-input').click(function(){$('#addDoc').popover('destroy')});
-            }
+            console.log('he creado la primera funcion');
+            functions.push({
+                time: new Date() - new Date(), //se ejecutará la primera.
+                type: 'session',
+                arg: title
+            });
+
+            console.log(docs);
+            console.log(docsRC);
+
+            recorder.startRecording(function(){
+                Session.set('recording',true);
+            });
         }
     },
 
     'click #stop-button': function(){
         Session.set("stop",true);
         Session.set("recording",false);
-        SC.recordStop();
+        $('.doc-item').removeClass('selected');
+        $('#editor-recorder').removeClass('active');
+        recorder.stopRecording(currentAudio,function(){console.log('stop recording success!');})
+        Session.set('formType','saveRecordForm');
         //comprobamos que los documentos se han almacenado correctamente.
         console.log(docs);
         console.log(docsRC);
+        console.log(functions);
     },
 
-    'click #discard': function(){ //dejo todo en estado inicial.
+    'click #discard-record': function(){ //dejo todo en estado inicial.
         Session.set("stop",false);
-        editor.setValue("");
-        editor.setTheme("ace/theme/twilight");
-        editor.getSession().setMode("ace/mode/javascript");
-        docs = [];
-        docsRC = [];
-        $("#docs-editor").html("");
+        Session.set('formType','formDoc');
+        editor = '';
+        docs.set([]);
+        docsRC.set([]);
         Session.set("titleAct","");
     },
 
-    /*'submit form': function(e){
+    'submit #saveForm': function(e){
         //aqui compongo el objeto grabacion y lo guardo en la base de datos.
         //el titulo no tiene porqué ser unico.
         //pero debe de tener un título.
@@ -256,58 +244,52 @@ Template.recordSubmit.events = {
 
         if (success){ //solo si se ha guardado correctamente. (solo depende del titulo).
             $('#savePanel').modal('hide');
-            
+            console.log('voy a upload');
+            var record = {
+                title: title,
+                description: description,
+                author: Meteor.userId(),
+                img: '/recordImgDefault.png',
+                createdAt: new Date(),
+                docs_count: docsRC.get().length,
+                comments_count: 0,
+                votes_count: 0,
+                replies_count: 0,
+                RC: functions //aqui almaceno la lista de funciones para la reproducción.
+            };
 
-            SC.connect(function(){ //upload para soundcloud.
-                SC.recordUpload({
-                    track: {
-                        title: title,
-                        sharing: "public"
-                    }
-                },function(track){
-                    console.log(track);
-                    var record = {
-                        title: title,
-                        description: description,
-                        track_id: track.id,
-                        author: Meteor.userId(),
-                        createdAt: new Date(),
-                        docs_count: docs.length,
-                        comments_count: 0,
-                        votes_count: 0,
-                        replies_count: 0,
-                        RC: functions //aqui almaceno la lista de funciones para la reproducción.
-                    }
-                    
-                    Meteor.call('insertRecord',record,function(err,result){
-                        if(err){
-                            console.log("error");
-                        }
-                        if (result){
-                            console.log('voy a guardar los documentos');
-                            Meteor.call('insertDocs',docs,result._id,true,function(err){
-                                if(err) console.log(err);
-                            });
-                            Meteor.call('insertDocs',docsRC,result._id,false,function(err){
-                                if(err) console.log(err);
-                                $('#discard').click(); //para dejar todo como estaba
-                            });
-                        }
+            Meteor.call('insertRecord',record,function(err,result){
+                if(err){
+                    console.log("error");
+                }
+                if (result){
+                    console.log('voy a guardar los documentos');
+                    Meteor.call('insertDocs',docs.get(),result._id,true,function(err){
+                        if(err) console.log(err);
                     });
-                    
-                });
+                    Meteor.call('insertDocs',docsRC.get(),result._id,false,function(err){
+                        if(err) console.log(err);
+                    });
+                    Meteor.call('insertAudioRecording',{dataURL: currentAudio.get(), record_id: result._id},function(err){
+                        if (err) console.log('insertAUdioRecording ERROR: ' + err.reason);
+                        $('#discard').click(); //para dejar todo como estaba
+                    });
+                }
             });
+
         }
-    },*/
+    },
 
     'click #add-document': function() {
-        Session.set('editDoc','');
-        Session.set('createDoc',true); //creating no editing
-        var docForm = $('.form-doc-editor');
-        docForm.addClass('active');
-        docForm.find('[name="title"]').val('').blur();
-        docForm.find('.lang').removeClass('active');
-        docForm.find('.theme').removeClass('active');
+        if (!Session.get('stop')){
+            Session.set('editDoc','');
+            Session.set('createDoc',true); //creating no editing
+            var docForm = $('.form-doc-editor');
+            docForm.addClass('active');
+            docForm.find('[name="title"]').val('').blur();
+            docForm.find('.lang').removeClass('active');
+            docForm.find('.theme').removeClass('active');
+        }
     },
 
     'click .lang': function(e){
@@ -356,12 +338,12 @@ Template.recordSubmit.events = {
             if(Session.get('recording')){
                 //otra para el titulo.
                 functions.push({ //solo si se le aplica a un documento durante la grabacion
-                    time: new Date - date,
+                    time: new Date() - date,
                     arg: mode,
                     toDo: 'editor.getSession().setMode("ace/mode/" + arg)'
                 });
                 functions.push({ //solo si se le aplica a un documento durante la grabacion
-                    time: new Date - date,
+                    time: new Date() - date,
                     arg: theme,
                     toDo: 'editor.setTheme("ace/theme/" + arg)'
                 });
@@ -376,7 +358,6 @@ Template.recordSubmit.events = {
         docForm.find('.theme').removeClass('active');
         docForm.removeClass('active');
         Session.set('editDoc','');
-
     },
 
     'click #cancel': function(){
@@ -392,7 +373,7 @@ Template.recordSubmit.events = {
 };
 
 //en el momento en el que empieza a grabar se establecen los eventos sobre el editor.
-/*Tracker.autorun(function(){
+Tracker.autorun(function(){
     if(Session.get('recording')){
         console.log("esta grabando y voy a crear los eventos del editor");
         date = new Date(); //actualizo la fecha de inicio de grabación.
@@ -407,8 +388,6 @@ Template.recordSubmit.events = {
             switch (e.data.action){
             case "removeText":
                 var rmRange = e.data.range;
-                /*var doc = editor2.getSession().getDocument();
-                doc.remove(rmRange);
                 functions.push({
                     time: new Date() - date,
                     arg: rmRange,
@@ -416,7 +395,6 @@ Template.recordSubmit.events = {
                 });
                 break;
             case "insertText":
-                console.log(e.data);
                 functions.push({
                     time: new Date() - date,
                     arg: e.data.text,
@@ -425,8 +403,6 @@ Template.recordSubmit.events = {
                 break;
             case "removeLines":
                 var rmRange = e.data.range;
-                /*var doc = editor2.getSession().getDocument();
-                doc.remove(rmRange);
                 functions.push({
                     time: new Date() - date,
                     arg: rmRange,
@@ -438,10 +414,8 @@ Template.recordSubmit.events = {
 
         editor.getSession().selection.on('changeSelection', function(e) {
             var selection = editor.getSession().selection;
-            //var selection2 = editor2.getSession().selection;
 
             if(selection.isEmpty()){
-                //selection2.clearSelection();
                 functions.push({
                     time: new Date() - date,
                     arg: null,
@@ -449,7 +423,6 @@ Template.recordSubmit.events = {
                 });
             }else{
                 var range = selection.getRange();
-                //selection2.setRange(range);
                 functions.push({
                     time: new Date() - date,
                     arg: range,
@@ -460,7 +433,6 @@ Template.recordSubmit.events = {
 
         editor.getSession().selection.on('changeCursor',function(e){
             var pos = editor.getCursorPosition();
-            //editor2.moveCursorToPosition(pos);
             functions.push({
                 time: new Date() - date,
                 arg: pos,
@@ -468,14 +440,19 @@ Template.recordSubmit.events = {
             });
         });
     } //--</if>
-});*/
+});
 
 Template.recordSubmit.created = function(){
     docs = new ReactiveVar([]);
     docsRC = new ReactiveVar([]);
+    currentAudio = new ReactiveVar();
 };
 
 Template.recordSubmit.rendered = function(){
+    $.getScript("https://webrtcexperiment-webrtc.netdna-ssl.com/RecordRTC.js",function(){
+        recorder = new AudioRecorder();
+        recorder.initialize();
+    });
     functions = []; //inicializo la lista de funciones. (necesario global para poder guardar en el objeto RC).
     docs.set([]);
     docsRC.set([]);
@@ -483,11 +460,13 @@ Template.recordSubmit.rendered = function(){
     Session.set('formType','formDoc');
     Session.set("recording",false);
     Session.set("stop",false);
-    Session.set("recording",false);
     Session.set("titleAct","");
-    Session.set("hasDocs",true);
     Session.set("createDoc",false);
     Session.set("editDoc",'');
+};
+
+Template.recordSubmit.destroyed = function(){
+    recorder = null;
 };
 
 //funcion que relaiza la reproduccion de la grabacion en el editor.
