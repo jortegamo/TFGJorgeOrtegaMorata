@@ -70,7 +70,8 @@
         border-bottom-left-radius: 5px;
         p{margin: auto;}
         .index{
-            margin: -10px 10px 10px -10px;
+            margin: -10px 10px -9px -10px;
+            border: none;
             border-right: 1px solid #404040;
             padding: 12px 10px;
             background: #F25252;
@@ -80,6 +81,7 @@
             font-size: 17px;
             cursor: pointer;
             height: 100%;
+            &:focus{outline: 0}
         }
         .option{
             margin-left: 10px;
@@ -111,16 +113,10 @@
         }
     }
     .section-tracks{
-        display: none;
         background: #BFBDBD;
-        min-height: 40px;
-
     }
     &.active{
         padding-bottom: 10px;
-        .section-tracks{
-            display: block;
-        }
         .section-header{
             border-radius: 0px;
             border-bottom: 1px solid #724949;

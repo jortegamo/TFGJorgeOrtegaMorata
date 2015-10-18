@@ -20,7 +20,6 @@ Template.channel.helpers({
         return Session.get('currentSection');
     },
     voted: function(){
-       console.log(VotesChannels.find());
        return (VotesChannels.findOne({user_id: Meteor.userId()}))? 'active' : '';
     },
     userEnrolled: function(){

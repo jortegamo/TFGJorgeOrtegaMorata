@@ -9,10 +9,21 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-9 player">
+                        <img src="http://p1.pichost.me/i/33/1565012.jpg">
                         <div class="touch-display-layer">
                             <div class="touch">
+                                <div class="cover">
+                                    <div class="over"></div>
+                                    <button type="button">
+                                        {{#if playing}}
+                                            <i class="fa fa-play"></i>
+                                        {{else}}
+                                            <i class="fa fa-pause"></i>
+                                        {{/if}}
+                                    </button>
+                                </div>
                                 <div class="player-actions-wrapper">
-                                    <div class="player-actions">
+                                    <div class="player-actions active">
                                         <audio src="/Letter.mp3"></audio>
                                         {{#if playing}}
                                             <span class="playpaused" id="pause"><i class="fa fa-pause"></i></span>
@@ -23,7 +34,15 @@
                                         <input id="seeker" type="range" min="0" max="100" value="0">
                                         <span id="played-bar"></span>
                                         <span id="timer">00:00</span>
-                                        <span><i class="fa fa-volume-up"></i></span>
+                                        {{#if hVol}}
+                                            <span class="vol"><i class="fa fa-volume-up"></i></span>
+                                        {{else}}
+                                            {{#if nVol}}
+                                                <span class="vol"><i class="fa fa-volume-down"></i></span>
+                                            {{else}}
+                                                <span class="vol"><i class="fa fa-volume-off"></i></span>
+                                            {{/if}}
+                                        {{/if}}
                                         <input id="volume" type="range" min="0" max="10" value="4">
                                     </div>
                                 </div>
@@ -35,25 +54,26 @@
                             <div class="creator-box">
                                 <img src="{{authorAvatar}}">
                                 <p>{{username}}</p>
+                                <span class="date"><i class="fa fa-clock-o"></i> {{dateFrom createdAt}}</span>
+                                <div class="info">
+                                    <span id="docs_counter"><i class="fa fa-file"></i> {{docs_count}}</span>
+                                    <span id="comments_counter"><i class="fa fa-comments"> {{comments_count}}</i></span>
+                                    <span id="votes_counter"><i class="fa fa-heart"></i> {{votes_count}}</span>
+                                    <span id="replies_counter"><i class="fa fa-reply"></i> {{replies_count}}</span>
+                                </div>
                             </div>
-                            <span class="date"><i class="fa fa-clock-o"></i> {{dateFrom createdAt}}</span>
-                            <div class="info">
-                                <span id="docs_counter"><i class="fa fa-file"></i> {{docs_count}}</span>
-                                <span id="comments_counter"><i class="fa fa-comments"> {{comments_count}}</i></span>
-                                <span id="votes_counter"><i class="fa fa-heart"></i> {{votes_count}}</span>
-                                <span id="replies_counter"><i class="fa fa-reply"></i> {{replies_count}}</span>
+                            <div class="description-box">
+                                <span><i class="fa fa-info-circle"></i> description</span>
+                                <p>{{description}}</p>
                             </div>
+                            <div class="box-options">
+                                <span id="view_parent"><i class="fa fa-eye"></i></span>
+                                <span id="create_reply"><i class="fa fa-reply"></i></span>
+                                <span id="see_later"><i class="fa fa-clock-o"></i></span>
+                                <span id="like_button"><i class="fa fa-heart-o"></i></span>
+                            </div>
+                        </div>
 
-                        </div>
-                        <div class="description-box">
-                            <span><i class="fa fa-info-circle"></i> description</span>
-                            <p>{{description}}</p>
-                        </div>
-                        <div class="box-options">
-                            <span id="view_parent"><i class="fa fa-eye"></i></span>
-                            <span id="create_reply"><i class="fa fa-reply"></i></span>
-                            <span id="see_later"><i class="fa fa-clock-o"></i></span>
-                        </div>
                     </div>
                 </div>
                 <div class="row text-center">
@@ -61,6 +81,49 @@
                         {{> navbarBanner tabs=tabNamesArray }}
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="content-tab-wrapper type-2">
+            <div class="content">
+                <div class="container-fluid">
+                    {{> Template.dynamic template=sectionActive}}
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="repliesTabContent">
+    <div class="row content-navbar">
+        <div class="col-xs-12">
+            <div class="filter-options">
+                <ul class="tab-page">
+                    <li><span>Replies ({{replies_count}})</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row text-center content-body">
+        <div class="col-xs-12 text-left">
+            <div class="list">
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="relatedTabContent">
+    <div class="row content-navbar">
+        <div class="col-xs-12">
+            <div class="filter-options">
+                <ul class="tab-page">
+                    <li><span>Related (0)</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row text-center content-body">
+        <div class="col-xs-12 text-left">
+            <div class="list">
             </div>
         </div>
     </div>

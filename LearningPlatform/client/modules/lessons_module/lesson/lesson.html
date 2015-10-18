@@ -151,7 +151,7 @@
     <div class="sectionItem col-xs-12 fade-in">
         <div class="row section-header">
             <p class="">
-                <span class="index"><i class="fa fa-bookmark"></i> Section {{order}}</span>
+                <button class="index" data-toggle="collapse" data-target="#{{order}}"><i class="fa fa-bookmark"></i> Section {{order}}</button>
                 <span>{{title}}</span>
                 {{#if isOwner}}
                     <span class="pull-right option config-section"><i class="fa fa-cog"></i></span>
@@ -163,7 +163,7 @@
 
             </p>
         </div>
-        <div class="row section-tracks">
+        <div class="row collapse section-tracks" id="{{order}}">
             {{#each tracks}}
                 {{>trackItem}}
             {{/each}}

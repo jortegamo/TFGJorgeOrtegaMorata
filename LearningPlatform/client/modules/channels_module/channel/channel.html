@@ -13,10 +13,10 @@
                                         <a href="{{pathFor 'profile' _id=this.author}}"><img src="{{avatar}}"></a>
                                         <a href="{{pathFor 'profile' _id=this.author}}"><span class="username"> {{username}}</span></a>
                                         <span>· <i class="fa fa-clock-o"></i> {{dateFrom createdAt}} · </span>
-                                        <span class="records-count"><i class="fa fa-film"></i> {{records_count}}</span>
-                                        <span class="comments-count"><i class="fa fa-comments"></i> {{comments_count}}</span>
-                                        <span class="votes-count"><i class="fa fa-heart"></i> {{votes_count}}</span>
-                                        <span class="subscriptions-count"><i class="fa fa-user"></i> {{users_count}}</span>
+                                        <span class="records-count" data-toggle="tooltip"><i class="fa fa-film"></i> {{records_count}}</span>
+                                        <span class="comments-count" data-toggle="tooltip"><i class="fa fa-comments"></i> {{comments_count}}</span>
+                                        <span class="votes-count" data-toggle="tooltip"><i class="fa fa-heart"></i> {{votes_count}}</span>
+                                        <span class="subscriptions-count" data-toggle="tooltip"><i class="fa fa-user"></i> {{users_count}}</span>
                                     </div>
                                     {{#if isOwner}}
                                         <div class="banner-edits">

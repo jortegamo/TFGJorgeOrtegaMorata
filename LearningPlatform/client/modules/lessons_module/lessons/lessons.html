@@ -19,70 +19,75 @@
         </div>
     </nav>
     <div class="content-wrapper">
-        <div class="content">
-            <div class="container-fluid">
-                <div class="row content-navbar">
-                    <div class="col-xs-12">
-                        <div class="display-options">
-                            <ul>
-                                <li><i id="list" class="display-option active fa fa-th-list"></i></li>
-                                <li><i class="display-option fa fa-th-large"></i></li>
-                            </ul>
-                        </div>
-                        <div class="filter-options">
-                            <ul class="tab-page">
-                                <li id="recent-filter" class="filter active"><span>Recent</span></li>
-                                <li id="popular-filter" class="filter"><span>Popular</span></li>
-                            </ul>
+        <div class="content-tab-wrapper type-2">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row content-navbar">
+                        <div class="col-xs-12">
+                            <div class="display-options">
+                                <ul>
+                                    <li><i id="list" class="display-option active fa fa-th-list"></i></li>
+                                    <li><i class="display-option fa fa-th-large"></i></li>
+                                </ul>
+                            </div>
+                            <div class="filter-options">
+                                <ul class="tab-page">
+                                    <li id="recent-filter" class="filter active"><span>Recent</span></li>
+                                    <li id="popular-filter" class="filter"><span>Popular</span></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row text-center content-body">
-                    <div class="col-xs-12 text-center">
-                        <div class="list-flex">
-                            {{#if listMode}}
-                                {{#each lessons}}
-                                    {{>lessonItemHorizontal}}
-                                {{/each}}
-                            {{else}}
-                                {{#each lessons}}
-                                    {{>lessonItemVertical}}
-                                {{/each}}
-                            {{/if}}
+                    <div class="row text-center content-body">
+                        <div class="col-xs-12 text-center">
+                            <div class="list-flex">
+                                {{#if listMode}}
+                                    {{#each lessons}}
+                                        {{>lessonItemHorizontal}}
+                                    {{/each}}
+                                {{else}}
+                                    {{#each lessons}}
+                                        {{>lessonItemVertical}}
+                                    {{/each}}
+                                {{/if}}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
 <template name="lessonItemHorizontal">
-    <div class="row text-left duckflight-card record-card-horizontal fade-in">
-        <div class="card-image col-md-7 col-xs-8">
-            <div class="image-hover"><i class="fa fa-book"></i></div>
-            <img src="https://typekit.files.wordpress.com/2012/09/sourcecodesplash.png?w=600&h=370"/>
-        </div>
-        <div class="card-caption col-md-5 col-xs-4">
-            <ul>
-                <li class="card-title">{{title}}</li>
-                <li>by <span class="card-author">{{authorName}}</span></li>
-                <li class="card-counters">
-                    <span>{{dateFrom createdAt}} · </span>
-                    <span class="sections-count fa fa-bookmark"></span><span class="counter">{{sections_count}}</span>
-                    <span class="comments-count fa fa-comments"></span><span class="counter">{{comments_count}}</span>
-                    <span class="votes-count fa fa-heart"></span><span class="counter">{{votes_count}}</span>
-                    <span class="subscriptions-count fa fa-user"></span><span class="counter">{{users_count}}</span>
-                </li>
-                <li class="card-description">{{shortDescription description 50}}</li>
-            </ul>
+    <div class="row text-left duckflight-card duckflight-card-horizontal fade-in">
+        <div class="col-xs-12 card-content">
+            <div class="absolute-col">
+                <div class="card-image">
+                    <div class="image-hover"><i class="fa fa-book"></i></div>
+                    <img src="https://typekit.files.wordpress.com/2012/09/sourcecodesplash.png?w=600&h=370"/>
+                </div>
+            </div>
+            <div class="card-caption">
+                <ul>
+                    <li class="card-title">{{title}}</li>
+                    <li>by <span class="card-author">{{authorName}}</span></li>
+                    <li class="card-counters">
+                        <span>{{dateFrom createdAt}} · </span>
+                        <span class="sections-count fa fa-bookmark"></span><span class="counter">{{sections_count}}</span>
+                        <span class="comments-count fa fa-comments"></span><span class="counter">{{comments_count}}</span>
+                        <span class="votes-count fa fa-heart"></span><span class="counter">{{votes_count}}</span>
+                        <span class="subscriptions-count fa fa-user"></span><span class="counter">{{users_count}}</span>
+                    </li>
+                    <li class="card-description">{{shortDescription description 50}}</li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
 
 <template name="lessonItemVertical">
-    <div class="text-left duckflight-card record-card-vertical fade-in">
+    <div class="text-left duckflight-card duckflight-card-vertical fade-in">
         <div class="card-image">
             <div class="image-hover"><i class="fa fa-book"></i></div>
             <img src="https://typekit.files.wordpress.com/2012/09/sourcecodesplash.png?w=600&h=370"/>

@@ -1,11 +1,14 @@
 var audio;
 var interval;
-var progress = function(){
-	var d = new Date(audio.currentTime);
-	var min = (d.getMinutes() > 9)? d.getMinutes(): '0' + d.getMinutes();
-	var sec = (d.getSeconds() > 9)? d.getSeconds(): '0' + d.getSeconds();
+var updatePlayer = function(){
+	var d = new Date(audio.currentTime * 1000);
+	var min = (d.getMinutes() > 9)? '' + d.getMinutes(): '0' + d.getMinutes();
+	var sec = (d.getSeconds() > 9)? '' + d.getSeconds(): '0' + d.getSeconds();
 	$('#timer').text(min + ':' + sec);
-	interval = window.setInterval(progress,10);
+	$('#seeker').width($('#progress').width());
+	var progressVal = 100 * audio.currentTime / audio.duration;
+	$('#progress').val(progressVal);
+	$('#played-bar').width(($('#progress').width() * progressVal)/100 + 1);
 };
 
 Template.record.helpers({
@@ -20,49 +23,97 @@ Template.record.helpers({
 	},
 	tabNamesArray: function(){
 		return [{template: 'commentsTabContent', name: 'comments', icon: 'fa-comments', initialActive: true},
-			{template: 'repliesTabContent',    name: 'replies', icon: 'fa-reply'}];
+			{template: 'repliesTabContent',    name: 'replies', icon: 'fa-reply'},
+			{template: 'relatedTabContent', name: 'related', icon: 'fa-tags'}];
 	},
 	playing: function(){
 		return Session.get('playing');
+	},
+	hVol:function(){
+		return Session.get('audioVolume') === 'hight';
+	},
+	nVol: function(){
+		return Session.get('audioVolume') === 'normal';
+	},
+	sectionActive: function(){
+		return Session.get('currentSection');
 	}
+
 });
 
 Template.record.events({
 	'click #play': function(){
+		$('.touch').addClass('active');
+		$('.player-actions').removeClass('active');
 		Session.set('playing',true);
 		audio.play();
-		interval = window.setInterval(function(){
-			var d = new Date(audio.currentTime * 1000);
-			var min = (d.getMinutes() > 9)? '' + d.getMinutes(): '0' + d.getMinutes();
-			var sec = (d.getSeconds() > 9)? '' + d.getSeconds(): '0' + d.getSeconds();
-			$('#timer').text(min + ':' + sec);
-			var progressVal = 100 * audio.currentTime / audio.duration;
-			$('#progress').val(progressVal);
-			$('#played-bar').width(($('#progress').width() * progressVal)/100 + 1);
-		},100);
+		interval = window.setInterval(updatePlayer,100);
 	},
 	'click #pause': function(){
+		$('.touch').removeClass('active');
+		$('.player-actions').addClass('active');
 		Session.set('playing',false);
 		audio.pause();
-		window.clearInterval(interval);
 	},
 	'ended audio': function(){
-		console.log('audio ha terminado');
+		$('.touch').removeClass('active');
+		$('.player-actions').addClass('active');
 		Session.set('playing',false);
-		window.clearInterval(interval);
 		$('#timer').text('00:00');
+		$('#progress').val(0);
+		$('#played-bar').width(0);
 	},
 	'click #seeker': function(e){
 		audio.currentTime = ($(e.target).val() * audio.duration)/100;
-		$('#progress').val($(e.target).val());
+		updatePlayer();
 	},
 	'click #volume': function(e){
 		audio.volume = $(e.target).val()/10;
-	}
-})
+		if(audio.volume > 0.5){
+			Session.set('audioVolume','hight');
+		}else if(audio.volume == 0){
+			Session.set('audioVolume','mute');
+		}else{
+			Session.set('audioVolume','normal');
+		}
+	},
+
+	'click .cover': function(e){
+		if($('.touch').hasClass('active')){
+			$('.touch').removeClass('active');
+			$('#pause').click();
+		}else{
+			$('.touch').addClass('active');
+			$('#play').click();
+		}
+		$(e.target).find('button').addClass('active');
+		window.setTimeout(function(){
+			$(e.target).find('button').removeClass('active');
+		},500);
+	},
+
+	'submit #form-comment': function(e){
+		e.preventDefault();
+		var text = $(e.currentTarget).find('textarea').val();
+		if (text){
+			var comment = {
+				createdAt: new Date(),
+				author: Meteor.userId(),
+				text: text,
+				contextId: this._id,
+				replies_count: 0,
+				isReply: false
+			};
+			Meteor.call('insertComment',comment);
+			Meteor.call('incrementRecordComment',this._id);
+			$(e.currentTarget).find('textarea').val('');
+		}
+	},
+});
 
 Template.record.rendered = function(){
 	Session.set('playing',false);
+	Session.set('audioVolume','normal');
 	audio = document.getElementsByTagName('audio')[0];
 	audio.volume = 0.4;
 	$('#docs_counter').tooltip({placement: 'left',title: 'docs'});
@@ -70,6 +121,10 @@ Template.record.rendered = function(){
 	$('#votes_counter').tooltip({placement: 'bottom',title: 'votes'});
 	$('#replies_counter').tooltip({placement: 'right',title: 'replies'});
 };
+
+Template.record.destroyed = function(){
+	window.clearInterval(interval);
+}
 
 
 

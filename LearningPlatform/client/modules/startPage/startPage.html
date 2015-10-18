@@ -1,41 +1,143 @@
 <template name="startPage">
-  <!--<div id="wellcome" class="container-fluid"></div>
-  
-  <div id="main-content" class="container-fluid" style="margin-top: 1em">
-    <div class="page-header">
-     <h3>Features</h3>
+    <div class="content-wrapper type-2">
+        <div class="page-banner type-2">
+            <div>
+                <div class="container-fluid">
+                    <div class="page-banner-content welcome-banner">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="banner-description">
+                                    <p>wellcome {{username}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-xs-12">
+                                {{> navbarBanner tabs=tabNamesArray }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-tab-wrapper type-2">
+            {{> Template.dynamic template=sectionActive}}
+        </div>
     </div>
-    <div class="row">
-      <div class="col-sm-6 col-md-4">
-        <div class="thumbnail pp">
-          <img src="pairProgramming.png">
-          <div class="caption">
-            <h3>Pair Programming</h3>
-            <p>...</p>
-            <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
-          </div>
-       </div>
-      </div>
-      <div class="col-sm-6 col-md-4">
-        <div class="thumbnail">
-          <img src="learnPlat.png">
-          <div class="caption">
-            <h3>Code Learning</h3>
-            <p>...</p>
-            <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
-          </div>
-       </div>
-      </div>
-      <div class="col-sm-6 col-md-4">
-        <div class="thumbnail">
-          <img src="recorderCode.png">
-          <div class="caption">
-            <h3>Code Recording</h3>
-            <p>...</p>
-            <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
-          </div>
-       </div>
-      </div>
+</template>
+
+<template name="homeTabContent">
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row text-center content-body">
+                <div class="col-xs-12">
+                    <div class="row home-section">
+                        <div class="col-xs-12 text-left head">
+                            <p>What to do first?</p>
+                        </div>
+                        {{> firstTimeTasks}}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-   </div>-->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row text-center content-body">
+                <div class="col-xs-12">
+                    <div class="row home-section">
+                        <div class="col-xs-12 text-left head">
+                            <p>What's happening?</p>
+                        </div>
+                        {{> news}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="firstTimeTasks">
+    <div class="col-xs-12 text-left content-home-section">
+        <div class="row description">
+            <div class="col-xs-12">
+                <p><span>It's your first time using DuckFlight?</span> Please, take your time doing the following tasks for a better experience!</p>
+            </div>
+        </div>
+        <div class="row body">
+            <div class="col-xs-12 task">
+
+                <p class="title"><i class="fa fa-user"></i> Update your profile. <a href="/">tutorial</a>
+                    <button type="button" data-toggle="collapse" data-target="#task1Collapse"><i class="fa fa-angle-down"></i></button>
+                </p>
+
+                <div class="collapse task-body" id="task1Collapse">
+                    <div class="row">
+                        <div class="col-xs-12 task-item">
+                            <p><i class="fa fa-picture-o"></i> Avatar and banner picture</p>
+                            <p class="description">Make your profile attractive adding an avatar and a banner image.</p>
+                        </div>
+                        <div class="col-xs-12 task-item">
+                            <p><i class="fa fa-meh-o"></i> About you</p>
+                            <p class="description">Add a description about yourself so that other users know you.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 task">
+                <p class="title"><i class="fa fa-plus-square"></i> Create your own content.<a href="/">tutorial</a>
+                    <button type="button" data-toggle="collapse" data-target="#task2Collapse"><i class="fa fa-angle-down"></i></button>
+                </p>
+                <div class="collapse task-body" id="task2Collapse">
+                    <div class="row">
+                        <div class="col-xs-12 task-item">
+                            <p><i class="fa fa-film"></i> records</p>
+                            <p class="description">Please, create your first record.</p>
+                        </div>
+                        <div class="col-xs-12 task-item">
+                            <p><i class="fa fa-desktop"></i> channels</p>
+                            <p class="description">Channels in DuckFlight are open to everyone. They're the place to share ideas about a specific
+                                subject. Please create a channel about the subject that you prefers and share your ideas and learn
+                                with others users.
+                            </p>
+                        </div>
+                        <div class="col-xs-12 task-item">
+                            <p><i class="fa fa-book"></i> lessons</p>
+                            <p class="description">Lessons in DuckFlight have a closed content. Only author can add, modify and delete
+                            contents. A lesson is the place to share your knowledges about a specific subject and where others can learn from you.
+                            Create your first lesson.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</template>
+
+<template name="news">
+    <div class="col-xs-12 text-left content-home-section">
+        <div class="row description">
+            <div class="col-xs-12">
+                <p>These are the news</p>
+            </div>
+        </div>
+        <div class="row body">
+
+        </div>
+    </div>
+</template>
+
+<template name="exploreTabContent">
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row text-left content-body">
+                <div class="col-xs-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
 </template>

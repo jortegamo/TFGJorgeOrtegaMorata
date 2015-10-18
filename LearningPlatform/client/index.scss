@@ -36,6 +36,7 @@ a{
   background: #FBFAFA;
   box-shadow: 0px 2px 10px grey;
   min-width: 700px;
+  margin-bottom: 20px;
 }
 
 .content-body{
@@ -48,6 +49,15 @@ a{
 .duckflight-card{
   margin: 15px;
   color: #585757;
+  .card-content{
+    padding-left: 230px;
+    min-height: 120px;
+  }
+  .absolute-col{
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
   .card-image {
     position: relative;
     .image-hover {
@@ -142,6 +152,29 @@ a{
     padding-top: 130px;
     &.type-2{
       padding-top: 30px;
+    }
+  }
+}
+
+@media (max-width: 600px){
+  .content-wrapper{
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+
+@media (max-width: 720px){
+  .duckflight-card-horizontal{
+    text-align: center;
+    .card-content{
+      padding-left: 0px;
+    }
+    .absolute-col{
+      position: relative;
+
+    }
+    .card-caption{
+      ul{padding-left: 5px;}
     }
   }
 }

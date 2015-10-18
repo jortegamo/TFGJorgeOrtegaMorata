@@ -1,0 +1,58 @@
+.welcome-banner{
+  .banner-description{
+    background: #5A5A5A;
+  }
+ }
+
+.home-section{
+  padding: 15px 15px 0px;
+  .head {
+    font-size: 17px;
+    font-weight: 400;
+  }
+  .content-home-section{
+    padding: 10px 15px 0px;
+    .description{
+      font-size: 15px;
+      span{font-weight: 400;}
+    }
+    .body{
+      .task{
+        padding-left: 30px;
+        &:hover{
+          background: #F5F4F4;
+        }
+        .title{
+          margin: 5px auto 0px;
+          a{
+            font-size: 14px;
+            color: #DD4242;
+          }
+          button{
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            &:focus{outline: 0}
+          }
+        }
+        .task-body{
+          padding: 10px 15px;
+          font-size: 14px;
+          .task-item{
+            &:hover{
+              background: #E3E1E1;
+              cursor: pointer;
+            }
+            border-radius: 5px;
+            padding: 10px;
+            p{margin-bottom: 5px;}
+            .description{
+              padding-left: 15px;
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

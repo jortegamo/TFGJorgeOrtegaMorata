@@ -1,7 +1,8 @@
-.record-card-horizontal{
-  padding: 10px 20px;
+.duckflight-card-horizontal{
+  padding: 10px 20px 10px;
   border-bottom: 1pt solid #ECEAEA;
   width: 100%;
+
   .card-image{
     display: inline-block;
     vertical-align: middle;
@@ -14,13 +15,11 @@
     }
   }
   .card-caption{
-    min-width: 280px;
     vertical-align: top;
-    display: inline-block;
   }
 }
 
-.record-card-vertical{
+.duckflight-card-vertical{
   margin: 10px;
   width: 250px;
   .card-image{
@@ -44,15 +43,9 @@
 
 .list-flex{
   padding-top: 10px;
-  display: -webkit-flex;
   display: flex;
-  -webkit-flex-direction: row;
   flex-direction: row;
-  -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
-  -webkit-flex-flow: row wrap;
-  flex-flow: row wrap;
-
-  -webkit-align-content: flex-end;
-  align-content: flex-end;
+  align-content: center;
+  justify-content: center;
 }
