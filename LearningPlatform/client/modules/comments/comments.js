@@ -1,11 +1,25 @@
 Template.commentsTabContent.helpers({
-	currentAvatar: function(){
-		return Meteor.users.findOne(Meteor.userId()).avatar;
-	},
 	hasComments: function(){
 		return this.comments_count;
 	}
 });
+
+
+
+//PUBLISH BOXES
+Template.commentPublishBox.helpers({
+	currentAvatar: function(){
+		return Meteor.users.findOne(Meteor.userId()).avatar;
+	}
+});
+
+Template.replyPublishBox.helpers({
+	currentAvatar: function(){
+		return Meteor.users.findOne(Meteor.userId()).avatar;
+	}
+});
+
+
 
 //LISTS
 Template.commentsList.helpers({
@@ -19,10 +33,6 @@ Template.commentsRepliesList.helpers({
 		return Comments.find({comment_id: this._id},{sort: {createdAt: -1}});
 	}
 });
-
-Template.commentsRepliesList.rendered = function(){
-	console.log('commentsRepliesList rendered');
-};
 
 //commentDefault
 Template.commentDefault.helpers({
@@ -44,20 +54,17 @@ Template.commentDefault.rendered = function(){
 
 //COMMENT
 Template.comment.helpers({
-	currentAvatar: function(){
-		return Meteor.users.findOne(Meteor.userId()).avatar;
-	},
 	hasReplies: function(){
 		return this.replies_count;
 	}
 });
 
 Template.comment.events({
-	'submit #form-reply-comment': function(e,template){
+	'submit form': function(e,template){
 		e.preventDefault();
+		console.log('han hecho reply');
 		var text = $(e.currentTarget).find('textarea').val();
 		if (text){
-			console.log('hay texto');
 			var reply = {
 				createdAt: new Date(),
 				author: Meteor.userId(),

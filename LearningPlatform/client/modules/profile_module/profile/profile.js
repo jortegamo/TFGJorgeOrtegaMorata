@@ -102,7 +102,6 @@ Template.profile.created = function(){
 };
 
 Template.profile.rendered = function(){
-
     messages = [];
 
 
@@ -544,6 +543,91 @@ Template.requestItem.events({
        }else{
            Router.go('profile',{_id: this.applicant.id});
        }
+    }
+});
+
+//AutocompleteContacts
+
+Template.autoCompleteContacts.helpers({
+    searching: function(){
+        return Session.get('searching');
+    },
+    activeSearch: function(){
+        return Session.get('activeSearch');
+    },
+    hasResults: function(){
+        return Session.get('hasResults');
+    },
+    results: function(){
+        return Meteor.users.find({username: new RegExp(Session.get('searchValue'))});
+    }
+});
+
+Template.autoCompleteContacts.events({
+    'keyup input': function(e){
+        Session.set('activeSearch',true);
+        if ($(e.target).val() != ""){
+            if (e.keyCode !== 16){Session.set('searching',true);}
+            Session.set('searchValue',$(e.target).val());
+        }else{
+            Session.set('searchValue',null);
+        }
+    }
+});
+
+Template.autoCompleteContacts.rendered = function(){
+    Session.set('searching',false);
+    Session.set('activeSearch',false);
+    Session.set('hasResults',false);
+    Session.set('searchValue',null);
+
+    var self = this;
+    self.autorun(function(){
+        if (Session.get('searchValue')){
+            Meteor.subscribe('usersBySearch',Session.get('searchValue'),
+                function(){
+                    if (!Meteor.users.find({username: new RegExp(Session.get('searchValue'))}).count()){
+                        Session.set('hasResults',false);
+                    }else{
+                        Session.set('hasResults',true);
+                    }
+                    Session.set('searching',false);
+
+                });
+        }else{
+            Session.set('searching',false);
+            Session.set('activeSearch',false);
+        }
+    })
+};
+
+Template.contactResult.helpers({
+    inContacts: function(){
+        return Relations.find({users: this._id}).count();
+    },
+    sent: function(){
+        return Requests.find({'applicant.id': Session.get('currentProfileId'), 'requested.id': this._id}).count();
+    },
+    received: function(){
+        return Requests.find({'applicant.id': this._id, 'requested.id': Session.get('currentProfileId')}).count();
+    }
+});
+
+Template.contactResult.events({
+    'click button': function(){
+        var request = {
+            createAt: new Date(),
+            applicant:{id: Session.get('currentProfileId'),deleted: false},
+            requested: {id: this._id, deleted: false},
+            message: "Hey, I'm using DuckFlight! add me to your contacts!",
+            status: 'pending'
+        };
+        Meteor.call('insertRequest',request,function(err,res){
+            if(err) console.log('error');
+            if(res){
+
+            }
+        });
     }
 })
 

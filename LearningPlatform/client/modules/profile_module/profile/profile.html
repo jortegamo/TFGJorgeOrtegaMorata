@@ -275,6 +275,7 @@
                     {{> contactsList}}
 
                 {{else}}
+                    {{> createRequest}}
                     {{> requestSentList}}
 
                     {{> requestReceivedList}}
@@ -293,6 +294,62 @@
         </div>
     </div>
 </template>
+
+<template name="createRequest">
+    <div class="row item-list text-left">
+        <div class="col-xs-12">
+            <p class="title"><i class="fa fa-plus"></i> Create a new Request</p>
+            {{> autoCompleteContacts }}
+        </div>
+    </div>
+</template>
+
+<template name="autoCompleteContacts">
+    <div class="auto-complete-wrapper text-center">
+        <div class="search-box">
+            <i class="fa fa-search"></i>
+            <input class="target" type="text" placeholder="Search a user">
+            {{#if searching}}
+                <i class="fa fa-spinner fa-pulse"></i>
+            {{/if}}
+        </div>
+        {{#if activeSearch}}
+            <div class="results-list">
+                {{#if hasResults}}
+                    {{#each results}}
+                        {{> contactResult }}
+                    {{/each}}
+                {{else}}
+                    <p>No results :(</p>
+                {{/if}}
+            </div>
+        {{/if}}
+    </div>
+</template>
+
+<template name="contactResult">
+    <div class="contact-result text-left">
+        <img src="{{avatar}}">
+        <span>{{username}}</span>
+        {{#if inContacts}}
+            <span class="in-contacts pull-right"><i class="fa fa-check-circle"></i></span>
+        {{else}}
+            {{#if sent}}
+                <span class="sent pull-right"><i class="fa fa-paper-plane-o"></i></span>
+            {{else}}
+                {{#if received}}
+                    <span class="received pull-right"><i class="fa fa-inbox"></i></span>
+                {{else}}
+                    <button class="pull-right">
+                        <i class="fa fa-user-plus"></i>
+                    </button>
+                {{/if}}
+            {{/if}}
+        {{/if}}
+
+    </div>
+</template>
+
 <template name="requestSentList">
     <div class="row item-list text-left">
         <div class="col-xs-12">
@@ -330,7 +387,9 @@
                     {{/if}}
                 </p>
                 <span class="date"><i class="fa fa-clock-o"></i> at contacts since {{dateFrom createAt}}</span>
-                <p class="description">{{shortField description 80}}</p>
+                {{#if description}}
+                    <p class="description">{{shortField description 80}}</p>
+                {{/if}}
 
             </div>
         </div>

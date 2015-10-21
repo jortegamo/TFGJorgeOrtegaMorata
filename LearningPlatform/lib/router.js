@@ -136,10 +136,7 @@ Router.route('/profile/:_id',{
 				Meteor.subscribe('recordsByUser',this.params._id),
 				Meteor.subscribe('conversationsByUser',this.params._id),
 				Meteor.subscribe('contactsByUser',this.params._id),
-				Meteor.subscribe('usersContacts',this.params._id),
-				Meteor.subscribe('requestsByUser',this.params._id),
-				Meteor.subscribe('requestedUsers',this.params._id),
-				Meteor.subscribe('applicantUsers',this.params._id)];
+				Meteor.subscribe('requestsByUser',this.params._id)];
 
 	}
 });

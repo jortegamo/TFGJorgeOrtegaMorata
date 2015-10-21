@@ -11,7 +11,6 @@ callback-hook@1.0.2
 check@1.0.4
 coffeescript@1.0.5
 ddp@1.0.14
-delgermurun:mediaelementjs@2.16.1_1
 deps@1.0.6
 ejson@1.0.5
 email@1.0.5
@@ -63,6 +62,7 @@ reactive-var@1.0.4
 reload@1.1.2
 retry@1.0.2
 reywood:font-awesome-sass@4.3.0_1
+reywood:publish-composite@1.4.2
 routepolicy@1.0.4
 service-configuration@1.0.3
 session@1.0.5

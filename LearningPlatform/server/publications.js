@@ -180,6 +180,10 @@ Meteor.publish('allUsers',function(){
 	return Meteor.users.find({},{fields: {username: 1, avatar: 1, banner: 1, description: 1}});
 });
 
+Meteor.publish('usersBySearch',function(searchVal){
+	return Meteor.users.find({username: new RegExp(searchVal)});
+});
+
 Meteor.publish('userById',function(user_id){
 	return Meteor.users.find(user_id);
 });
@@ -187,18 +191,6 @@ Meteor.publish('userById',function(user_id){
 Meteor.publish('userByChannel',function(channel_id){
 	var cursor = Channels.findOne(channel_id);
 	return Meteor.users.find(cursor.author);
-});
-
-Meteor.publish('usersContacts',function(user_id){
-	var arrayIds = [];
-	var cursor = Relations.find({users: user_id});
-	_(cursor.fetch()).each(function(relation){
-		var matchIds = _(relation.users).filter(function(id){
-			return id !== user_id;
-		});
-		arrayIds.push(matchIds[0]);
-	});
-	return Meteor.users.find({_id: {$in: arrayIds}},{fields: {username: 1, avatar: 1, description: 1, status: 1}});
 });
 
 Meteor.publish('usersLesson',function(lesson_id){
@@ -221,24 +213,6 @@ Meteor.publish('usersChannel',function(channel_id){
 	return Meteor.users.find({_id: {$in: usersChannelIds}});
 });
 
-Meteor.publish('requestedUsers',function(user_id){
-	var cursor = Requests.find({'applicant.id': user_id});
-	var arrayIds = [];
-	_(cursor.fetch()).each(function(elem){
-		arrayIds.push(elem.requested.id);
-	});
-	return Meteor.users.find({_id: {$in: arrayIds}});
-});
-
-Meteor.publish('applicantUsers',function(user_id){
-	var cursor = Requests.find({'requested.id': user_id});
-	var arrayIds = [];
-	_(cursor.fetch()).each(function(elem){
-		arrayIds.push(elem.applicant.id);
-	});
-	return Meteor.users.find({_id: {$in: arrayIds}});
-});
-
 Meteor.publish('commentsUsers',function(context_id){
 	var cursor = Comments.find({contextId: context_id});
 	var arrayIds = [];
@@ -252,8 +226,26 @@ Meteor.publish('commentsUsers',function(context_id){
 
 
 //RELATIONS
-Meteor.publish('contactsByUser',function(user_id){
-	return Relations.find({users: user_id});
+Meteor.publishComposite('contactsByUser',function(user_id){
+	var sub = {
+		find: function(){
+			return Relations.find({users: user_id});
+		},
+		children: [{
+			find: function(){
+				var arrayIds = [];
+				var cursor = Relations.find({users: user_id});
+				_(cursor.fetch()).each(function(relation){
+					var matchIds = _(relation.users).filter(function(id){
+						return id !== user_id;
+					});
+					arrayIds.push(matchIds[0]);
+				});
+				return Meteor.users.find({_id: {$in: arrayIds}},{fields: {username: 1, avatar: 1, description: 1, status: 1}});
+			}
+		}]
+	}
+	return sub;
 });
 
 //USERS ENROLLED
@@ -265,8 +257,28 @@ Meteor.publish('usersEnrolled',function(lesson_id){
 
 
 //REQUESTS
-Meteor.publish('requestsByUser',function(user_id){
-	return Requests.find({$or: [{'requested.id': user_id},{'applicant.id': user_id}]});
+
+Meteor.publishComposite('requestsByUser',function(user_id){
+	var sub = {
+		find: function(){
+			return Requests.find({$or: [{'requested.id': user_id},{'applicant.id': user_id}]});
+		},
+		children: [
+			{
+				find: function(){
+					var arrayIds = [];
+					_(Requests.find({'applicant.id': user_id}).fetch()).each(function(elem){
+						arrayIds.push(elem.requested.id);
+					});
+					_(Requests.find({'requested.id': user_id}).fetch()).each(function(elem){
+						arrayIds.push(elem.applicant.id);
+					});
+					return Meteor.users.find({_id: {$in: arrayIds}});
+				}
+			}]
+	};
+
+	return sub;
 });
 
 //SECTIONS

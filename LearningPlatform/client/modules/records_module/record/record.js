@@ -92,7 +92,7 @@ Template.record.events({
 		},500);
 	},
 
-	'submit #form-comment': function(e){
+	'submit form': function(e){
 		e.preventDefault();
 		var text = $(e.currentTarget).find('textarea').val();
 		if (text){
