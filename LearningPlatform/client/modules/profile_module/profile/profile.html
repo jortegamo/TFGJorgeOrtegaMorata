@@ -211,20 +211,23 @@
     </div>
 </template>
 
-<template name="messagesTabContent">
+<template name="conversationsTabContent">
     <div class="row content-navbar">
         <div class="col-xs-12">
             <div class="filter-options">
                 <ul class="tab-page">
-                    <li id="receiver-filter" class="filter"><span>Receiver box</span></li>
-                    <li id="sender-filter" class="filter"><span>Sender box</span></li>
+                    <li><span>Conversations (3)</span></li>
                 </ul>
+            </div>
+            <div class="tab-actions pull-right">
+                <a href="{{pathFor 'conversationSubmit'}}" id="create-conversation"><i class="fa fa-plus-circle"></i></a>
             </div>
         </div>
     </div>
     <div class="row text-center content-body">
         <div class="col-xs-12 text-center">
             <div class="list-flex">
+
                 {{#each conversations}}
                     {{>conversationItem}}
                 {{/each}}
@@ -299,7 +302,7 @@
     <div class="row item-list text-left">
         <div class="col-xs-12">
             <p class="title"><i class="fa fa-plus"></i> Create a new Request</p>
-            {{> autoCompleteContacts }}
+            {{> autoCompleteContacts feedDynamic='true'}}
         </div>
     </div>
 </template>
@@ -312,12 +315,13 @@
             {{#if searching}}
                 <i class="fa fa-spinner fa-pulse"></i>
             {{/if}}
+            <button id="eraser-search" type="button"><i class="fa fa-eraser"></i></button>
         </div>
         {{#if activeSearch}}
             <div class="results-list">
                 {{#if hasResults}}
                     {{#each results}}
-                        {{> contactResult }}
+                        {{> Template.dynamic template=resultTemplate}}
                     {{/each}}
                 {{else}}
                     <p>No results :(</p>

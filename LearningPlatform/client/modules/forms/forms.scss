@@ -284,4 +284,200 @@ $verdana-thin: 100;
     }
   }
 }
+
+.conversation-form{
+  .form-group{
+    padding: 0px 25px;
+  }
+  .form-field{
+    font-size: 15px;
+    padding: 0px;
+    margin: 0px;
+  }
+  section{
+    .section-content {
+      padding: 0px 25px;
+      .users-choosed-list {
+        list-style: none;
+        padding-left: 0px;
+        li{
+          vertical-align: top;
+          margin: 5px;
+          position: relative;
+          display: inline-block;
+          img{
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+          }
+          button{
+            border: none;
+            border-radius: 50%;
+            height: 50px;
+            width: 50px;
+            font-size: 15px;
+            font-weigth: 100;
+            &:focus{  outline: 0px; }
+            &.add-member{
+              background: #B8B7B7;
+              color: #5F5E5E;
+              &:hover{  background: #ABABAB;  }
+            }
+
+            &.delete-member-button{
+              color: white;
+              display: none;
+              left: 0;
+              top:0;
+              position: absolute;
+              background: rgba(0, 0, 0, 0.5);
+            }
+
+          }
+          .username-tooltip{
+            display: none;
+            position: absolute;
+            z-index: 10;
+            bottom: 48px;
+            left: 15px;
+            background: rgba(7, 0, 4, 0.8);
+            color: white;
+            border-radius: 5px;
+            padding: 0px 10px;
+            font-weight: 100;
+          }
+          .arrow-down{
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid rgba(7, 0, 4, 0.8);
+            width: 5px;
+            position: absolute;
+            bottom: 53px;
+            left: 20px;
+            display: none;
+          }
+          &:hover{
+            .delete-member-button.active{
+              display: inline-block;
+            }
+            .username-tooltip,.arrow-down{
+              display: block;
+            }
+          }
+        }
+      }
+      .auto-complete-wrapper{
+        padding: 5px 0px;
+      }
+    }
+  }
+
+}
 /*form*/
+
+
+.input-message-box{
+  display: flex;
+  position: relative;
+  .popover-panel{
+    position: absolute;
+    min-width: 200px;
+    max-width: 400px;
+    display: flex;
+    .body{
+      height: 100%;
+      width: 100%;
+      position: relative;
+      padding: 10px;
+      .arrow{
+        position: absolute;
+      }
+      .close-panel{
+        color: white;
+        background: transparent;
+        parent: 0px;
+        border: none;
+        &:focus{outline: 0px;}
+      }
+    }
+    z-index: 100;
+    background: rgba(7, 0, 4, 0.8);
+    border-radius: 10px;
+  };
+
+  #emoticons-panel{
+    height: 100px;
+    top: -100px;
+    left: 50px;
+    .arrow{
+      bottom: -9px;
+      left: 25px;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid rgba(7, 0, 4, 0.8);
+    }
+  }
+
+  #link-panel{
+    top: 80px;
+    left: 50px;
+    .body{
+      .arrow{
+        top: -9px;
+        left: 25px;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid rgba(7, 0, 4, 0.8);
+      }
+    }
+  }
+
+  .author-avatar{
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+  }
+  .input-box-wrapper{
+    flex: 1;
+    position: relative;
+    border: 1px solid #EBEAEA;
+    background: #EAEAEA;
+    padding: 10px 15px 10px 10px;
+    border-radius: 20px;
+    margin-left: 15px;
+    display: flex;
+    .arrow{
+      position: absolute;
+      top: 15px;
+      left: -10px;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right: 10px solid #EAEAEA;
+    }
+    .actions{
+      margin-right: 10px;
+      ul{
+        font-size: 20px;
+        padding-left: 0;
+        list-style: none;
+
+        button{
+          padding: 0px;
+          background: transparent;
+          border: none;
+          &:focus{outline: 0px;}
+        }
+      }
+    }
+    textarea{
+      flex:1;
+      background: transparent;
+      border: none;
+      border-radius: 5px;
+      min-height: 100px;
+      &:focus{
+        outline: 0px;
+      }
+    }
+  }
+}

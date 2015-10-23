@@ -153,6 +153,13 @@ Router.route('/profile/:_id/edit',{
 
 //CONVERSATIONS
 
+Router.route('/conversation/submit',{
+	name: 'conversationSubmit',
+	waitOn: function(){
+		return Meteor.subscribe('contactsByUser',Meteor.userId());
+	}
+});
+
 Router.route('/conversation/:_id',{
 	name: 'conversation',
 	data: function(){return Conversations.findOne(this.params._id);},
@@ -160,5 +167,7 @@ Router.route('/conversation/:_id',{
 		return Meteor.subscribe('conversationById',this.params._id);
 	}
 });
+
+
 
 

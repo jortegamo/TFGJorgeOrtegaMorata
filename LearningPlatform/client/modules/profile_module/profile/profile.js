@@ -40,7 +40,7 @@ Template.profile.helpers({
                 {template: 'teamsTabContent',    name: 'teams', icon: 'fa-users'},
                 {template: 'lessonsTabContent',  name: 'lessons', icon: 'fa-book'},
                 {template: 'recordsTabContent',  name: 'records', icon: 'fa-film'},
-                {template: 'messagesTabContent', name: 'messages', icon: 'fa-envelope-o', ownerOnly: true, isOwner: Session.get('currentProfileId') === Meteor.userId()},
+                {template: 'conversationsTabContent', name: 'Conversations', icon: 'fa-envelope-o', ownerOnly: true, isOwner: Session.get('currentProfileId') === Meteor.userId()},
                 {template: 'contactsTabContent', name: 'contacts', icon: 'fa-user'}];
     }
 });
@@ -102,6 +102,7 @@ Template.profile.created = function(){
 };
 
 Template.profile.rendered = function(){
+    Session.set('resultTemplate','contactResult');
     messages = [];
 
 
@@ -332,13 +333,13 @@ Template.lessonsTabContent.rendered = function(){
     $('#recent-filter').click();
 };
 
-Template.messagesTabContent.helpers({
+Template.conversationsTabContent.helpers({
    conversations: function(){
        return messages;
    }
 });
 
-Template.messagesTabContent.events({
+Template.conversationsTabContent.events({
     'click .filter': function(e){
         switch(e.currentTarget.id){
             case 'receiver-filter':
@@ -351,7 +352,7 @@ Template.messagesTabContent.events({
     }
 });
 
-Template.messagesTabContent.rendered = function(){
+Template.conversationsTabContent.rendered = function(){
     $('#receiver-filter').click();
 };
 
@@ -473,7 +474,6 @@ Template.requestReceivedList.helpers({
     }
 });
 
-
 Template.requestItem.helpers({
     dateFrom: function(date){
         return smartDate(date);
@@ -560,6 +560,9 @@ Template.autoCompleteContacts.helpers({
     },
     results: function(){
         return Meteor.users.find({username: new RegExp(Session.get('searchValue'))});
+    },
+    resultTemplate: function(){
+        return Session.get('resultTemplate');
     }
 });
 
@@ -572,6 +575,11 @@ Template.autoCompleteContacts.events({
         }else{
             Session.set('searchValue',null);
         }
+    },
+    'click #eraser-search': function(){
+        Session.set('activeSearch',false);
+        Session.set('searching',false);
+        $('input').val('');
     }
 });
 
@@ -582,18 +590,22 @@ Template.autoCompleteContacts.rendered = function(){
     Session.set('searchValue',null);
 
     var self = this;
-    self.autorun(function(){
-        if (Session.get('searchValue')){
-            Meteor.subscribe('usersBySearch',Session.get('searchValue'),
-                function(){
-                    if (!Meteor.users.find({username: new RegExp(Session.get('searchValue'))}).count()){
-                        Session.set('hasResults',false);
-                    }else{
-                        Session.set('hasResults',true);
-                    }
-                    Session.set('searching',false);
 
-                });
+    self.autorun(function(){
+
+        if (Session.get('searchValue')){
+            if(self.data.feedDynamic){
+                Meteor.subscribe('usersBySearch',Session.get('searchValue'),
+                    function(){
+                        if (!Meteor.users.find({username: new RegExp(Session.get('searchValue'))}).count()){
+                            Session.set('hasResults',false);
+                        }else{
+                            Session.set('hasResults',true);
+                        }
+                        Session.set('searching',false);
+                    }
+                );
+            }
         }else{
             Session.set('searching',false);
             Session.set('activeSearch',false);

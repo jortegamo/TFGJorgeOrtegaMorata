@@ -1,6 +1,113 @@
 <template name="formAwesome">
     {{> Template.dynamic template=formType}}
 </template>
+
+<template name="conversationSubmitForm">
+    <form class="awesome-form conversation-form">
+        <section>
+            <p class="title-section">Subject:</p>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-12 form-field">
+                        <input name="subject" autocomplete="off" type="text" placeholder="Please, write a subject" required/>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <p class="title-section">Members:</p>
+            <div class="row">
+                <div class="col-xs-12 section-content">
+                    <ul class="users-choosed-list">
+                        {{#each members}}
+                            {{>member}}
+                        {{/each}}
+                        <li><button class="add-member" type="button"><i class="fa fa-plus"></i></button></li>
+                        <li><button class="edit-members" type="button"><i class="fa fa-pencil"></i></button></li>
+                    </ul>
+                </div>
+                <div class="col-xs-12 section-content">
+                    {{> autoCompleteContacts feedDynamic="false"}}
+                </div>
+            </div>
+        </section>
+        <section>
+            <p class="title-section">Message:</p>
+            <div class="row">
+                <div class="col-xs-12 section-content">
+                   {{>inputMessageBox}}
+                </div>
+            </div>
+        </section>
+
+        <div class="form-group">
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <button class="submit-button" type="submit"><i class="fa fa-paper-plane"></i> Send</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</template>
+
+<template name="inputMessageBox">
+    <div class="input-message-box">
+        <img class="author-avatar" src="{{avatar}}">
+        <div class="input-box-wrapper">
+            <div class="arrow"></div>
+            <div class="actions">
+                <ul>
+                    <li><button id="emoticons-target" type="button"><i class="fa fa-smile-o"></i></button></li>
+                    <li><button id="link-target" type="button"><i class="fa fa-link"></i></button></li>
+                </ul>
+            </div>
+            <textarea placeholder="Write text"></textarea>
+        </div>
+        <div id="emoticons-panel" class="popover-panel">
+            <div class="body">
+                <button id="close-emoticons" class="close-panel pull-right" type="button"><i class="fa fa-times"></i></button>
+                <div class="arrow"></div>
+            </div>
+
+        </div>
+        <div id="link-panel" class="popover-panel">
+            <div class="body">
+                <button id="close-link" class="close-panel pull-right" type="button"><i class="fa fa-times"></i></button>
+                <div class="arrow"></div>
+            </div>
+        </div>
+
+    </div>
+</template>
+
+<template name="member">
+    <li rel="tooltip">
+        <div class="image-member">
+            <img src="{{avatar}}">
+            {{#if isNotAuthor}}
+                <button class="delete-member-button" type="button"><i class="fa fa-times-circle"></i></button>
+            {{/if}}
+        </div>
+        <p class="username-tooltip">{{username}}</p>
+        <div class="arrow-down"></div>
+    </li>
+</template>
+
+<template name="memberResult">
+    <div class="contact-result text-left">
+        <img src="{{avatar}}">
+        <span>{{username}}</span>
+        {{#if inMembers}}
+            <span class="in-contacts pull-right"><i class="fa fa-check-circle"></i></span>
+        {{else}}
+            <span class="add-member-button pull-right">
+                <i class="fa fa-user-plus"></i>
+            </span>
+        {{/if}}
+    </div>
+</template>
+
+
 <template name="formProfileEdit">
     <form class="awesome-form form-editable">
         <!--avatar-->
@@ -26,7 +133,6 @@
                                 <label><i class="fa fa-circle-o"></i> file</label>
                                 <input type="file" placeholder="file" disabled/>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -261,4 +367,6 @@
         </div>
     </form>
 </template>
+
+
 

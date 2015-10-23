@@ -1,3 +1,5 @@
+var conversationMembers;
+
 Template.formAwesome.helpers({
     formType: function(){
         return Session.get('formType');
@@ -102,6 +104,112 @@ Template.formProfileEdit.events({
     }
 });
 
-Template.profileEdit.rendered = function(){
 
+Template.conversationSubmitForm.helpers({
+    members: function(){
+        return conversationMembers.get();
+    }
+});
+
+Template.conversationSubmitForm.events({
+    'click button.add-member': function(e){
+        if($(e.currentTarget).find('i').hasClass('fa-times')){
+            $('.auto-complete-wrapper').find('input').val('');
+            Session.set('activeSearch',false);
+            $('.auto-complete-wrapper').fadeOut();
+            $(e.currentTarget).find('i').removeClass('fa-times');
+            $(e.currentTarget).find('i').addClass('fa-plus');
+        }else{
+            $('.auto-complete-wrapper').fadeIn();
+            $(e.currentTarget).find('i').removeClass('fa-plus');
+            $(e.currentTarget).find('i').addClass('fa-times');
+        }
+    },
+    'click button.edit-members':function(e){
+        if($(e.currentTarget).find('i').hasClass('fa-check')){
+            $('.delete-member-button').removeClass('active');
+            $(e.currentTarget).find('i').removeClass('fa-check');
+            $(e.currentTarget).find('i').addClass('fa-pencil');
+        }else{
+            $('.delete-member-button').addClass('active');
+            $(e.currentTarget).find('i').removeClass('fa-pencil');
+            $(e.currentTarget).find('i').addClass('fa-check');
+        }
+    }
+});
+Template.conversationSubmitForm.created = function(){
+    conversationMembers = new ReactiveVar([]);
+    var members = conversationMembers.get();
+    members.push(Meteor.users.findOne(Meteor.userId()));
+    conversationMembers.set(members);
 };
+Template.conversationSubmitForm.rendered = function(){
+    $('.auto-complete-wrapper').hide();
+    Session.set('resultTemplate','memberResult');
+};
+
+Template.memberResult.helpers({
+    inMembers: function(){
+        var members = conversationMembers.get();
+        var self = this;
+        return _(members).any(function(member){return member._id == self._id;});
+    }
+});
+
+Template.member.helpers({
+    isNotAuthor: function(){return this._id !== Meteor.userId();}
+});
+
+Template.member.events({
+    'click .delete-member-button': function(){
+        var members = conversationMembers.get();
+        members.splice(members.indexOf(this),1);
+        conversationMembers.set(members);
+    }
+})
+Template.member.rendered = function(){
+    $(this.firstNode).tooltip({placement: 'bottom',title: this.data.username});
+};
+
+Template.memberResult.events({
+    'click .add-member-button': function(){
+        console.log('click button');
+        var members = conversationMembers.get();
+        members.push(this);
+        conversationMembers.set(members);
+    }
+});
+
+Template.inputMessageBox.helpers({
+    avatar: function(){
+        return Meteor.users.findOne(Meteor.userId()).avatar;
+    }
+});
+
+Template.inputMessageBox.events({
+    'click #emoticons-target': function(){
+        $('#emoticons-panel').fadeIn();
+    },
+    'click #link-target': function(){
+        $('#link-panel').fadeIn();
+    },
+    'click .close-panel': function(e){
+        var $target = $(e.currentTarget);
+
+        switch($target.attr('id')){
+            case 'close-emoticons':
+                $('#emoticons-panel').fadeOut();
+                break;
+            case 'close-link':
+                $('#link-panel').fadeOut();
+                break;
+        }
+    },
+    'focus textarea': function(){
+        $('.popover-panel').fadeOut();
+    }
+});
+
+Template.inputMessageBox.rendered = function(){
+    $('.popover-panel').hide();
+}

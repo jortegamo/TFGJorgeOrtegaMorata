@@ -285,6 +285,20 @@
       line-height: 20px;
       margin-right: 10px;
     }
+    #eraser-search{
+      border: none;
+      background: #DBDBDB;
+      border-radius: 20px;
+      padding: 0px 10px;
+      i{margin:0;}
+      &:focus{
+        outline: 0;
+      }
+      &:hover{
+        background: #D0D0D0;
+      }
+    }
+
   }
   .results-list{
     margin: 5px auto;
@@ -313,6 +327,11 @@
         &.in-contacts{
           color: #73ACEC;
           font-size: 30px;
+        }
+        &.add-member-button{
+          font-size: 20px;
+          margin-top: 10px;
+          cursor: pointer;
         }
       }
       button{
