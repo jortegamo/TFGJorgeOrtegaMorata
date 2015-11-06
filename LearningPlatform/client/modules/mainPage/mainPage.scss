@@ -4,37 +4,41 @@
   background: #4d394b;
   padding-bottom: 120px;
 }
+
 #main-page-content{
   height: 100%;
-  padding: 100px;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  .main-box{
-    padding: 40px;
-    #main-logo{
-      background: white;
-      padding: 3px;
-      border-radius: 50%;
-    }
-    h3{
-      color: white;
-      font-size: 28px;
-      font-family: roboto, sans-serif;
-      font-weight: 100;
-      font-style: italic;
-      letter-spacing: .5pt;
-      margin: 5px;
-    }
-    h4{
-      color: #3B2B2B;
-      font-size: 20px;
-      font-family: roboto, sans-serif;
-      font-weight: 100;
-      font-style: italic;
-      letter-spacing: .5pt;
-      margin: 5px;
-    }
+  .container-fluid, .row, [class^=col-]{
+    height: 100%;
+  }
+
+  .center-container-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  #main-logo{
+    background: white;
+    padding: 3px;
+    border-radius: 50%;
+  }
+  h3{
+    color: white;
+    font-size: 28px;
+    font-family: roboto, sans-serif;
+    font-weight: 100;
+    font-style: italic;
+    letter-spacing: .5pt;
+    margin: 5px;
+  }
+  h4{
+    color: #3B2B2B;
+    font-size: 20px;
+    font-family: roboto, sans-serif;
+    font-weight: 100;
+    font-style: italic;
+    letter-spacing: .5pt;
+    margin: 5px;
   }
 
   button{
@@ -44,6 +48,7 @@
     border-radius: 10px;
     padding: 5px 10px;
     font-size: 20px;
+    margin-top: 10px;
     &:hover{
       color: #8FE4BF;
       border: 2px solid #8FE4BF;
@@ -54,6 +59,7 @@
     }
   }
 }
+
 #footer-page{
   min-height: 120px;
   padding: 20px 40px;

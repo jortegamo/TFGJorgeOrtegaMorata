@@ -1,0 +1,43 @@
+<template name="player">
+    <div class="col-xs-9 player">
+        <img src="http://p1.pichost.me/i/33/1565012.jpg">
+        <div class="touch-display-layer">
+            <div class="touch">
+                <div class="cover">
+                    <div class="over"></div>
+                    <button type="button">
+                        {{#if playing}}
+                            <i class="fa fa-play"></i>
+                        {{else}}
+                            <i class="fa fa-pause"></i>
+                        {{/if}}
+                    </button>
+                </div>
+                <div class="player-actions-wrapper">
+                    <div class="player-actions active">
+                        <audio src="/Letter.mp3"></audio>
+                        {{#if playing}}
+                            <span class="playpaused" id="pause"><i class="fa fa-pause"></i></span>
+                        {{else}}
+                            <span class="playpaused" id="play"><i class="fa fa-play"></i></span>
+                        {{/if}}
+                        <input id="progress" type="range" min="0" max="100" value="0">
+                        <input id="seeker" type="range" min="0" max="100" value="0">
+                        <span id="played-bar"></span>
+                        <span id="timer">00:00</span>
+                        {{#if hVol}}
+                            <span class="vol"><i class="fa fa-volume-up"></i></span>
+                        {{else}}
+                            {{#if nVol}}
+                                <span class="vol"><i class="fa fa-volume-down"></i></span>
+                            {{else}}
+                                <span class="vol"><i class="fa fa-volume-off"></i></span>
+                            {{/if}}
+                        {{/if}}
+                        <input id="volume" type="range" min="0" max="10" value="4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

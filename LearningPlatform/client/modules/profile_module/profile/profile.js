@@ -40,7 +40,7 @@ Template.profile.helpers({
                 {template: 'teamsTabContent',    name: 'teams', icon: 'fa-users'},
                 {template: 'lessonsTabContent',  name: 'lessons', icon: 'fa-book'},
                 {template: 'recordsTabContent',  name: 'records', icon: 'fa-film'},
-                {template: 'conversationsTabContent', name: 'Conversations', icon: 'fa-envelope-o', ownerOnly: true, isOwner: Session.get('currentProfileId') === Meteor.userId()},
+                {template: 'conversationsTabContent', name: 'conversations', icon: 'fa-envelope-o', ownerOnly: true, isOwner: Session.get('currentProfileId') === Meteor.userId()},
                 {template: 'contactsTabContent', name: 'contacts', icon: 'fa-user'}];
     }
 });
@@ -76,7 +76,7 @@ Template.profile.events({
         Meteor.call('removeContact',Session.get('currentProfileId'));
     },
     'click #send-message': function(){
-        console.log('nos vamos a la pagina de crear mensaje');
+        Router.go('conversationSubmit',{user: Session.get('currentProfileId')});
     },
     'click .filter': function(e){
         var elem = e.currentTarget;
@@ -103,51 +103,6 @@ Template.profile.created = function(){
 
 Template.profile.rendered = function(){
     Session.set('resultTemplate','contactResult');
-    messages = [];
-
-
-    var mes1 = {
-        author: 'GrexRob',
-        createdAt: new Date(),
-        subject: 'Create a new Team',
-        message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ' +
-        'Praesent malesuada leo nisi, eget vehicula augue auctor faucibus. Nam ' +
-        'dictum eros nec arcu fermentum ornare. Nunc commodo fermentum aliquet. Vivamus dapibus, ' +
-        'diam et sagittis suscipit, tortor velit accumsan nulla, et aliquam nunc ipsum et ex. ',
-        avatar: "https://avatars0.githubusercontent.com/u/842692?v=3&s=460",
-        state: 'responded',
-        replies_count: 0,
-        users_count: 5
-    };
-    var mes2 = {
-        author: 'PHeras',
-        createdAt: new Date(),
-        subject: 'Vacances',
-        message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ' +
-        'Praesent malesuada leo nisi, eget vehicula augue auctor faucibus. Nam ' +
-        'dictum eros nec arcu fermentum ornare. Nunc commodo fermentum aliquet. Vivamus dapibus, ' +
-        'diam et sagittis suscipit, tortor velit accumsan nulla, et aliquam nunc ipsum et ex. ',
-        avatar: "http://gsyc.es/~grex/concurso/21/images/pedrodelasheras.jpg",
-        state: 'pending',
-        replies_count: 29,
-        users_count: 2
-    };
-    var mes3 = {
-        author: 'JBarahona',
-        createdAt: new Date(),
-        subject: 'ñalksdjfñalksjdfñalksdjñflaksjdfñlkasjdfñlaksjdfñlkasjdfñlaksdj',
-        message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ' +
-        'Praesent malesuada leo nisi, eget vehicula augue auctor faucibus. Nam ' +
-        'dictum eros nec arcu fermentum ornare. Nunc commodo fermentum aliquet. Vivamus dapibus, ' +
-        'diam et sagittis suscipit, tortor velit accumsan nulla, et aliquam nunc ipsum et ex. ',
-        avatar: 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/1/000/029/1d4/0bc075a.jpg',
-        state: 'viewed',
-        replies_count: 14,
-        users_count: 4
-    };
-    messages.push(mes1);
-    messages.push(mes2);
-    messages.push(mes3);
 };
 
 Template.profile.destroyed = function(){
@@ -335,52 +290,48 @@ Template.lessonsTabContent.rendered = function(){
 
 Template.conversationsTabContent.helpers({
    conversations: function(){
-       return messages;
+       return Conversations.find({},{sort: {last_modified: -1}});
+   },
+   conversationsCount: function(){
+       return Conversations.find({}).count();
    }
 });
-
-Template.conversationsTabContent.events({
-    'click .filter': function(e){
-        switch(e.currentTarget.id){
-            case 'receiver-filter':
-                Session.set('currentFilter','receiver');
-                break;
-            case 'sender-filter':
-                Session.set('currentFilter','sender');
-                break;
-        }
-    }
-});
-
-Template.conversationsTabContent.rendered = function(){
-    $('#receiver-filter').click();
-};
 
 Template.conversationItem.helpers({
     dateFrom: function(date){
         return smartDate(date);
     },
     status: function(){
-        return this.state;
+        var me = _(this.members).filter(function(member){
+            return member._id == Session.get('currentProfileId');
+        });
+        return me.status;
     },
     shortField: function(field,max){
         return ellipsis (field,max);
+    },
+    avatar: function(){
+        var message = Messages.findOne({conversation_id: this._id},{sort: {createdAt: -1}});
+        return Meteor.users.findOne(message.author).avatar;
+    },
+    username: function(){
+        var message = Messages.findOne({conversation_id: this._id},{sort: {createdAt: -1}});
+        return Meteor.users.findOne(message.author).username;
+    },
+    message: function(){
+        return new Handlebars.SafeString(Messages.findOne({conversation_id: this._id},{sort: {createdAt: -1}}).message);
     }
 });
 
 Template.conversationItem.events({
     'click .reply-button': function(){
-        console.log("go to message's converation");
+        Router.go('conversation',{_id: this._id});
     },
     'click img, click .author': function(){
-        console.log('go profile message author');
+        var authorId = Messages.findOne({conversation_id: this._id}).author;
+        Router.go('profile',{_id: authorId});
     }
 });
-
-Template.conversationItem.rendered = function(){
-    $('.replies_counter').tooltip({placement: 'top', title: 'replies'});
-    $('.users_counter').tooltip({placement: 'bottom', title: 'members'});
-};
 
 Template.contactsTabContent.helpers({
     showContacts: function(){
@@ -414,7 +365,7 @@ Template.contactsTabContent.rendered = function(){
 
 Template.contactsList.helpers({
     contacts: function(){
-        return Relations.find();
+        return Relations.find({},{sort: {createAt: -1}});
     }
 });
 
@@ -458,7 +409,7 @@ Template.contactItem.events({
 
 Template.requestSentList.helpers({
     requests: function(){
-        return Requests.find({$and: [{'applicant.id': Session.get('currentProfileId')}, {'applicant.deleted': false}]});
+        return Requests.find({$and: [{'applicant.id': Session.get('currentProfileId')}, {'applicant.deleted': false}]},{sort: {createAt: -1}});
     },
     sent_count: function(){
         return Requests.find({$and: [{'applicant.id': Session.get('currentProfileId')}, {'applicant.deleted': false}]}).count();
@@ -467,7 +418,7 @@ Template.requestSentList.helpers({
 
 Template.requestReceivedList.helpers({
     requests: function(){
-        return Requests.find({$and: [{'requested.id': Session.get('currentProfileId')}, {'requested.deleted': false}]});
+        return Requests.find({$and: [{'requested.id': Session.get('currentProfileId')}, {'requested.deleted': false}]},{sort: {createAt: -1}});
     },
     received_count: function(){
         return Requests.find({$and: [{'requested.id': Session.get('currentProfileId')}, {'requested.deleted': false}]}).count();
@@ -576,10 +527,11 @@ Template.autoCompleteContacts.events({
             Session.set('searchValue',null);
         }
     },
-    'click #eraser-search': function(){
+    'click #eraser-search': function(e){
+        e.preventDefault();
         Session.set('activeSearch',false);
         Session.set('searching',false);
-        $('input').val('');
+        $('#auto-complete-input').val('');
     }
 });
 
@@ -590,21 +542,17 @@ Template.autoCompleteContacts.rendered = function(){
     Session.set('searchValue',null);
 
     var self = this;
-
+    var resultsDecisor = function(){
+        Session.set('hasResults',Meteor.users.find({username: new RegExp(Session.get('searchValue'))}).count() > 0);
+        Session.set('searching',false);
+    };
     self.autorun(function(){
 
         if (Session.get('searchValue')){
-            if(self.data.feedDynamic){
-                Meteor.subscribe('usersBySearch',Session.get('searchValue'),
-                    function(){
-                        if (!Meteor.users.find({username: new RegExp(Session.get('searchValue'))}).count()){
-                            Session.set('hasResults',false);
-                        }else{
-                            Session.set('hasResults',true);
-                        }
-                        Session.set('searching',false);
-                    }
-                );
+            if(self.data.feedDynamic != 'false'){
+                Meteor.subscribe('usersBySearch',Session.get('searchValue'), resultsDecisor);
+            }else{
+                resultsDecisor();
             }
         }else{
             Session.set('searching',false);

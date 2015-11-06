@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <div class="content-tab-wrapper">
+        <div class="content-tab-wrapper type-2">
             <div class="content">
                 <div class="container-fluid">
                     {{> Template.dynamic template=sectionActive}}
@@ -216,7 +216,7 @@
         <div class="col-xs-12">
             <div class="filter-options">
                 <ul class="tab-page">
-                    <li><span>Conversations (3)</span></li>
+                    <li><span>Conversations ({{conversationsCount}})</span></li>
                 </ul>
             </div>
             <div class="tab-actions pull-right">
@@ -226,11 +226,12 @@
     </div>
     <div class="row text-center content-body">
         <div class="col-xs-12 text-center">
-            <div class="list-flex">
-
-                {{#each conversations}}
-                    {{>conversationItem}}
-                {{/each}}
+            <div class="row item-list text-left">
+                <div class="col-xs-12">
+                    {{#each conversations}}
+                        {{>conversationItem}}
+                    {{/each}}
+                </div>
             </div>
         </div>
     </div>
@@ -238,22 +239,31 @@
 
 
 <template name="conversationItem">
-    <div class="{{status}} text-left row conversation-item fade-in">
-        <div class="text-center col-xs-2">
-            <img src="{{avatar}}"/>
-        </div>
-        <div class="message col-xs-10">
-            <p><span class="author">{{author}}</span>
-                <span>-- <i class="fa fa-clock-o"></i> {{dateFrom createdAt}} --</span>
-                subject: <span class="subject">{{shortField subject 15}}</span>
-                <span class="replies_counter counter"><i class="fa fa-reply"></i> {{replies_count}}</span>
-                <span class="users_counter counter"><i class="fa fa-user"></i> {{users_count}}</span>
-                <span class="status"><i class="fa fa-circle"></i></span></p>
-            <div class="message-content">
-                <div class="arrow"></div>
-                <p>{{shortField message 150}}</p>
+    <div class="text-left row fade-in">
+        <div class="col-xs-12">
+            <div class="conversation-item {{status}}">
+                <p>
+                    subject: <span class="subject">{{shortField subject 15}}</span>
+                    <span class="replies_counter counter"><i class="fa fa-reply"></i> {{messages_count}}</span>
+                    <span class="users_counter counter"><i class="fa fa-user"></i> {{members_count}}</span>
+                    <span class="status"><i class="fa fa-circle"></i></span>
+                </p>
+                <div class="message-wrapper">
+                    <img src="{{avatar}}"/>
+                    <div class="message">
+                        <div class="message-content">
+                            <div class="arrow"></div>
+                            <p><span class="author">{{username}}</span>
+                                <span>-- <i class="fa fa-clock-o"></i> {{dateFrom last_modified}}</span>
+                            </p>
+                            <p class="message-body">
+                                {{message}}
+                            </p>
+                        </div>
+                        <span class="pull-right reply-button"><i class="fa fa-reply"></i> create reply</span>
+                    </div>
+                </div>
             </div>
-            <span class="pull-right reply-button"><i class="fa fa-reply"></i> create reply</span>
         </div>
     </div>
 </template>
@@ -273,18 +283,13 @@
     </div>
     <div class="row text-center content-body">
         <div class="col-xs-12 text-center">
-            <div class="list-flex">
-                {{#if showContacts}}
-                    {{> contactsList}}
-
-                {{else}}
-                    {{> createRequest}}
-                    {{> requestSentList}}
-
-                    {{> requestReceivedList}}
-
-                {{/if}}
-            </div>
+            {{#if showContacts}}
+                {{> contactsList}}
+            {{else}}
+                {{> createRequest}}
+                {{> requestSentList}}
+                {{> requestReceivedList}}
+            {{/if}}
         </div>
     </div>
 </template>
@@ -311,7 +316,7 @@
     <div class="auto-complete-wrapper text-center">
         <div class="search-box">
             <i class="fa fa-search"></i>
-            <input class="target" type="text" placeholder="Search a user">
+            <input id="auto-complete-input" class="target" type="text" placeholder="Search a user">
             {{#if searching}}
                 <i class="fa fa-spinner fa-pulse"></i>
             {{/if}}
@@ -377,75 +382,81 @@
 </template>
 
 <template name="contactItem">
-    <div class="{{userStatus}} row contact-item fade-in">
-        <div class="col-xs-2 text-center">
-            <img class="avatar" src="{{avatar}}">
-        </div>
-        <div class="col-xs-10 text-left contact-body">
-            <div>
-                <p>
-                    <span class="author">{{username}}</span>
-                    <span class="status"><i class="fa fa-circle"></i> {{status}}</span>
-                    {{#if isOwner}}
-                        <span class="action-button pull-right"><i class="fa fa-paper-plane"></i> send message</span>
+    <div class="row fade-in">
+        <div class="col-xs-12">
+            <div class="{{userStatus}} contact-item">
+                <img class="avatar" src="{{avatar}}">
+                <div class="text-left contact-body">
+                    <p>
+                        <span class="author">{{username}}</span>
+                        <span class="status"><i class="fa fa-circle"></i> {{status}}</span>
+                        {{#if isOwner}}
+                            <span class="action-button pull-right"><i class="fa fa-envelope-o"></i></span>
+                        {{/if}}
+                    </p>
+                    <span class="date"><i class="fa fa-clock-o"></i> at contacts since {{dateFrom createAt}}</span>
+                    {{#if description}}
+                        <p class="description">{{shortField description 80}}</p>
                     {{/if}}
-                </p>
-                <span class="date"><i class="fa fa-clock-o"></i> at contacts since {{dateFrom createAt}}</span>
-                {{#if description}}
-                    <p class="description">{{shortField description 80}}</p>
-                {{/if}}
-
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <template name="requestItem">
-    <div class="{{status}} row request-item fade-in">
-        <div class="col-xs-2 text-center">
-            <img class="avatar" src="{{avatar}}">
-        </div>
-        <div class="col-xs-10 text-left request-body">
-            <p>
-                <span class="username">{{username}}</span>
-                <span class="date">-- <i class="fa fa-clock-o"></i> {{dateFrom createAt}} --</span>
-                <span class="status"><i class="fa fa-circle"></i> {{status}}</span>
-                {{#if toMe}}
-                    {{#if pending}}
-                        <span id="accept" class="pull-right action-button"><i class="fa fa-check"></i> accept</span>
-                        <span id="refuse" class="pull-right action-button"><i class="fa fa-times"></i> refuse</span>
+    <div class="row fade-in">
+        <div class="col-xs-12">
+            <div class="{{status}} request-item">
+                <img class="avatar" src="{{avatar}}">
+                <div class="text-left request-body">
+                    <p>
+                        <span class="username">{{username}}</span>
+                        <span class="date">-- <i class="fa fa-clock-o"></i> {{dateFrom createAt}} --</span>
+                        <span class="status"><i class="fa fa-circle"></i> {{status}}</span>
+                    </p>
+                    {{#if isSent}}
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="applicant-box">
+                                    <img class="applicant-avatar" src="{{avatarApplicant}}">
+                                    <div class="message-content">
+                                        <div class="arrow"></div>
+                                        <p>{{shortField message 150}}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     {{else}}
-                        <span id="ok" class="pull-right action-button"><i class="fa fa-check"></i> ok</span>
-                    {{/if}}
-                {{else}}
-                    {{#if refused}}
-                        <span id="ok" class="pull-right action-button"><i class="fa fa-check"></i> ok</span>
-                        <span id="resend" class="pull-right action-button"><i class="fa fa-paper-plane-o"></i> resend</span>
-                    {{else}}
-                        {{#if accepted}}
-                            <span id="ok" class="pull-right action-button"><i class="fa fa-check"></i> ok</span>
-                        {{/if}}
-                     {{/if}}
-                {{/if}}
-            </p>
-            {{#if isSent}}
-                <div class="row">
-                    <div class="col-xs-1">
-                        <img class="applicant-avatar" src="{{avatarApplicant}}">
-                    </div>
-                    <div class="col-xs-11">
                         <div class="message-content">
                             <div class="arrow"></div>
                             <p>{{shortField message 150}}</p>
                         </div>
-                    </div>
+                    {{/if}}
+                    {{#if toMe}}
+                        {{#if pending}}
+                            <p>
+                                <span id="accept" class="pull-right action-button"><i class="fa fa-check"></i> accept</span>
+                                <span id="refuse" class="pull-right action-button"><i class="fa fa-times"></i> refuse</span>
+                            </p>
+                        {{else}}
+                            <p><span id="ok" class="pull-right action-button"><i class="fa fa-check"></i> ok</span></p>
+                        {{/if}}
+                    {{else}}
+                        {{#if refused}}
+                            <p>
+                                <span id="ok" class="pull-right action-button"><i class="fa fa-check"></i> ok</span>
+                                <span id="resend" class="pull-right action-button"><i class="fa fa-paper-plane-o"></i> resend</span>
+                            </p>
+                        {{else}}
+                            {{#if accepted}}
+                                <p><span id="ok" class="pull-right action-button"><i class="fa fa-check"></i> ok</span></p>
+                            {{/if}}
+                        {{/if}}
+                    {{/if}}
                 </div>
-            {{else}}
-                <div class="message-content">
-                    <div class="arrow"></div>
-                    <p>{{shortField message 150}}</p>
-                </div>
-            {{/if}}
+            </div>
         </div>
     </div>
 </template>

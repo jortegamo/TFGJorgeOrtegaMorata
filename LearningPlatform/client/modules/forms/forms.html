@@ -17,25 +17,14 @@
         <section>
             <p class="title-section">Members:</p>
             <div class="row">
-                <div class="col-xs-12 section-content">
-                    <ul class="users-choosed-list">
-                        {{#each members}}
-                            {{>member}}
-                        {{/each}}
-                        <li><button class="add-member" type="button"><i class="fa fa-plus"></i></button></li>
-                        <li><button class="edit-members" type="button"><i class="fa fa-pencil"></i></button></li>
-                    </ul>
-                </div>
-                <div class="col-xs-12 section-content">
-                    {{> autoCompleteContacts feedDynamic="false"}}
-                </div>
+                {{>inputMemberBox storageDynamic="true"}}
             </div>
         </section>
         <section>
             <p class="title-section">Message:</p>
             <div class="row">
-                <div class="col-xs-12 section-content">
-                   {{>inputMessageBox}}
+                <div id="inputMessageBox" class="col-xs-12 section-content">
+                    {{>inputMessageBox}}
                 </div>
             </div>
         </section>
@@ -50,6 +39,21 @@
     </form>
 </template>
 
+<template name="inputMemberBox">
+    <div id="inputMembersBox" class="col-xs-12 section-content">
+        <ul class="users-choosed-list">
+            {{#each members}}
+                {{>member}}
+            {{/each}}
+            <li><button class="add-member" type="button"><i class="fa fa-plus"></i></button></li>
+            <li><button class="edit-members" type="button"><i class="fa fa-pencil"></i></button></li>
+        </ul>
+    </div>
+    <div class="col-xs-12 section-content">
+        {{> autoCompleteContacts feedDynamic="false"}}
+    </div>
+</template>
+
 <template name="inputMessageBox">
     <div class="input-message-box">
         <img class="author-avatar" src="{{avatar}}">
@@ -61,7 +65,7 @@
                     <li><button id="link-target" type="button"><i class="fa fa-link"></i></button></li>
                 </ul>
             </div>
-            <textarea placeholder="Write text"></textarea>
+            <div id="message-input" contenteditable="true"></div>
         </div>
         <div id="emoticons-panel" class="popover-panel">
             <div class="body">
@@ -72,8 +76,13 @@
         </div>
         <div id="link-panel" class="popover-panel">
             <div class="body">
+                <span><i class="fa fa-link"></i> Url</span>
                 <button id="close-link" class="close-panel pull-right" type="button"><i class="fa fa-times"></i></button>
                 <div class="arrow"></div>
+                <form id="link-input">
+                    <span>http:// </span><input type="text" name="link" autocomplete="off">
+                    <button type="submit"><i class="fa fa-check"></i></button>
+                </form>
             </div>
         </div>
 

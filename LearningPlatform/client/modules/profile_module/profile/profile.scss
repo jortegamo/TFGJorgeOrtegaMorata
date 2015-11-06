@@ -14,8 +14,7 @@
     .title{
       font-size: 15px;
     }
-    width: 100%;
-    padding-bottom: 15px;
+    padding: 15px;
   }
   &.type-2{
     min-width: 0;
@@ -34,14 +33,79 @@
 .conversation-item{
   border-bottom: 1pt solid #E4E4E4;
   margin: 0px 10px;
-  padding: 10px 5px 15px 0px;
-  img{
-    border-radius: 50%;
-    height: 65px;
-    width: 65px;
-    margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px 10px 15px 10px;
+  span{
+    color: #9A9C9A;
+    font-weight: 100;
+    font-size: 12px;
+    margin-left: 5px;
+  }
+  .author{
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
     cursor: pointer;
   }
+  .subject{
+    font-size: 14px;
+    font-weight: 400;
+    background: #DEE0E1;
+    padding: 5px;
+    color: #666767;
+  }
+  .status{
+    font-size: 14px;
+    color: #636463;
+    i{
+      font-size: 16px;
+      color: #BFEFCA;
+    }
+  }
+  .message-wrapper{
+    display: flex;
+    img{
+      border-radius: 50%;
+      height: 55px;
+      width: 55px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+    .message{
+      flex: 1;
+      padding-left: 0px;
+      font-size: 14px;
+      font-weight: 500;
+
+      .arrow{
+        position: absolute;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-right: 8px solid #F2F3F3;
+        left: -7px;
+        top: 10px;
+      }
+      .message-content{
+        margin: 0px 0px 5px 15px;
+        position: relative;
+        padding: 5px 10px;
+        font-size: 13px;
+        font-weight: 100;
+        color: #686968;
+        background: #F2F3F3;
+        border-radius: 10px;
+        .message-body{padding: 0px 5px;}
+        .message-body a{
+          color: #77A3FB;
+          &:hover{
+            color: #77A3FB;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
   .reply-button{
     padding: 5px 10px;
     background: #DEE0E1;
@@ -52,56 +116,7 @@
       background: #E6E8EA;
     }
   }
-  .message{
-    padding-left: 0px;
-    font-size: 14px;
-    font-weight: 500;
-    span{
-      color: #9A9C9A;
-      font-weight: 100;
-      font-size: 12px;
-      margin-left: 5px;
-    }
-    .author{
-      font-size: 14px;
-      font-weight: 500;
-      color: #333333;
-      cursor: pointer;
-    }
-    .subject{
-      font-size: 14px;
-      font-weight: 400;
-      background: #DEE0E1;
-      padding: 5px;
-      color: #666767;
-    }
-    .status{
-      font-size: 14px;
-      color: #636463;
-      i{
-        font-size: 16px;
-        color: #BFEFCA;
-      }
-    }
-    .arrow{
-      position: absolute;
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-right: 10px solid #F2F3F3;
-      left: -8px;
-    }
-    .message-content{
-      position: relative;
-      font-size: 13px;
-      font-weight: 100;
-      padding: 10px;
-      color: #686968;
-      text-align: justify;
-      background: #F2F3F3;
-      border-radius: 10px;
-      margin-bottom: 5px;
-    }
-  }
+
   &.pending{
     .message .status i{
       color: #F77575;
@@ -115,9 +130,9 @@
 }
 
 .contact-item{
-  width: 100%;
   font-size: 14px;
-  padding: 10px 5px 15px 0px;
+  display: flex;
+  padding: 10px 10px 15px 10px;
   margin: 0px 10px;
   border-bottom: 1pt solid #E4E4E4;
   font-weight: 500;
@@ -132,6 +147,8 @@
 
   .contact-body{
     padding: 0px;
+    flex: 1;
+    margin-left: 20px;
     .status{
       font-weight: 100;
       margin-left: 5px;
@@ -186,7 +203,8 @@
 
 .request-item{
   font-size: 14px;
-  padding: 10px 5px 15px 0px;
+  padding: 10px 5px 15px 10px;
+  display: flex;
   margin: 0px 10px;
   border-bottom: 1pt solid #E4E4E4;
   font-weight: 500;
@@ -205,6 +223,8 @@
     }
   }
   .request-body{
+    flex: 1;
+    margin-left: 10px;
     padding: 0px;
     p{
       color: #333333;
@@ -229,6 +249,13 @@
       border-bottom: 10px solid transparent;
       border-right: 10px solid #F2F3F3;
       left: -8px;
+    }
+    .applicant-box{
+      display: flex;
+      .message-content{
+        flex: 1;
+        margin-left: 10px;
+      }
     }
     .message-content{
       p{color: #686968;}

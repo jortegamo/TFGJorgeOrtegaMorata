@@ -4,14 +4,12 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-platform
 insecure
 underscore
 iron:router
 mizzao:sharejs-ace
 accounts-base
 accounts-password
-fourseven:scss
 mizzao:bootstrap-3
 reywood:font-awesome-sass
 momentjs:moment
@@ -20,3 +18,20 @@ reactive-var
 mizzao:user-status
 mizzao:jquery-ui
 reywood:publish-composite
+standard-minifiers
+meteor-base
+mobile-experience
+mongo
+blaze-html-templates
+session
+jquery
+tracker
+logging
+reload
+random
+ejson
+spacebars
+check
+fourseven:scss@2.0.0
+cfs:standard-packages
+cfs:gridfs

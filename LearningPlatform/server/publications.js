@@ -140,24 +140,52 @@ Meteor.publish('lessonsByUserRanking',function(user_id){
 
 //CONVERSATIONS
 
-var getIds = function(cursor){
-	return cursor.map(function(elem){
-		return ObjectId(elem._id);
-	});
-};
-
-Meteor.publish('conversationsByUser',function(user_id){
-	var conversationsCursor = Conversations.find({members: user_id});
-	var arrayIds = getIds(conversationsCursor);
-	return [conversationsCursor, Messages.find({conversation: {$in: [arrayIds]}})];
+Meteor.publishComposite ('conversationsByUser',function(user_id){
+	var sub = {
+		collection: 'conversations',
+		find: function(){
+			return Conversations.find({members: {$elemMatch: {_id: user_id}}});
+		},
+		children: [{
+			collection: 'messages',
+			find: function(conversation){
+				return Messages.find({conversation_id: conversation._id});
+			},
+			children: [{
+				find: function(message){
+					return Meteor.users.find({_id: message.author});
+				}
+			}]
+		}]
+	}
+	return sub;
 });
 
-Meteor.publish('conversationById',function(id){
-	var conversationCursor = Conversations.findOne(id);
-	var messagesCursor = Messages.find({conversation: conversationCursor._id});
-	return [conversationCursor, messagesCursor];
+Meteor.publishComposite('conversationById',function(conversation_id){
+	var sub = {
+		collection: 'conversations',
+		find: function(){
+			return Conversations.find(conversation_id);
+		},
+		children: [
+			{
+				find: function(conversation){
+					return Messages.find({conversation_id: conversation._id});
+				}
+			},
+			{
+				find: function(conversation){
+					var arrayMembersIds = [];
+					_(conversation.members).each(function(member){
+						arrayMembersIds.push(member._id);
+					});
+					return Meteor.users.find({_id: {$in: arrayMembersIds}});
+				}
+			}
+		]
+	};
+	return sub;
 });
-
 
 
 
@@ -287,8 +315,13 @@ Meteor.publish('lessonSections',function(lesson_id){
 });
 
 //AUDIOS
+
 Meteor.publish('audioRecordings',function(){
 	return AudioRecordings.find();
+});
+
+Meteor.publish('audioRCData',function(){
+	return AudioRCData.find();
 });
 
 

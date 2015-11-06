@@ -212,6 +212,7 @@ Template.recordSubmit.events = {
         console.log(docs);
         console.log(docsRC);
         console.log(functions);
+        console.log(currentAudio.get());
     },
 
     'click #discard-record': function(){ //dejo todo en estado inicial.
@@ -263,16 +264,26 @@ Template.recordSubmit.events = {
                     console.log("error");
                 }
                 if (result){
+                    console.log('recordObjectId: ' + result._id);
                     console.log('voy a guardar los documentos');
                     Meteor.call('insertDocs',docs.get(),result._id,true,function(err){
-                        if(err) console.log(err);
+                        if(err) console.log('insertDocs ERROR: ' + err.reason);
                     });
                     Meteor.call('insertDocs',docsRC.get(),result._id,false,function(err){
-                        if(err) console.log(err);
+                        if(err) console.log('insertDocsRC ERROR: ' + err.reason);
                     });
-                    Meteor.call('insertAudioRecording',{dataURL: currentAudio.get(), record_id: result._id},function(err){
-                        if (err) console.log('insertAUdioRecording ERROR: ' + err.reason);
-                        $('#discard').click(); //para dejar todo como estaba
+                    AudioRCData.insert(currentAudio.get(),function(err,fileObj){
+                        if(err)console.log('insertAudioRCData ERROR: ' + err.reason);
+                        if (fileObj) {
+                            console.log('audioRCDataId: ' + fileObj._id);
+                            Meteor.call('insertAudioRecording',{
+                                dataURL: window.URL.createObjectURL(fileObj.data.blob),
+                                record_id: result._id
+                            },function(err){
+                                if (err) console.log('insertAudioRecording ERROR: ' + err.reason);
+                                $('#discard').click();
+                            });
+                        }
                     });
                 }
             });
@@ -384,10 +395,11 @@ Tracker.autorun(function(){
 
         //eventos del editor
 
-        editor.getSession().on('change', function(e) {
-            switch (e.data.action){
+        editor.on('change', function(e) {
+            console.log(e);
+            switch (e.action){
             case "removeText":
-                var rmRange = e.data.range;
+                var rmRange = e.range;
                 functions.push({
                     time: new Date() - date,
                     arg: rmRange,
@@ -397,12 +409,12 @@ Tracker.autorun(function(){
             case "insertText":
                 functions.push({
                     time: new Date() - date,
-                    arg: e.data.text,
+                    arg: e.text,
                     toDo: 'editor.insert(arg);'
                 });
                 break;
             case "removeLines":
-                var rmRange = e.data.range;
+                var rmRange = e.range;
                 functions.push({
                     time: new Date() - date,
                     arg: rmRange,

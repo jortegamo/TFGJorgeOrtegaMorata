@@ -24,7 +24,12 @@ Router.route('/records',{
 	waitOn: function(){ return [Meteor.subscribe('records'),Meteor.subscribe('allUsers')]; }
 });
 
-Router.route('/records/submit',{name: 'recordSubmit'});
+Router.route('/records/submit',{
+	name: 'recordSubmit',
+	waitOn: function() {
+		return Meteor.subscribe('audioRecordings');
+	}
+});
 
 
 Router.route('/record/:_id',{
@@ -155,6 +160,9 @@ Router.route('/profile/:_id/edit',{
 
 Router.route('/conversation/submit',{
 	name: 'conversationSubmit',
+	data: function(){
+		return {userToSend: this.params.user};
+	},
 	waitOn: function(){
 		return Meteor.subscribe('contactsByUser',Meteor.userId());
 	}

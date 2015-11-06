@@ -1,5 +1,3 @@
-var conversationMembers;
-
 Template.formAwesome.helpers({
     formType: function(){
         return Session.get('formType');
@@ -105,13 +103,25 @@ Template.formProfileEdit.events({
 });
 
 
-Template.conversationSubmitForm.helpers({
+/*CONVERSATION SUBMIT FORM*/
+
+Template.conversationSubmitForm.created = function(){
+    Session.set('memberList',[]);
+};
+
+Template.conversationSubmitForm.destroyed = function(){
+    Session.set('memberList',null);
+};
+
+
+/*INPUT MEMBER BOX*/
+Template.inputMemberBox.helpers({
     members: function(){
-        return conversationMembers.get();
+        return Session.get('memberList');
     }
 });
 
-Template.conversationSubmitForm.events({
+Template.inputMemberBox.events ({
     'click button.add-member': function(e){
         if($(e.currentTarget).find('i').hasClass('fa-times')){
             $('.auto-complete-wrapper').find('input').val('');
@@ -137,49 +147,63 @@ Template.conversationSubmitForm.events({
         }
     }
 });
-Template.conversationSubmitForm.created = function(){
-    conversationMembers = new ReactiveVar([]);
-    var members = conversationMembers.get();
-    members.push(Meteor.users.findOne(Meteor.userId()));
-    conversationMembers.set(members);
-};
-Template.conversationSubmitForm.rendered = function(){
+
+Template.inputMemberBox.rendered = function(){
     $('.auto-complete-wrapper').hide();
     Session.set('resultTemplate','memberResult');
+    if(this.data.storageDynamic === 'true'){
+        console.log('eeeyyy');
+        var members = Session.get('memberList');
+        members.push(Meteor.users.findOne(Meteor.userId()));
+        Session.set('memberList',members);
+    }
 };
 
+
+/*MEMBER RESULT*/
 Template.memberResult.helpers({
     inMembers: function(){
-        var members = conversationMembers.get();
+        var members = Session.get('memberList');
         var self = this;
         return _(members).any(function(member){return member._id == self._id;});
     }
 });
 
+/*MEMBER*/
 Template.member.helpers({
-    isNotAuthor: function(){return this._id !== Meteor.userId();}
+    isNotAuthor: function(){
+        return this._id !== Meteor.userId();
+    },
+    avatar: function(){
+        return Meteor.users.findOne(this._id).avatar;
+    },
+    username: function(){
+        return Meteor.users.findOne(this._id).username;
+    }
 });
 
 Template.member.events({
     'click .delete-member-button': function(){
-        var members = conversationMembers.get();
-        members.splice(members.indexOf(this),1);
-        conversationMembers.set(members);
+        var members = Session.get('memberList');
+        var self = this;
+        members = _(members).filter(function(member){
+            return member._id != self._id;
+        });
+        Session.set('memberList',members);
     }
-})
-Template.member.rendered = function(){
-    $(this.firstNode).tooltip({placement: 'bottom',title: this.data.username});
-};
+});
 
 Template.memberResult.events({
     'click .add-member-button': function(){
         console.log('click button');
-        var members = conversationMembers.get();
+        var members = Session.get('memberList');
         members.push(this);
-        conversationMembers.set(members);
+        Session.set('memberList',members);
     }
 });
 
+
+/*INPUT MESSAGE BOX*/
 Template.inputMessageBox.helpers({
     avatar: function(){
         return Meteor.users.findOne(Meteor.userId()).avatar;
@@ -188,9 +212,11 @@ Template.inputMessageBox.helpers({
 
 Template.inputMessageBox.events({
     'click #emoticons-target': function(){
+        $('#link-panel').fadeOut();
         $('#emoticons-panel').fadeIn();
     },
     'click #link-target': function(){
+        $('#emoticons-panel').fadeOut();
         $('#link-panel').fadeIn();
     },
     'click .close-panel': function(e){
@@ -205,8 +231,18 @@ Template.inputMessageBox.events({
                 break;
         }
     },
-    'focus textarea': function(){
+    'focus #message-input': function(){
         $('.popover-panel').fadeOut();
+    },
+    'submit #link-input': function(e){
+        e.preventDefault();
+        var link = $(e.target).find('[name=link]').val();
+        $(e.target).find('[name=link]').val('');
+        $('#message-input').focus();
+        $('#message-input').html($('#message-input').html() + '<a href="http://' + link + '">' + link + '</a>');
+    },
+    'click #message-input a': function(e){
+        window.open($(e.target).attr('href'));
     }
 });
 
