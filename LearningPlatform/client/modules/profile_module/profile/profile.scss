@@ -50,8 +50,9 @@
   .subject{
     font-size: 14px;
     font-weight: 400;
-    background: #DEE0E1;
+    background: #FFC2C2;
     padding: 5px;
+    border-radius: 5px;
     color: #666767;
   }
   .status{
@@ -63,11 +64,12 @@
     }
   }
   .message-wrapper{
+    padding: 5px;
     display: flex;
     img{
       border-radius: 50%;
-      height: 55px;
-      width: 55px;
+      height: 50px;
+      width: 50px;
       cursor: pointer;
       margin-right: 5px;
     }
@@ -97,6 +99,7 @@
         .message-body{padding: 0px 5px;}
         .message-body a{
           color: #77A3FB;
+          display: inline-block;
           &:hover{
             color: #77A3FB;
             text-decoration: underline;

@@ -8,189 +8,19 @@
         <div id="tab-sidebar" class="absolute-top">
             <ul>
                 <li id="menu-tab" class="tab active"><i class="fa fa-bars"></i></li>
-                <li class="tab">
+                <li id="notifications-tab" class="tab">
                     <i class="fa fa-bell"></i>
-                    <span class="notifications-total-counter">43</span>
+                    <span class="counter">{{notifications_counter}}</span>
+                </li>
+                <li id="chats-tab" class="tab">
+                    <i class="fa fa-comments"></i>
+                    <span class="counter">{{conversations_counter}}</span>
                 </li>
             </ul>
         </div>
-        {{#if menuTab}}
-            <div id="sidebar-menu">
 
-                <div class="sidebar-section">
+        {{> Template.dynamic template=currentSidebarTab}}
 
-                    <p id="sidebar-channels-browse" class="section-title active">
-                        <i class="fa fa-desktop ikon-section"></i>
-                        <span>CHANNELS</span>
-                        <a href="{{pathFor 'channelSubmit'}}"><i class="fa fa-plus-circle pull-right"></i></a>
-                    </p>
-
-                    <ul class="nav-sidebar">
-                        {{#each channels}}
-                            <li class="channel-item"><span># {{title}}</span></li>
-                        {{/each}}
-                    </ul>
-
-                    <a id="channelsTabContent" class="more">+ View More...</a>
-
-                </div>
-
-                <div class="sidebar-section">
-
-                    <p id="sidebar-teams-browse" class="section-title">
-                        <i class="fa fa-users ikon-section"></i>
-                        <span>TEAMS</span>
-                        <a  href="{{pathFor 'teamSubmit'}}"><i class="fa fa-plus-circle pull-right"></i></a>
-                    </p>
-
-                    <ul class="nav-sidebar">
-                        {{#each teams}}
-                            <li class="team-item"><span>@ {{title}}</span></li>
-                        {{/each}}
-                    </ul>
-
-                    <a id="teamsTabContent" class="more">+ View More...</a>
-
-                </div>
-
-                <div class="sidebar-section">
-
-                    <p id="sidebar-lessons-browse" class="section-title">
-                        <i class="fa fa-book ikon-section"></i>
-                        <span>LESSONS</span>
-                        <a href="{{pathFor 'lessonSubmit'}}"><i class="fa fa-plus-circle pull-right"></i></a>
-                    </p>
-
-                    <ul class="nav-sidebar">
-                        {{#each lessons}}
-                            <li class="lesson-item"><span>& {{title}}</span></li>
-                        {{/each}}
-                    </ul>
-
-                    <a id="lessonsTabContent" class="more">+ View More...</a>
-
-                </div>
-                <div class="sidebar-section">
-
-                    <p id="sidebar-records-browse" class="section-title active">
-                        <i class="fa fa-film ikon-section"></i>
-                        <span>RECORDS</span>
-                        <a href="{{pathFor 'recordSubmit'}}"><i class="fa fa-plus-circle pull-right"></i></a>
-                    </p>
-
-                    <ul class="nav-sidebar">
-                        <li id="my-records"><span>My records</span></li>
-                        <li><span>Last played</span></li>
-                    </ul>
-
-                </div>
-            </div>
-        {{else}}
-            <div id="sidebar-notifications">
-                <div class="notifications-section">
-
-                    <p class="notifications-section-title active">
-                        <i class="fa fa-desktop ikon-section"></i>
-                        <span>CHANNELS</span>
-                        <span class="counter">7</span>
-                        <i class="pull-right rem-ikon fa fa-trash-o"></i>
-                    </p>
-
-                    <ul class="notifications-list">
-                        <li class="notification-card">1</li>
-                        <li class="notification-card">2</li>
-                        <li class="notification-card">3</li>
-                        <li class="notification-card">4</li>
-                    </ul>
-
-                </div>
-                <div class="notifications-section">
-
-                    <p class="notifications-section-title active">
-                        <i class="fa fa-users ikon-section"></i>
-                        <span>TEAMS</span>
-                        <span class="counter">13</span>
-                        <i class="pull-right rem-ikon fa fa-trash-o"></i>
-                    </p>
-
-                    <ul class="notifications-list">
-                        <li class="notification-card">1</li>
-                        <li class="notification-card">2</li>
-                        <li class="notification-card">3</li>
-                        <li class="notification-card">4</li>
-                    </ul>
-
-                </div>
-                <div class="notifications-section">
-
-                    <p class="notifications-section-title active">
-                        <i class="fa fa-book ikon-section"></i>
-                        <span>LESSONS</span>
-                        <span class="counter">4</span>
-                        <i class="pull-right rem-ikon fa fa-trash-o"></i>
-                    </p>
-
-                    <ul class="notifications-list">
-                        <li class="notification-card">1</li>
-                        <li class="notification-card">2</li>
-                        <li class="notification-card">3</li>
-                        <li class="notification-card">4</li>
-                    </ul>
-
-                </div>
-                <div class="notifications-section">
-
-                    <p class="notifications-section-title active">
-                        <i class="fa fa-film ikon-section"></i>
-                        <span>RECORDS</span>
-                        <span class="counter">2</span>
-                        <i class="pull-right rem-ikon fa fa-trash-o"></i>
-                    </p>
-
-                    <ul class="notifications-list">
-                        <li class="notification-card">1</li>
-                        <li class="notification-card">2</li>
-                        <li class="notification-card">3</li>
-                        <li class="notification-card">4</li>
-                    </ul>
-
-                </div>
-                <div class="notifications-section">
-
-                    <p class="notifications-section-title active">
-                        <i class="fa fa-comments ikon-section"></i>
-                        <span>MESSAGES</span>
-                        <span class="counter">5</span>
-                        <i class="pull-right rem-ikon fa fa-trash-o"></i>
-                    </p>
-
-                    <ul class="notifications-list">
-                        <li class="notification-card">1</li>
-                        <li class="notification-card">2</li>
-                        <li class="notification-card">3</li>
-                        <li class="notification-card">4</li>
-                    </ul>
-
-                </div>
-                <div class="notifications-section">
-
-                    <p class="notifications-section-title active">
-                        <i class="fa fa-user-plus ikon-section"></i>
-                        <span>FRIENDSHIP</span>
-                        <span class="counter">5</span>
-                        <i class="pull-right rem-ikon fa fa-trash-o"></i>
-                    </p>
-
-                    <ul class="notifications-list">
-                        <li class="notification-card">1</li>
-                        <li class="notification-card">2</li>
-                        <li class="notification-card">3</li>
-                        <li class="notification-card">4</li>
-                    </ul>
-
-                </div>
-            </div>
-        {{/if}}
         <div id="box-user" class="absolute-bottom">
             {{#if currentUser}}
                 <div>
@@ -204,4 +34,215 @@
         </div>
     </div>
 
+</template>
+
+<template name="menuTab">
+    <div id="sidebar-menu">
+
+        <div class="sidebar-section">
+
+            <p id="sidebar-channels-browse" class="section-title active">
+                <i class="fa fa-desktop ikon-section"></i>
+                <span>CHANNELS</span>
+                <a href="{{pathFor 'channelSubmit'}}"><i class="fa fa-plus-circle pull-right"></i></a>
+            </p>
+
+            <ul class="nav-sidebar">
+                {{#each channels}}
+                    <li class="channel-item"><span># {{title}}</span></li>
+                {{/each}}
+            </ul>
+
+            <a id="channelsTabContent" class="more">+ View More...</a>
+
+        </div>
+
+        <div class="sidebar-section">
+
+            <p id="sidebar-teams-browse" class="section-title">
+                <i class="fa fa-users ikon-section"></i>
+                <span>TEAMS</span>
+                <a  href="{{pathFor 'teamSubmit'}}"><i class="fa fa-plus-circle pull-right"></i></a>
+            </p>
+
+            <ul class="nav-sidebar">
+                {{#each teams}}
+                    <li class="team-item"><span>@ {{title}}</span></li>
+                {{/each}}
+            </ul>
+
+            <a id="teamsTabContent" class="more">+ View More...</a>
+
+        </div>
+
+        <div class="sidebar-section">
+
+            <p id="sidebar-lessons-browse" class="section-title">
+                <i class="fa fa-graduation-cap ikon-section"></i>
+                <span>LESSONS</span>
+                <a href="{{pathFor 'lessonSubmit'}}"><i class="fa fa-plus-circle pull-right"></i></a>
+            </p>
+
+            <ul class="nav-sidebar">
+                {{#each lessons}}
+                    <li class="lesson-item"><span>& {{title}}</span></li>
+                {{/each}}
+            </ul>
+
+            <a id="lessonsTabContent" class="more">+ View More...</a>
+
+        </div>
+        <div class="sidebar-section">
+
+            <p id="sidebar-records-browse" class="section-title active">
+                <i class="fa fa-film ikon-section"></i>
+                <span>RECORDS</span>
+                <a href="{{pathFor 'recordSubmit'}}"><i class="fa fa-plus-circle pull-right"></i></a>
+            </p>
+
+            <ul class="nav-sidebar">
+                <li id="my-records"><span>My records</span></li>
+                <li><span>Last played</span></li>
+            </ul>
+
+        </div>
+    </div>
+</template>
+
+<template name="notificationsTab">
+    <div id="sidebar-notifications">
+        {{#if notifications_counter}}
+            {{#if counter 'channel'}}
+                <div class="notifications-section">
+
+                    <p class="notifications-section-title">
+                        <a role="button" data-toggle="collapse" href="#channelNotificationList" aria-expanded="false">
+                            <i class="fa fa-desktop ikon-section"></i>
+                            <span>CHANNELS</span>
+                            <span class="counter">{{counter 'channel'}}</span>
+                            <i class="pull-right rem-ikon fa fa-trash-o"></i>
+                        </a>
+                    </p>
+                    <div class="collapse fade-in" id="channelNotificationList">
+                        <ul class="notifications-list">
+                            {{#each notifications 'channel'}}
+                                {{>notificationItem}}
+                            {{/each}}
+                        </ul>
+                    </div>
+
+                </div>
+            {{/if}}
+            {{#if counter 'lesson'}}
+                <div class="notifications-section">
+
+                    <p class="notifications-section-title">
+                        <a data-toggle="collapse" href="#lessonNotificationList" aria-expanded="false">
+                            <i class="fa fa-graduation-cap ikon-section"></i>
+                            <span>LESSONS</span>
+                            <span class="counter">{{counter 'lesson'}}</span>
+                            <i class="pull-right rem-ikon fa fa-trash-o"></i>
+                        </a>
+                    </p>
+                    <div class="collapse" id="lessonNotificationList">
+                        <ul class="notifications-list">
+                            {{#each notifications 'lesson'}}
+                                {{>notificationItem}}
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+            {{/if}}
+            {{#if counter 'record'}}
+                <div class="notifications-section">
+
+                    <p class="notifications-section-title">
+                        <a data-toggle="collapse" href="#recordNotificationList" aria-expanded="false">
+                            <i class="fa fa-film ikon-section"></i>
+                            <span>RECORDS</span>
+                            <span class="counter">{{counter 'record'}}</span>
+                            <i class="pull-right rem-ikon fa fa-trash-o"></i>
+                        </a>
+                    </p>
+                    <div class="collapse" id="recordNotificationList">
+                        <ul class="notifications-list">
+                            {{#each notifications 'record'}}
+                                {{>notificationItem}}
+                            {{/each}}
+                        </ul>
+                    </div>
+
+                </div>
+            {{/if}}
+            {{#if counter 'contact'}}
+                <div class="notifications-section">
+
+                    <p class="notifications-section-title active">
+                        <a data-toggle="collapse" href="#contactNotificationList" aria-expanded="false">
+                            <i class="fa fa-comments ikon-section"></i>
+                            <span>CONTACTS</span>
+                            <span class="counter">{{counter 'contact'}}</span>
+                            <i class="pull-right rem-ikon fa fa-trash-o"></i>
+                        </a>
+                    </p>
+                    <div class="collapse" id="contactNotificationList">
+                        <ul class="notifications-list">
+                            {{#each notifications 'contact'}}
+                                {{>notificationItem}}
+                            {{/each}}
+                        </ul>
+                    </div>
+
+                </div>
+            {{/if}}
+            {{#if counter 'conversation'}}
+                <div class="notifications-section">
+
+                    <p class="notifications-section-title active">
+                        <a data-toggle="collapse" href="#conversationNotificationList" aria-expanded="false">
+                            <i class="fa fa-user-plus ikon-section"></i>
+                            <span>CONVERSATIONS</span>
+                            <span class="counter">{{counter 'conversation'}}</span>
+                            <i class="pull-right rem-ikon fa fa-trash-o"></i>
+                        </a>
+                    </p>
+
+                    <div class="collapse" id="conversationNotificationList">
+                        <ul class="notifications-list">
+                            {{#each notifications 'conversation'}}
+                                {{>notificationItem}}
+                            {{/each}}
+                        </ul>
+                    </div>
+
+                </div>
+            {{/if}}
+        {{else}}
+            <p class="text-center not-exists-message">No new notifications</p>
+        {{/if}}
+
+    </div>
+</template>
+
+<template name="notificationItem">
+    <li class="notification-item">
+        <p class="title"><i class="fa fa-desktop type-indicator"></i> {{title 15}}
+            <button type="button" class="pull-right"><i class="fa fa-times-circle"></i></button>
+        </p>
+        <p><span class="date"><i class="fa fa-clock-o"></i> {{smartDate createdAt}}</span></p>
+        <div class="message-body">
+            <img src="{{avatar}}">
+            <p>{{#if from}}<span class="who">{{username}}</span> {{/if}}{{message}}</p>
+        </div>
+    </li>
+</template>
+
+
+<template name="chatsTab">
+    <div id="sidebar-chats">
+       {{#if conversations_counter}}
+       {{else}}
+           <p class="text-center not-exists-message">No open conversations yet</p>
+       {{/if}}
+    </div>
 </template>

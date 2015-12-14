@@ -23,14 +23,19 @@
     font-size: 14px;
     height: 40px;
   }
+  .banner-navbar-vertical{
+    background: #2B2B2B;
+    color: #CECDCD;
+  }
 }
 
 .player{
   position: relative;
-  img{
-    object-fit: cover;
+  #editor{
     width: 100%;
     height: 100%;
+    margin-left: 0px;
+
   }
   .touch-display-layer{
     position: absolute;
@@ -284,13 +289,14 @@
   .box-options{
     position: absolute;
     display: flex;
+    align-items: center;
+    justify-content: center;
     bottom: 0;
     width: 100%;
     padding: 8px;
     height: 40px;
     background: rgba(34, 32, 33, 0.9);
     span {
-      flex: 1;
       padding: 0px 10px;
       margin: 2px;
       color: #C9C8C8;
@@ -318,5 +324,33 @@
   .player-wrapper {
     margin-top: 55px;
     transition: all 0.5s ease;
+  }
+}
+
+@media (max-width: 990px){
+  .player-wrapper{
+    .sidebar-player{
+      height: auto;
+      .box-info{
+        padding-top: 40px;
+        padding-bottom: 0px;
+        height: 200px;
+        .creator-box{
+          height: 100%;
+          float: left;
+          width: 190px;
+          position: static;
+        }
+        .description-box{
+          height: 100%;
+        }
+        .box-options{
+          top: 0;
+          span{
+            padding: 0px 15px;
+          }
+        }
+      }
+    }
   }
 }

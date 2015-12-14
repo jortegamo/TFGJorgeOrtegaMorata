@@ -2,6 +2,7 @@
     padding: 20px 30px;
 }
 .form-section{
+    margin: 0px 15px;
     padding: 10px;
     position: relative;
     border-radius: 5px;
@@ -128,6 +129,72 @@
 
 }
 
+.sectionItem-vertical{
+    @extend .sectionItem;
+    display: none;
+    background: #494949;
+    margin: 0px 0px 5px;
+    border-radius: 5px;
+    padding-bottom: 0px;
+    .section-header{
+        color: #848484;
+        padding-bottom: 0px;
+        .header-indicators{
+            padding: 15px 15px;
+        }
+        .counter{
+            margin-top: -10px;
+        }
+        .option{
+            margin-top: -10px;
+            font-size: 16px;
+            color: #3C3B3B;
+            &:hover{
+                color: #B8B6B6;
+            }
+        }
+        .lesson-icon{
+            margin-left: 15px;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 20px;
+            border: 2px solid #F25252;
+            color: #F25252;
+        }
+        p{margin-bottom: 10px;}
+
+        .index{
+            font-size: 14px;
+            background: none;
+            color: inherit;
+            padding: 0px;
+            margin: auto;
+            border: none;
+        }
+        .title{
+            color: #CBCACA;
+        }
+        .section-button{
+            background: #3C3B3B;
+            padding: 5px 10px;
+            &:hover{
+                background: #302F2F;
+            }
+        }
+        .show-tracks{
+            border: none;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            padding: 2px 51px;
+            background: #302F2F;
+            &:focus, {outline: 0px;}
+        }
+    }
+    &.active{
+        padding-bottom: 10px;
+    }
+}
+
 .trackItem{
     color: #434442;
     padding: 0px 10px 0px 0px;
@@ -158,4 +225,56 @@
         margin-top: 10px;
         margin-left: 5px;
     }
+}
+
+@media (max-width: 450px){
+    #lesson-banner{
+        .banner-info{
+            .creator-box{
+                display: block;
+                span{display: block;}
+            }
+            .counters-box{display: block;}
+        }
+    }
+}
+
+@media (max-width: 1100px){
+    .sectionItem{
+        display: none;
+    }
+    .sectionItem-vertical{
+        display: block;
+    }
+}
+
+.page-banner-lesson{
+    .banner-header{
+        button{
+            border: none;
+            background: #F25252;
+            color: white;
+            font-size: 14px;
+            height: 33px;
+            width: 33px;
+            border-radius: 50%;
+            &:focus{outline: 0px;}
+        }
+    }
+    .description-wrapper{
+        position: relative;
+        padding-bottom: 50px !important;
+        img{height: 80px;
+            margin-right: 20px;}
+        .description {
+            flex: 1;
+            max-height: 90px;
+            overflow-y: scroll;
+        }
+    }
+    .banner-tags{
+       background: #2B2A2A;
+        p{color: #CECECE;}
+    }
+
 }

@@ -71,6 +71,16 @@
             <div class="body">
                 <button id="close-emoticons" class="close-panel pull-right" type="button"><i class="fa fa-times"></i></button>
                 <div class="arrow"></div>
+                {{#emoji}}
+                    <span>:smile:</span>
+                    <span>:smiley:</span>
+                    <span>:heart_eyes:</span>
+                    <span>:flushed:</span>
+                    <span>:grin:</span>
+                    <span>:worried:</span>
+                    <span>:blush:</span>
+                    <span>:kissing_heart:</span>
+                {{/emoji}}
             </div>
 
         </div>
@@ -152,6 +162,7 @@
             </div>
         </section>
         <!--banner-->
+        {{#if banner}}
         <section id="banner-section">
             <p class="title-section">Banner <span class="edit-button"><i class="fa fa-pencil"></i> edit</span></p>
             <div class="edited-block">
@@ -182,7 +193,7 @@
                 </div>
             </div>
         </section>
-
+        {{/if}}
         <!--description-->
         <section id="description-section">
             <p class="title-section">Description <span class="edit-button"><i class="fa fa-pencil"></i> edit</span></p>
@@ -208,6 +219,27 @@
                 </div>
             </div>
         </section>
+        {{#if tagsAllow}}
+            <section id="tags-section">
+                <p class="title-section">Tags <span class="edit-button"><i class="fa fa-pencil"></i> edit</span></p>
+                <div class="edited-block">
+                    <ul>
+                        {{#each tags}}
+                            <li><i class="fa fa-tag"></i> {{name}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+                <div class="edit-block">
+
+                    {{> tagsInput}}
+
+                    <div class="actions text-center">
+                        <span class="action-button save">save</span>
+                        <span class="action-button discard">discard</span>
+                    </div>
+                </div>
+            </section>
+        {{/if}}
 
         <div class="form-group">
             <div class="row text-center">
@@ -236,10 +268,8 @@
                         <p class="section-form">Languages</p>
                         <div>
                             <ul>
-                                <li class="lang">behaviour</li>
                                 <li class="lang">coffee</li>
                                 <li class="lang">css</li>
-                                <li class="lang">folding</li>
                                 <li class="lang">html</li>
                                 <li class="lang">javascript</li>
                                 <li class="lang">json</li>
@@ -310,6 +340,14 @@
             </div>
         </div>
         <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12">
+                    <p>tags</p>
+                    {{>tagsInput}}
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
             <div class="row text-center">
                 <div class="col-xs-12">
                     <button class="submit-button" type="submit">Done</button>
@@ -317,6 +355,48 @@
             </div>
         </div>
     </form>
+</template>
+
+<template name="tagsInput">
+    <div class="tags-input-wrapper">
+        {{#if hasTags}}
+            <div class="tags-choosen">
+                <ul>
+                    {{#each tagsChoosen}}
+                           {{>tagChoosen}}
+                    {{/each}}
+                </ul>
+            </div>
+        {{/if}}
+
+        <div class="tags-input">
+            <div id="tags-input-box">
+                <div class="input-box">
+                    <input type="text" name="tags" autocomplete="false">
+                    {{#if searching}}<span><i class="fa fa-spinner fa-pulse"></i></span> {{/if}}
+                    <button id="eraser-button" type="button"><i class="fa fa-eraser"></i></button>
+                </div>
+                <button id="add-tag" type="button" class="pull-right"><i class="fa fa-plus"></i></button>
+            </div>
+            <div id="tags-list">
+                {{#if founded}}
+                    <ul>
+                        {{#each tagsFounded}}
+                            {{>tagResult}}
+                        {{/each}}
+                    </ul>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="tagResult">
+    <li><span class="tag {{choosen}}"><i class="fa fa-tag"></i> {{name}}</span></li>
+</template>
+
+<template name="tagChoosen">
+    <li><span class="tag-choosen"><i class="fa fa-tag"></i> {{name}} <i class="fa fa-times remove-tag"></i></span></li>
 </template>
 
 <!-- LESSON FORM -->
@@ -335,6 +415,14 @@
                 <div class="col-xs-12 form-field">
                     <label>Description</label>
                     <textarea name="description" style="resize: none"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12">
+                    <p>tags</p>
+                    {{>tagsInput}}
                 </div>
             </div>
         </div>
@@ -364,6 +452,14 @@
                 <div class="col-xs-12 form-field">
                     <label>Description</label>
                     <textarea name="description" style="resize: none"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-xs-12">
+                    <p>tags</p>
+                    {{>tagsInput}}
                 </div>
             </div>
         </div>

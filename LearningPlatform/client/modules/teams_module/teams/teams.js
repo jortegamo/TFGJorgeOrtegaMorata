@@ -12,9 +12,6 @@ Template.teams.helpers({
 });
 
 Template.teams.events({
-    'click .image-hover i, click .card-title': function(){
-        Router.go('team',{_id: this._id}); //voy a la pagina principal del record.
-    },
     'click .display-option': function(e){
         var elem = e.currentTarget;
         $('.display-option').removeClass('active');
@@ -32,9 +29,6 @@ Template.teams.events({
     },
     'click .button-circle': function(){
         Router.go('teamSubmit');
-    },
-    'click .card-author': function(){
-        Router.go('profile',{_id: this.author});
     }
 });
 
@@ -59,6 +53,15 @@ Template.teamItemHorizontal.helpers({
     }
 });
 
+Template.teamItemHorizontal.events({
+    'click .image-hover i, click .card-title, click .image-hover, click img': function(){
+        Router.go('team',{_id: this._id}); //voy a la pagina principal del record.
+    },
+    'click .card-author': function(){
+        Router.go('profile',{_id: this.author});
+    }
+});
+
 Template.teamItemHorizontal.rendered = function(){
     $('.projects-count').tooltip({placement: 'bottom', title: 'projects'});
     $('.users-count').tooltip({placement: 'top', title: 'users'});
@@ -71,6 +74,15 @@ Template.teamItemVertical.helpers({
     },
     authorName: function(){
         return Meteor.users.findOne(this.author).username;
+    }
+});
+
+Template.teamItemVertical.events({
+    'click .image-hover i, click .card-title, click .image-hover, click img': function(){
+        Router.go('team',{_id: this._id}); //voy a la pagina principal del record.
+    },
+    'click .card-author': function(){
+        Router.go('profile',{_id: this.author});
     }
 });
 

@@ -10,7 +10,9 @@ $verdana-thin: 100;
 
 
 .form-wrapper{
-  min-width: 400px;
+  &.edit{
+    margin-top: -60px;
+  }
 }
 /*form*/
 .header-form{
@@ -202,6 +204,22 @@ $verdana-thin: 100;
 }
 
 .form-editable{
+  #tags-section{
+    .actions{
+      margin-top: 10px;
+    }
+    .edited-block{
+      ul{
+        list-style: none;
+        padding: 0px;
+        margin: auto;
+        li{
+          margin: 5px;
+          display: inline-block;
+        }
+      }
+    }
+  }
   .edit-block{
     padding-bottom: 20px;
     display: none;
@@ -491,17 +509,17 @@ $verdana-thin: 100;
   }
 
   #link-panel{
-    top: 80px;
-    left: 50px;
+    top: 20px;
+    left: 110px;
     .body{
       color: #F84141;
       font-size: 14px;
       .arrow{
-        top: -9px;
-        left: 25px;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-bottom: 10px solid rgba(7, 0, 4, 0.8);
+        top: 25px;
+        left: -10px;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-right: 10px solid rgba(7, 0, 4, 0.8);
       }
       #link-input{
         color: #ADACAC;
@@ -587,6 +605,78 @@ $verdana-thin: 100;
         &:hover{
           text-decoration: underline;
           color: #7A73FC;
+        }
+      }
+    }
+  }
+}
+
+.tags-input-wrapper{
+  ul{
+    list-style: none;
+    padding: 10px;
+    li {
+      display: inline-block;
+      margin: 5px 0px;
+      .tag {
+        font-size: 14px;
+        padding: 5px 10px;
+        background: #DFE1E1;
+        border-radius: 15px;
+        cursor: pointer;
+        &.choosen{
+          background: #5DC684;
+        }
+      }
+      .tag-choosen{
+        font-size: 12px;
+        background: #959595;
+        border-radius: 5px;
+        padding: 5px 10px;
+        i.fa-times{cursor:pointer;}
+      }
+
+    }
+  }
+  .tags-choosen{
+
+  }
+  .tags-input{
+    #tags-input-box{
+      display: flex;
+      button{
+        &:focus{outline: 0px;}
+        border: none;
+        margin: 0px 2px;
+        background: #D0CFCF;
+        border-radius: 20px;
+        width: 35px;
+        &#add-tag:hover{
+          background: #5DC684;
+          color: white;
+        }
+      }
+      .input-box{
+        flex: 1;
+        display: inline-flex;
+        padding: 5px 10px;
+        border: 1px solid #ABABAB;
+        border-radius: 20px;
+        margin-right: 5px;
+        button{
+          margin: 0px;
+          background: #D0CFCF;
+          padding: 0px 8px;
+          border-radius: 10px;
+          &:hover{background: #B6B7B7;}
+        }
+        span{margin: 0px 5px;}
+        input{
+          color: #7F7F7F;
+          flex: 1;
+          border: none;
+          &:focus{outline: 0px;}
+          margin: 0px 5px;
         }
       }
     }

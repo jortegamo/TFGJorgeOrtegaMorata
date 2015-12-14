@@ -2,10 +2,29 @@
 Meteor.publish('records',function(){
 	return Records.find({});
 });
-
-Meteor.publish('record',function(record_id){
-	return Records.find({_id: record_id});
+Meteor.publishComposite('record',function(record_id){
+	var sub = {
+		find: function(){
+			return Records.find({_id: record_id});
+		},
+		children: [
+			{find: function(){return Documents.find({record: record_id});}},
+			{
+				collection: 'audioRecordings',
+				find: function(){
+					return AudioRecordings.find({record_id: record_id});
+				},
+				children: [{
+					find: function(audio){
+						return AudioRCData.find(audio.audioData_id);
+					}
+				}]
+			}
+		]
+	};
+	return sub;
 });
+
 
 Meteor.publish('recordsByUser',function(user_id){
 	return Records.find({author: user_id});
@@ -51,10 +70,6 @@ Meteor.publish('channelsByUserRanking',function(user_id){
 	return Channels.find({author: user_id, $orderby: {votes: -1}});
 });
 
-Meteor.publish('votesChannel',function(channel_id){
-	return VotesChannels.find({channel_id: channel_id});
-});
-
 
 
 
@@ -74,8 +89,21 @@ Meteor.publish('documentsRecord',function(record_id){
 
 
 //COMMENTS
-Meteor.publish('commentsByContext',function(context_id){
-	return Comments.find({contextId: context_id});
+Meteor.publishComposite('commentsByContext',function(context_id){
+	var sub = {
+		collection: 'comments',
+		find: function(){
+			return Comments.find({contextId: context_id});
+		},
+		children: [
+			{
+				find: function(comment){
+					return Meteor.users.find(comment.author,{params: {avatar: 1, username: 1}});
+				}
+			}
+		]
+	};
+	return sub;
 });
 
 
@@ -195,8 +223,39 @@ Meteor.publish('notifications',function(){
 	return Notifications.find();
 });
 
-Meteor.publish('userNotifications',function(user_id){
-	return Notifications.find({to: user_id});
+Meteor.publishComposite('userNotifications',function(user_id){
+	var sub = {
+		collection: 'notifications',
+		find: function(){
+			return Notifications.find({to: user_id});
+		},
+		children: [
+			{
+				find: function(notification) {
+					return Meteor.users.find(notification.from);
+				}
+			},
+			{
+				find: function(notification){
+					switch(notification.type){
+						case 'channel':
+							return Channels.find(notification.parentContext_id,{fields: {title: 1}});
+							break;
+						case 'lesson':
+							return Lessons.find(notification.parentContext_id,{fields: {title: 1}});
+							break;
+						case 'record':
+							return Records.find(notification.parentContext_id,{fields: {title: 1}});
+							break;
+						case 'conversation':
+							return Conversations.find(notification.parentContext_id,{fields: {title: 1}});
+							break;
+					}
+				}
+			}
+		]
+	};
+	return sub;
 });
 
 
@@ -219,35 +278,6 @@ Meteor.publish('userById',function(user_id){
 Meteor.publish('userByChannel',function(channel_id){
 	var cursor = Channels.findOne(channel_id);
 	return Meteor.users.find(cursor.author);
-});
-
-Meteor.publish('usersLesson',function(lesson_id){
-	var usersLessonIds = [];
-	var lessonCursor = Lessons.findOne(lesson_id);
-	_(UsersEnrolled.find({context_id: lessonCursor._id}).fetch()).each(function(elem){
-		usersLessonIds.push(elem.user_id);
-	});
-	usersLessonIds.push(lessonCursor.author);
-	return Meteor.users.find({_id: {$in: usersLessonIds}});
-});
-
-Meteor.publish('usersChannel',function(channel_id){
-	var usersChannelIds = [];
-	var channelCursor = Channels.findOne(channel_id);
-	_(UsersEnrolled.find({context_id: channelCursor._id}).fetch()).each(function(elem){
-		usersChannelIds.push(elem.user_id);
-	});
-	usersChannelIds.push(channelCursor.author);
-	return Meteor.users.find({_id: {$in: usersChannelIds}});
-});
-
-Meteor.publish('commentsUsers',function(context_id){
-	var cursor = Comments.find({contextId: context_id});
-	var arrayIds = [];
-	_(cursor.fetch()).each(function(elem){
-		arrayIds.push(elem.author);
-	});
-	return Meteor.users.find({_id: {$in: arrayIds}});
 });
 
 
@@ -278,8 +308,21 @@ Meteor.publishComposite('contactsByUser',function(user_id){
 
 //USERS ENROLLED
 
-Meteor.publish('usersEnrolled',function(lesson_id){
-	return UsersEnrolled.find({context_id: lesson_id});
+Meteor.publishComposite('usersEnrolled',function(context_id){
+	var sub = {
+		collection: 'usersEnrolledLesson',
+		find: function(){
+			return UsersEnrolled.find({context_id: context_id});
+		},
+		children: [
+			{
+				find: function(userEnrolled){
+					return Meteor.users.find(userEnrolled.user_id,{params: {avatar: 1, username: 1}});
+				}
+			}
+		]
+	};
+	return sub;
 });
 
 
@@ -316,14 +359,33 @@ Meteor.publish('lessonSections',function(lesson_id){
 
 //AUDIOS
 
-Meteor.publish('audioRecordings',function(){
-	return AudioRecordings.find();
-});
-
 Meteor.publish('audioRCData',function(){
 	return AudioRCData.find();
 });
 
+
+//TAGS
+
+Meteor.publish('tagsBySearch',function(searchValue){
+	return Tags.find({name: new RegExp(searchValue)});
+});
+
+//VOTES
+
+//channel
+Meteor.publish('voteChannelByUser',function(channel_id,user_id){
+	return Votes.find({channel_id: channel_id, user_id: user_id});
+});
+
+//lesson
+Meteor.publish('voteLessonByUser',function(lesson_id,user_id){
+	return Votes.find({lesson_id: lesson_id, user_id: user_id});
+});
+
+//record
+Meteor.publish('voteRecordByUser',function(record_id,user_id){
+	return Votes.find({record_id: record_id, user_id: user_id});
+});
 
 
 

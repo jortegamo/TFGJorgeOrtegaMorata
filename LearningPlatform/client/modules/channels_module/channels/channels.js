@@ -12,9 +12,6 @@ Template.channels.helpers({
 });
 
 Template.channels.events({
-	'click .image-hover i, click .card-title': function(){
-		Router.go('channel',{_id: this._id}); //voy a la pagina principal del record.
-	},
 	'click .display-option': function(e){
 		var elem = e.currentTarget;
 		$('.display-option').removeClass('active');
@@ -32,9 +29,6 @@ Template.channels.events({
 	},
 	'click .button-circle': function(){
 		Router.go('channelSubmit');
-	},
-	'click .card-author': function(){
-		Router.go('profile',{_id: this.author});
 	}
 })
 
@@ -59,6 +53,15 @@ Template.channelItemHorizontal.helpers({
 	}
 });
 
+Template.channelItemHorizontal.events({
+	'click .image-hover i, click .card-title, click .image-hover, click img': function(){
+		Router.go('channel',{_id: this._id}); //voy a la pagina principal del record.
+	},
+	'click .card-author': function(){
+		Router.go('profile',{_id: this.author});
+	}
+});
+
 Template.channelItemHorizontal.rendered = function(){
 	$('.records-count').tooltip({placement: 'bottom', title: 'records'});
 	$('.comments-count').tooltip({placement: 'top', title: 'comments'});
@@ -72,6 +75,15 @@ Template.channelItemVertical.helpers({
 	},
 	dateFrom: function(d){
 		return smartDate(d);
+	}
+});
+
+Template.channelItemVertical.events({
+	'click .image-hover i, click .card-title, click .image-hover, click img': function(){
+		Router.go('channel',{_id: this._id}); //voy a la pagina principal del record.
+	},
+	'click .card-author': function(){
+		Router.go('profile',{_id: this.author});
 	}
 });
 

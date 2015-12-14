@@ -18,7 +18,7 @@ Template.record.helpers({
 		return Session.get('currentSection');
 	},
 	playerObjectData: function(){
-		return {recordPlayer: new RecordPlayer(), record_id: this._id};
+		return {recordPlayer: new RecordPlayer(), audioDataURL: AudioRCData.findOne().url()};
 	}
 
 });

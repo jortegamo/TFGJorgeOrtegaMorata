@@ -38,7 +38,7 @@ Template.profile.helpers({
     tabNamesArray: function(){
         return [{template: 'channelsTabContent', name: 'channels', icon: 'fa-desktop', initialActive: true},
                 {template: 'teamsTabContent',    name: 'teams', icon: 'fa-users'},
-                {template: 'lessonsTabContent',  name: 'lessons', icon: 'fa-book'},
+                {template: 'lessonsTabContent',  name: 'lessons', icon: 'fa-graduation-cap'},
                 {template: 'recordsTabContent',  name: 'records', icon: 'fa-film'},
                 {template: 'conversationsTabContent', name: 'conversations', icon: 'fa-envelope-o', ownerOnly: true, isOwner: Session.get('currentProfileId') === Meteor.userId()},
                 {template: 'contactsTabContent', name: 'contacts', icon: 'fa-user'}];
@@ -112,17 +112,28 @@ Template.profile.destroyed = function(){
 
 
 Template.navbarBanner.helpers({
+    currentTabName: function(){
+        if (Session.get('currentSection')){
+            return _(this.tabs).find(function(t){ return t.template === Session.get('currentSection');}).name;
+        }else{
+            return _(this.tabs).find(function(t){ return t.initialActive == true;}).name;
+        }
+    },
     capitalize: function(s){
         return s.charAt(0).toUpperCase() + s.slice(1);
     }
 });
 
 Template.navbarBanner.events({
-    'click .section': function(e){
+    'click .banner-navbar .section': function(e){
         $('.section').removeClass('active');
         $('#' + this.name).addClass('active');
         Session.set('currentSection',this.template);
         $('#list').click();
+    },
+    'click .banner-navbar-vertical .section': function(){
+        Session.set('currentSection',this.template);
+        $('#menuTabCollapse').collapse('hide');
     }
 });
 
@@ -133,7 +144,21 @@ Template.navbarBanner.rendered = function(){
     }else{
         tab = _(this.data.tabs).find(function(t){ return t.initialActive == true;});
     }
-    $('#' + tab.name).click();
+    switch(this.data.widthType){
+        case 'large':
+            if($(window).width() > 1130){
+                $('#' + tab.name).click();
+            }else{
+                Session.set('currentSection',tab.template);
+            }
+            break;
+        case 'medium':
+            if($(window).width() > 550){
+                $('#' + tab.name).click();
+            }else{
+                Session.set('currentSection',tab.template);
+            }
+    }
 };
 
 Template.navbarBanner.destroyed = function(){

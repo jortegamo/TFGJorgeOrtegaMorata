@@ -142,6 +142,57 @@
   }
 }
 
+.banner-navbar-vertical{
+  display: none;
+  text-align: left;
+  background: #F2F0F0;
+  color: #2E2D2D;
+  button{
+    background: #F25252;
+    vertical-align: middle;
+    border: none;
+    padding: 0px 15px;
+    color: white;
+    height: 42px;
+    width: 42px;
+    font-size: 18px;
+    &:focus{outline: 0px;}
+  }
+  .section-active{
+    margin-left: -4px;
+    display: inline-block;
+    font-size: 17px;
+    border-bottom: 2px solid #F25252;
+    padding: 5px 10px 5px 10px;
+    height: 40px;
+    p{margin: auto;}
+
+  }
+  #menuTabCollapse{
+    padding: 5px 0px;
+    background: #E6E3E3;
+    ul{
+      text-align: center;
+      list-style: none;
+      padding-left: 0;
+      margin: auto;
+      li{
+        padding: 5px 15px;
+        font-size: 17px;
+        transition: .5s ease;
+        color: #929191;
+        cursor: pointer;
+        &:hover{
+          color: #2E2D2D;
+          padding-left: 20px;
+          transition: 0.5s ease;
+        }
+      }
+    }
+  }
+
+}
+
 /*END NAVBARS*/
 
 
@@ -159,4 +210,15 @@
     width: 70%;
     input{width: 80%}
   }
+}
+
+@media (max-width: 1130px){
+  .banner-navbar.large{display: none};
+  .banner-navbar-vertical.large{display: block;}
+}
+
+
+@media (max-width: 550px){
+  .banner-navbar.medium{display: none};
+  .banner-navbar-vertical.medium{display: block;}
 }

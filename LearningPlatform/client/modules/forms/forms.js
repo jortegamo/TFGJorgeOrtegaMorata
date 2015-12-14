@@ -62,6 +62,12 @@ Template.formProfileEdit.helpers({
     },
     description: function(){
         return Session.get('userObject').description;
+    },
+    tagsAllow: function(){
+        return Session.get('userObject').tagsAllow;
+    },
+    tags: function(){
+        return (Session.get('userObject').tags)? Session.get('userObject').tags : [];
     }
 });
 
@@ -99,8 +105,101 @@ Template.formProfileEdit.events({
         $(e.currentTarget).find('i').removeClass('fa-circle-o');
         $(e.currentTarget).find('i').addClass('fa-chevron-circle-down');
         $(e.currentTarget).parent().find('input').attr('disabled',false).focus();
+    },
+    'click #avatar-section .save': function(){
+
+        var img = Session.get('userObject').imgDefault;
+
+        function setImg (img){
+            var obj = Session.get('userObject');
+            obj.img = img;
+            Session.set('userObject',obj);
+            $('#avatar-section .discard').click();
+        };
+
+        var cbs = $('#avatar-section').find('.checkbox-item');
+        var selected = _(cbs).filter(function(item){
+            return $(item).hasClass('selected');
+        });
+
+        if (selected && $(selected).find('input').length){
+            var input = $(selected).find('input');
+
+            switch($(input).attr('type')) {
+                case 'text':
+                    setImg($(input).val());
+                    break;
+                case 'file':
+                    if ($(input)[0].files) {
+                        var file = $(input)[0].files[0];
+                        var reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onloadend = function () {
+                            setImg(reader.result);
+                        };
+                    }
+                    break;
+            }
+        }else{
+            setImg(img);
+        }
+
+    },
+
+    'click #banner-section .save': function(){
+        var banner = Session.get('userObject').bannerDefault;
+
+        function setBanner(banner){
+            var obj = Session.get('userObject');
+            obj.banner = banner;
+            Session.set('userObject',obj);
+            $('#banner-section .discard').click();
+        }
+
+        var cbs = $('#banner-section').find('.checkbox-item');
+        var selected = _(cbs).filter(function(item){
+            return $(item).hasClass('selected');
+        });
+
+        if (selected && $(selected).find('input').length){
+            var input = $(selected).find('input');
+            switch($(input).attr('type')) {
+                case 'text':
+                    setBanner($(input).val());
+                    break;
+                case 'file':
+                    if ($(input)[0].files) {
+                        var file = $(input)[0].files[0];
+                        var reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onloadend = function () {
+                            setBanner(reader.result);
+                        };
+                    }
+                    break;
+            }
+        }else{
+            setBanner (banner);
+        }
+    },
+
+    'click #description-section .save': function(){
+        var obj = Session.get('userObject');
+        obj.description = $('#description-section').find('textarea').val();
+        Session.set('userObject',obj);
+        $('#description-section .discard').click();
+    },
+    'click #tags-section .save': function(){
+        var obj = Session.get('userObject');
+        obj.tags = Session.get('tagsChoosen');
+        Session.set('userObject',obj);
+        $('#tags-section .discard').click();
     }
 });
+
+Template.formProfileEdit.rendered = function(){
+    Session.set('tagsChoosen',Session.get('userObject').tags);
+};
 
 
 /*CONVERSATION SUBMIT FORM*/
@@ -215,6 +314,10 @@ Template.inputMessageBox.events({
         $('#link-panel').fadeOut();
         $('#emoticons-panel').fadeIn();
     },
+    'click #emoticons-panel img.emoji':function(e){
+        var emojiCode = $(e.target).attr('alt');
+        $('#message-input').html($('#message-input').html() + Emoji.convert(emojiCode));
+    },
     'click #link-target': function(){
         $('#emoticons-panel').fadeOut();
         $('#link-panel').fadeIn();
@@ -233,13 +336,14 @@ Template.inputMessageBox.events({
     },
     'focus #message-input': function(){
         $('.popover-panel').fadeOut();
+        $('.link-panel').fadeOut();
     },
     'submit #link-input': function(e){
         e.preventDefault();
         var link = $(e.target).find('[name=link]').val();
         $(e.target).find('[name=link]').val('');
         $('#message-input').focus();
-        $('#message-input').html($('#message-input').html() + '<a href="http://' + link + '">' + link + '</a>');
+        $('#message-input').html($('#message-input').html() + '<a href="http://' + link + '">' + ellipsis(link,20) + '</a>');
     },
     'click #message-input a': function(e){
         window.open($(e.target).attr('href'));
@@ -248,4 +352,107 @@ Template.inputMessageBox.events({
 
 Template.inputMessageBox.rendered = function(){
     $('.popover-panel').hide();
-}
+};
+
+
+//TAGS INPUT
+
+Template.tagsInput.helpers({
+    tagsFounded: function(){
+        return Tags.find({name: new RegExp(Session.get('searchValue'))});
+    },
+    tagsChoosen: function(){
+        return Session.get('tagsChoosen');
+    },
+    hasTags: function(){
+        return (Session.get('tagsChoosen'))? Session.get('tagsChoosen').length > 0 : false;
+    },
+    founded: function(){
+        return Session.get('founded');
+    },
+    searching: function(){
+        return Session.get('searching');
+    }
+});
+
+Template.tagsInput.events({
+    'keyup input': function(e){
+        if ($(e.target).val() != ""){
+            Session.set('searching',e.keyCode !== 16);
+            Session.set('searchValue',$(e.target).val());
+        }else{
+            Session.set('searchValue',null);
+        }
+    },
+    'click #eraser-button': function(){
+        $('input').val('');
+        Session.set('searchValue',null);
+    },
+    'click #add-tag': function(){
+        var nameTag = Session.get('searchValue');
+        var tagsChoosen = Session.get('tagsChoosen');
+        if (!_(tagsChoosen).any(function(tag){return tag.name == nameTag})) {
+            tagsChoosen.push({name: nameTag});
+            Session.set('tagsChoosen', tagsChoosen);
+        }
+        $('input').val('');
+        Session.set('searchValue',null);
+    }
+});
+
+Template.tagsInput.rendered = function(){
+    Session.set('searching',false);
+    Session.set('founded',false);
+    Session.set('searchValue',null);
+    var tagsChoosen = Session.get('tagsChoosen');
+    Session.set('tagsChoosen',(tagsChoosen)? tagsChoosen : []);
+
+    var resultsDecisor = function(){
+        Session.set('founded', Tags.find().count() > 0);
+        Session.set('searching',false);
+    };
+    var self = this;
+    self.autorun(function(){
+        if(Session.get('searchValue')) {
+            Meteor.subscribe('tagsBySearch', Session.get('searchValue'), resultsDecisor());
+        }
+    })
+};
+
+Template.tagsInput.destroyed = function(){
+    Session.set('searching',null);
+    Session.set('founded',null);
+    Session.set('searchValue',null);
+    Session.set('tagsChosen',null);
+};
+
+Template.tagResult.helpers({
+    choosen: function(){
+        var self = this;
+        return (_(Session.get('tagsChoosen')).any(function(tag){return tag.name == self.name;}))? 'choosen' : '';
+    }
+});
+
+Template.tagResult.events({
+    'click .tag': function(){
+        var self = this;
+        if (!_(Session.get('tagsChoosen')).any(function(tag){return tag.name == self.name})){
+            var tagsChoosen = Session.get('tagsChoosen');
+            tagsChoosen.push({name: this.name});
+            Session.set('tagsChoosen',tagsChoosen);
+        }
+    }
+});
+
+Template.tagChoosen.events({
+    'click .tag-choosen .remove-tag': function(){
+        var self = this;
+        var tagsChoosen = _(Session.get('tagsChoosen')).filter(function(tag){
+            return tag.name !== self.name;
+        });
+        Session.set('tagsChoosen',tagsChoosen);
+
+
+
+    }
+})

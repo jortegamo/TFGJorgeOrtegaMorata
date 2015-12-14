@@ -9,6 +9,13 @@ html,body{
   font-weight: 200;
 }
 
+img.emoji{
+  height: 1.5em !important;
+  width: 1.5em !important;
+  margin: 0 .05em 0 .1em;
+  vertical-align: middle;
+}
+
 a{
   text-decoration: none;
   color: white;
@@ -154,7 +161,12 @@ a{
     &.type-2{
       padding-top: 30px;
     }
+    &.conversation-page-wrapper{
+      padding: 0px !important;
+      padding-top: 45px !important;
+    }
   }
+
 }
 
 @media (max-width: 600px){

@@ -1,6 +1,6 @@
 <template name="player">
-    <div class="col-xs-9 player">
-        <img src="http://p1.pichost.me/i/33/1565012.jpg">
+    <div class="col-md-9 col-xs-12 player">
+        <div id="editor"></div>
         <div class="touch-display-layer">
             <div class="touch">
                 <div class="cover">
@@ -15,7 +15,7 @@
                 </div>
                 <div class="player-actions-wrapper">
                     <div class="player-actions active">
-                        <audio src="/Letter.mp3"></audio>
+                        <audio src=""></audio>
                         {{#if playing}}
                             <span class="playpaused" id="pause"><i class="fa fa-pause"></i></span>
                         {{else}}

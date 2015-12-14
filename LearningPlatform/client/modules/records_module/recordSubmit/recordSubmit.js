@@ -11,6 +11,44 @@ var date;
 var recorder;
 var currentAudio;
 
+Template.uploadPanel.helpers({
+    uploadProgressVal: function(){
+        return Session.get('uploadProgressVal');
+    },
+    uploaded: function(){
+        return Session.get('uploaded');
+    }
+});
+
+Template.uploadPanel.events({
+    'click button': function(){}
+});
+
+Template.uploadPanel.created = function(){
+    Session.set('uploaded',false);
+    Session.set('uploadProgressVal',0);
+};
+
+Template.uploadPanel.rendered = function(){
+    var interval;
+    var progressUploading = function(){
+        var file = AudioRCData.findOne();
+        if(file.uploadProgress()<100){
+            Session.set('uploadProgressVal',file.uploadProgress());
+            interval = window.setInterval(progressUploading(),500);
+        }else{
+            window.clearInterval(interval);
+            interval = null;
+            Session.set('uploaded',true);
+        }
+    };
+    progressUploading();
+};
+
+Template.uploadPanel.destroyed = function(){
+    Session.set('uploaded',null);
+    Session.set('uploadProgressVal',null);
+};
 //DOCUMENTOS
 
 
@@ -161,6 +199,9 @@ Template.recordSubmit.helpers ({
     },
     documents: function(){
         return (Session.get('recording'))? docsRC.get() : docs.get();
+    },
+    uploading: function(){
+        return Session.get('uploading');
     }
 });
 
@@ -191,9 +232,6 @@ Template.recordSubmit.events = {
                 type: 'session',
                 arg: title
             });
-
-            console.log(docs);
-            console.log(docsRC);
 
             recorder.startRecording(function(){
                 Session.set('recording',true);
@@ -249,6 +287,7 @@ Template.recordSubmit.events = {
             var record = {
                 title: title,
                 description: description,
+                tags: Session.get('tagsChoosen'),
                 author: Meteor.userId(),
                 img: '/recordImgDefault.png',
                 createdAt: new Date(),
@@ -256,6 +295,7 @@ Template.recordSubmit.events = {
                 comments_count: 0,
                 votes_count: 0,
                 replies_count: 0,
+                ready: false,
                 RC: functions //aqui almaceno la lista de funciones para la reproducción.
             };
 
@@ -272,15 +312,21 @@ Template.recordSubmit.events = {
                     Meteor.call('insertDocs',docsRC.get(),result._id,false,function(err){
                         if(err) console.log('insertDocsRC ERROR: ' + err.reason);
                     });
+
                     AudioRCData.insert(currentAudio.get(),function(err,fileObj){
                         if(err)console.log('insertAudioRCData ERROR: ' + err.reason);
                         if (fileObj) {
-                            console.log('audioRCDataId: ' + fileObj._id);
+                            console.log('voy a guardar el audioRecording!');
                             Meteor.call('insertAudioRecording',{
-                                dataURL: window.URL.createObjectURL(fileObj.data.blob),
+                                audioData_id: fileObj._id,
                                 record_id: result._id
                             },function(err){
-                                if (err) console.log('insertAudioRecording ERROR: ' + err.reason);
+                                if (err){
+                                    console.log('insertAudioRecording ERROR: ' + err.reason);
+                                }else{
+                                    console.log('cambio de plantilla');
+                                    Session.set('uploading',true);
+                                }
                                 $('#discard').click();
                             });
                         }
@@ -396,7 +442,6 @@ Tracker.autorun(function(){
         //eventos del editor
 
         editor.on('change', function(e) {
-            console.log(e);
             switch (e.action){
             case "removeText":
                 var rmRange = e.range;
@@ -475,6 +520,7 @@ Template.recordSubmit.rendered = function(){
     Session.set("titleAct","");
     Session.set("createDoc",false);
     Session.set("editDoc",'');
+    Session.set('uploading',false);
 };
 
 Template.recordSubmit.destroyed = function(){

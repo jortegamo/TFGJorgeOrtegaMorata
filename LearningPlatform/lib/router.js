@@ -5,7 +5,8 @@ Router.configure({
 		return [Meteor.subscribe('userById',Meteor.userId()),
 				Meteor.subscribe('sidebarChannels',Meteor.userId()),
 				Meteor.subscribe('sidebarTeams',Meteor.userId()),
-				Meteor.subscribe('sidebarLessons',Meteor.userId())];
+				Meteor.subscribe('sidebarLessons',Meteor.userId()),
+				Meteor.subscribe('userNotifications',Meteor.userId())];
 	}
 });
 
@@ -27,7 +28,7 @@ Router.route('/records',{
 Router.route('/records/submit',{
 	name: 'recordSubmit',
 	waitOn: function() {
-		return Meteor.subscribe('audioRecordings');
+		return Meteor.subscribe('audioRCData');
 	}
 });
 
@@ -36,8 +37,7 @@ Router.route('/record/:_id',{
 	name: 'record',
 	data: function(){return Records.findOne(this.params._id);},
 	waitOn: function(){
-		return [Meteor.subscribe('documentsRecord',this.params._id),
-				Meteor.subscribe('records'),
+		return [Meteor.subscribe('record',this.params._id),
 				Meteor.subscribe('commentsByContext',this.params._id)];
 	}
 });
@@ -64,11 +64,8 @@ Router.route('/channels/:_id',{
 		return [Meteor.subscribe('channel',this.params._id),
 				Meteor.subscribe('userByChannel',this.params._id),
 				Meteor.subscribe('commentsByContext',this.params._id),
-				Meteor.subscribe('commentsUsers',this.params._id),
-				Meteor.subscribe('votesChannel',this.params._id),
 				Meteor.subscribe('usersEnrolled',this.params._id),
-				Meteor.subscribe('usersChannel',this.params._id)];
-
+				Meteor.subscribe('voteChannelByUser',this.params._id,Meteor.userId())];
 	}
 });
 
@@ -120,10 +117,21 @@ Router.route('/lesson/:_id',{
 		return [Meteor.subscribe('lesson', this.params._id),
 				Meteor.subscribe('recordsByLesson', this.params._id),
 				Meteor.subscribe('lessonSections', this.params._id),
+				Meteor.subscribe('commentsByContext',this.params._id),
 				Meteor.subscribe('usersEnrolled',this.params._id),
-				Meteor.subscribe('usersLesson',this.params._id)];
+				Meteor.subscribe('voteLessonByUser',this.params._id,Meteor.userId())];
 	}
-})
+});
+
+Router.route('/lesson/:_id/edit',{
+	name: 'lessonEdit',
+	data: function(){
+		return (this.ready()) ? Lessons.findOne(this.params._id) : null;
+	},
+	waitOn: function(){
+		return Meteor.subscribe('lesson',this.params._id);
+	}
+});
 
 
 

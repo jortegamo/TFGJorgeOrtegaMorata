@@ -12,7 +12,7 @@ Template.startPage.helpers({
 });
 
 Template.startPage.events({
-    'click button': function(e){
+    'click .content-home-section button': function(e){
         $button = $(e.currentTarget);
         $i = $button.find('i');
         if($i.hasClass('fa-angle-down')){

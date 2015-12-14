@@ -11,6 +11,7 @@ Template.lessonSubmit.events({
             author: Meteor.userId(),
             title: title,
             description: description,
+            tags: Session.get('tagsChoosen'),
             createdAt: new Date(),
             sections_count: 0,
             comments_count: 0,

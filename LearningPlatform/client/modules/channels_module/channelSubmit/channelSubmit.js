@@ -13,6 +13,7 @@ Template.channelSubmit.events({
             banner: '/channelBannerBg.jpg',
             img: '/channelImgDefault.jpg',
             description: description,
+            tags: Session.get('tagsChoosen'),
             createdAt: new Date(),
             records_count: 0,
             comments_count: 0,

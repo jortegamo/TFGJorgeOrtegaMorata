@@ -1,6 +1,6 @@
 <template name="profile">
     <div class="content-wrapper type-2">
-        <div class="page-banner">
+        <div class="page-banner type-2">
             <div>
                 <div class="container-fluid">
                     <div class="page-banner-content">
@@ -35,7 +35,7 @@
                         </div>
                         <div class="row text-center">
                             <div class="col-xs-12">
-                                {{> navbarBanner tabs=tabNamesArray }}
+                                {{> navbarBanner tabs=tabNamesArray widthType='large'}}
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,31 @@
 </template>
 
 <template name="navbarBanner">
-    <div class="banner-navbar">
+    <!--vertical view -->
+    <div class="banner-navbar-vertical {{widthType}}">
+        <button type="button" data-toggle="collapse" data-target="#menuTabCollapse" aria-expanded="false">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="section-active">
+            <p><span>{{capitalize currentTabName}}</span></p>
+        </div>
+        <div class="collapse" id="menuTabCollapse">
+            <ul>
+            {{#each tabs}}
+                {{#if ownerOnly}}
+                    {{#if isOwner}}
+                        <li class="section"><i class="fa {{icon}}"></i> {{capitalize name}}</li>
+                    {{/if}}
+                {{else}}
+                    <li class="section"><i class="fa {{icon}}"></i> {{capitalize name}}</li>
+                {{/if}}
+            {{/each}}
+            </ul>
+        </div>
+    </div>
+
+    <!-- horizontal view -->
+    <div class="banner-navbar {{widthType}}">
         <ul>
         {{#each tabs}}
             {{#if ownerOnly}}
@@ -243,7 +267,7 @@
         <div class="col-xs-12">
             <div class="conversation-item {{status}}">
                 <p>
-                    subject: <span class="subject">{{shortField subject 15}}</span>
+                    <span class="subject">{{shortField subject 15}}</span>
                     <span class="replies_counter counter"><i class="fa fa-reply"></i> {{messages_count}}</span>
                     <span class="users_counter counter"><i class="fa fa-user"></i> {{members_count}}</span>
                     <span class="status"><i class="fa fa-circle"></i></span>

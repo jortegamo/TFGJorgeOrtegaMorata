@@ -33,6 +33,9 @@ Template.player.events({
 
 
 Template.player.rendered = function(){
+    $('audio').attr('src',this.data.audioDataURL);
+
+
     var $elements = {
         audioElem: document.getElementsByTagName('audio')[0],
         playButton: $('#play'),
@@ -44,7 +47,7 @@ Template.player.rendered = function(){
         touchScreenWrapper: $('.touch'),
         playerActionsWrapper: $('.player-actions')
     };
-    this.data.recordPlayer.initialize($elements,Session.get('currentRecordId'));
+    this.data.recordPlayer.initialize($elements,Session.get('currentRecordId'),'editor');
 };
 
 Template.player.destroyed = function(){

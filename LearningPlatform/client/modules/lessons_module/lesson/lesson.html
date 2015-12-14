@@ -1,20 +1,41 @@
 <template name="lesson">
     <div class="content-wrapper type-2">
-        <div class="page-banner">
+        <div id="lesson-banner" class="page-banner type-2">
             <div>
                 <div class="container-fluid">
-                    <div class="page-banner-content">
+                    <div class="page-banner-content page-banner-lesson">
                         <div class="row">
                             <div class="col-xs-12 banner-header">
-                                <p class="banner-title"><i class="fa fa-book"></i> {{title}}</p>
+                                <p class="banner-title"><i class="fa fa-graduation-cap"></i> {{title}}
+                                    {{#if isOwner}} <button id="edit-button" type="button" class="pull-right"><i class="fa fa-pencil"></i></button>{{/if}}
+                                </p>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-3 text-center banner-info ">
+                            <div class="col-xs-12 banner-description-box">
+                                <div class="description-wrapper">
+                                    <img src="{{img}}">
+                                    <div class="description"><p>{{description}}</p></div>
+
+                                    {{#if isNotOwner}}
+                                        <div class="buttons">
+                                            {{#if userEnrolled}}
+                                                <span class="enrol-info"><i class="fa fa-check"></i> you're already enrolled in!</span>
+                                                <button id="cancel-subscription-button" type="button"><i class="fa fa-times"> left this lesson</i></button>
+                                                <span class="vote-button {{voted}}"><i class="fa fa-heart-o"></i></span>
+                                            {{else}}
+                                                <span class="enrol-button"><i class="fa fa-sign-in"></i> enroll here</span>
+                                            {{/if}}
+                                        </div>
+                                    {{/if}}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 text-center banner-info">
                                 <div class="box-info">
                                     <div class="creator-box">
                                         <img class="avatar" src="{{avatar}}">
-                                        <p class="author">{{username}}</p>
+                                        <span class="author">{{username}}</span>
                                     </div>
                                     <span class="date"><i class="fa fa-clock-o"> {{dateFrom createdAt}}</i></span>
                                     <div class="counters-box">
@@ -25,25 +46,22 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-9 banner-description-box">
-                                <div class="description">
-                                    <p>{{description}}</p>
-                                    {{#if isNotOwner}}
-                                        <div class="buttons">
-                                            {{#if userEnrolled}}
-                                                <span class="enrol-info"><i class="fa fa-check"></i> you're already enrolled in!</span>
-                                            {{else}}
-                                                <span class="enrol-button"><i class="fa fa-sign-in"></i> enroll here</span>
-                                            {{/if}}
-
-                                        </div>
-                                    {{/if}}
+                            {{#if hasTags}}
+                            <div class="col-xs-12">
+                                <div class="banner-tags">
+                                    <p><i class="fa fa-tags"></i> Tags</p>
+                                    <ul>
+                                        {{#each tags}}
+                                            <li class="tag"><i class="fa fa-tag"></i> {{name}}</li>
+                                        {{/each}}
+                                    </ul>
                                 </div>
                             </div>
+                            {{/if}}
                         </div>
                         <div class="row text-center">
                             <div class="col-xs-12">
-                                {{> navbarBanner tabs=tabNamesArray }}
+                                {{> navbarBanner tabs=tabNamesArray widthType="medium"}}
                             </div>
                         </div>
                     </div>
@@ -53,7 +71,7 @@
 
         </div>
 
-        <div class="content-tab-wrapper">
+        <div class="content-tab-wrapper type-2">
             <div class="content">
                 <div class="container-fluid">
                     {{> Template.dynamic template=sectionActive}}
@@ -90,7 +108,7 @@
             {{#if isOwner}}
                 <div class="form-section">
                     <p><i class="fa fa-plus-circle"></i> Create a new section</p>
-                    <form>
+                    <form id="form-section">
                         <input type="text" placeholder="write a title for a new section" required>
                         <div class="submit-inline-box">
                             <button class="button-input-inline" type="submit"><i class="fa fa-plus"></i> create</button>
@@ -123,27 +141,10 @@
     </div>
 </template>
 
-<template name="settingsTabContent">
-    <div class="row content-navbar">
-        <div class="col-xs-12">
-            <div class="filter-options">
-                <ul class="tab-page">
-                    <li><span>Settings</span></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="row text-center content-body">
-        <div class="col-xs-12 text-center">
-            <!-- settings -->
-        </div>
-    </div>
-</template>
-
 <template name="userItem">
     <div class="col-xs-4 userItem fade-in">
         <img class="avatar" src="{{avatar}}">
-        <span class="username">{{username}}</span>
+        <p class="username">{{username}}</p>
     </div>
 </template>
 
@@ -164,6 +165,38 @@
             </p>
         </div>
         <div class="row collapse section-tracks" id="{{order}}">
+            {{#each tracks}}
+                {{>trackItem}}
+            {{/each}}
+        </div>
+    </div>
+    <div class="sectionItem-vertical col-xs-12 fade-in">
+        <div class="row section-header text-center">
+            <div class="col-xs-12 header-indicators">
+                <span class="pull-left counter counter-tracks"><i class="fa fa-film"></i> {{records_count}}</span>
+                <span class="lesson-icon"><i class="fa fa-bookmark"></i></span>
+                {{#if isOwner}}
+                    <span class="pull-right option config-section"><i class="fa fa-cog"></i></span>
+                    <span class="pull-right option delete-section"><i class="fa fa-trash"></i></span>
+                {{/if}}
+            </div>
+            <div class="col-xs-12">
+                <p class="index">Section {{order}}</p>
+                <p class="title">{{title}}</p>
+            </div>
+            <div class="col-xs-12">
+                <p>
+                    {{#if isOwner}}
+                        <span class="section-button"><i class="fa fa-plus"></i> new track</span>
+                    {{/if}}
+                    <span class="section-button"><i class="fa fa-play"></i> play all</span>
+                </p>
+            </div>
+            <div class="col-xs-12">
+                <button type="button" class="show-tracks" data-toggle="collapse" data-target="#vertical{{order}}"><i class="fa fa-film"></i></button>
+            </div>
+        </div>
+        <div class="row collapse section-tracks" id="vertical{{order}}">
             {{#each tracks}}
                 {{>trackItem}}
             {{/each}}

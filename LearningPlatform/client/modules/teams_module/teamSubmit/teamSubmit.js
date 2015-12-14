@@ -11,6 +11,7 @@ Template.teamSubmit.events({
             author: Meteor.userId(),
             title: title,
             description: description,
+            tags: Session.get('tagsChoosen'),
             createdAt: new Date(),
             projects_count: 0,
             users_count: 0,

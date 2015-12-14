@@ -1,9 +1,9 @@
 <template name="channel">
-    <div class="content-wrapper type-2">
-        <div class="page-banner">
+    <div class="content-wrapper type-2 fade-in">
+        <div class="page-banner type-2">
             <div>
                 <div class="container-fluid">
-                    <div class="page-banner-content">
+                    <div class="page-banner-content page-banner-content-channel">
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="banner-img">
@@ -13,10 +13,13 @@
                                         <a href="{{pathFor 'profile' _id=this.author}}"><img src="{{avatar}}"></a>
                                         <a href="{{pathFor 'profile' _id=this.author}}"><span class="username"> {{username}}</span></a>
                                         <span>· <i class="fa fa-clock-o"></i> {{dateFrom createdAt}} · </span>
-                                        <span class="records-count" data-toggle="tooltip"><i class="fa fa-film"></i> {{records_count}}</span>
-                                        <span class="comments-count" data-toggle="tooltip"><i class="fa fa-comments"></i> {{comments_count}}</span>
-                                        <span class="votes-count" data-toggle="tooltip"><i class="fa fa-heart"></i> {{votes_count}}</span>
-                                        <span class="subscriptions-count" data-toggle="tooltip"><i class="fa fa-user"></i> {{users_count}}</span>
+                                        <p>
+                                            <span class="records-count" data-toggle="tooltip"><i class="fa fa-film"></i> {{records_count}}</span>
+                                            <span class="comments-count" data-toggle="tooltip"><i class="fa fa-comments"></i> {{comments_count}}</span>
+                                            <span class="votes-count" data-toggle="tooltip"><i class="fa fa-heart"></i> {{votes_count}}</span>
+                                            <span class="subscriptions-count" data-toggle="tooltip"><i class="fa fa-user"></i> {{users_count}}</span>
+                                        </p>
+
                                     </div>
                                     {{#if isOwner}}
                                         <div class="banner-edits">
@@ -25,7 +28,8 @@
                                     {{else}}
                                         <div class="banner-options">
                                             {{#if userEnrolled}}
-                                                <span class="subscribed-info"><i class="fa fa-check"></i> you're already subscribed!</span>
+                                                <span class="subscribed-info"><i class="fa fa-check"></i> subscribed</span>
+                                                <button id="cancel-subscription-button" type="button"><i class="fa fa-times"> left this channel</i></button>
                                             {{else}}
                                                 <span class="subscribe-button"><i class="fa fa-plus-square"></i> subscribe</span>
                                             {{/if}}
@@ -42,10 +46,22 @@
                                     <p class="description">{{description}}</p>
                                 </div>
                             </div>
+                            {{#if hasTags}}
+                                <div class="col-xs-12">
+                                    <div class="banner-tags">
+                                        <p><i class="fa fa-tags"></i> Tags</p>
+                                        <ul>
+                                            {{#each tags}}
+                                                <li class="tag"><i class="fa fa-tag"></i> {{name}}</li>
+                                            {{/each}}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {{/if}}
                         </div>
                         <div class="row text-center">
                             <div class="col-xs-12">
-                                {{> navbarBanner tabs=tabNamesArray }}
+                                {{> navbarBanner tabs=tabNamesArray widthType='medium'}}
                             </div>
                         </div>
                     </div>

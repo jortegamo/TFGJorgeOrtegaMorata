@@ -29,11 +29,6 @@ Template.records.helpers({
 });
 
 Template.records.events({
-	
-	'click .image-hover i, click .card-title': function(){
-		Router.go('record',{_id: this._id}); //voy a la pagina principal del record.
-	},
-
 	'click .display-option': function(e){
 		var elem = e.currentTarget;
 		$('.display-option').removeClass('active');
@@ -51,10 +46,6 @@ Template.records.events({
 	},
 	'click .button-circle': function(){
 		Router.go('recordSubmit');
-	},
-
-	'click .card-author': function(){
-		Router.go('profile',{_id: this.author});
 	}
 });
 
@@ -80,6 +71,15 @@ Template.recordItemHorizontal.helpers({
 	}
 });
 
+Template.recordItemHorizontal.events({
+	'click .image-hover i, click .card-title, click .image-hover, click img': function(){
+		Router.go('record',{_id: this._id}); //voy a la pagina principal del record.
+	},
+	'click .card-author': function(){
+		Router.go('profile',{_id: this.author});
+	}
+});
+
 Template.recordItemHorizontal.rendered = function(){
 	$('.file-count').tooltip({placement: 'bottom', title: 'documents'});
 	$('.replies-count').tooltip({placement: 'top', title: 'replies'});
@@ -93,6 +93,15 @@ Template.recordItemVertical.helpers({
 	},
 	authorName: function(){
 		return Meteor.users.findOne(this.author).username;
+	}
+});
+
+Template.recordItemVertical.events({
+	'click .image-hover i, click .card-title, click .image-hover, click img': function(){
+		Router.go('record',{_id: this._id}); //voy a la pagina principal del record.
+	},
+	'click .card-author': function(){
+		Router.go('profile',{_id: this.author});
 	}
 });
 

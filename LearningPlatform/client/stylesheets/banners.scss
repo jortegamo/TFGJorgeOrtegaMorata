@@ -4,14 +4,17 @@
   position: relative;
   min-width: 754px;
   transition: all 0.5s ease;
-  &.type-2{
-    min-width: 0;
+  &.dark{
     .page-banner-content{
-      .banner-navbar{
+      .banner-navbar, .banner-navbar-vertical{
         background: #3A3A3A;
         color: #C3C3C3;
       }
+
     }
+  }
+  &.type-2{
+    min-width: 0;
   }
 }
 
@@ -31,9 +34,8 @@
   }
 
   .banner-description-box{
-    height: 160px;
-    padding-left: 0px;
-    .description{
+    .description-wrapper{
+      display: flex;
       position: relative;
       height: 100%;
       padding: 10px 15px;
@@ -47,18 +49,49 @@
         position: absolute;
         bottom: 0;
         right: 0;
-        span{
+        .vote-button{
+          background: transparent;
+          border: none;
+          i{cursor: pointer;}
+          font-size: 18px;
+          color: #A4A4A4;
+          margin-right: 5px;
+          &:hover{
+            color: #E7E7E9;
+          }
+          &.active{
+            color: #F76363;
+            &:hover{color: #F76363;}
+          }
+        }
+        .enrol-info{
+          font-size: 13px;
+          color: #A3F6C7;
+          margin-right: 10px;
+          vertical-align: middle;
+        }
+        .enrol-button{
           padding: 5px 10px;
           font-size: 14px;
           color: white;
           background: #28C1B1;
           border-radius: 10px;
-        }
-        .enrol-button{
           cursor: pointer;
+          margin-right: 5px;
           &:hover{
             background: #23A497;
           }
+        }
+        #cancel-subscription-button{
+          border: none;
+          padding: 5px 10px;
+          background: #FF4E4E;
+          font-size: 12px;
+          border-radius: 10px;
+          vertical-align: middle;
+          color: white;
+          margin-right: 5px;
+          &:focus{outline: 0px;}
         }
       }
     }
@@ -66,16 +99,19 @@
   .banner-edits{
     background: #F25252;
     position: absolute;
-    padding: 10px;
-    width: 33px;
-    height: 34px;
-    right: 0;
-    top: 0;
+    padding: 12px;
+    width: 42px;
+    height: 43px;
+    right: 5px;
+    top: 5px;
+    font-size: 20px;
     color: white;
+    border-radius: 50%;
     span{cursor: pointer;}
   }
 
   .banner-img{
+    background: #D7D8D7;
     position: relative;
     width: 100%;
     height: 170px;
@@ -109,18 +145,29 @@
     .subscribed-info{
       font-size: 13px;
       color: #A3F6C7;
+      margin-right: 10px;
       vertical-align: middle;
+    }
+    #cancel-subscription-button{
+      border: none;
+      padding: 5px 10px;
+      background: #FF4E4E;
+      font-size: 12px;
+      border-radius: 10px;
+      vertical-align: middle;
+      margin-right: 5px;
+      color: white;
+      &:focus{outline: 0px;}
     }
   }
 
   .banner-info{
-    padding-right: 0px;
-    height: 160px;
     .box-info{
       height: 100%;
       padding: 10px;
-      background: #5E5B5B;
+      background: #DD4242;
       .creator-box{
+        display: inline-block;
         padding: 5px;
         .avatar{
           border-radius: 50%;
@@ -138,6 +185,7 @@
         font-size: 12px;
       }
       .counters-box{
+        display: inline-block;
         padding: 5px 5px 0px;
         span{
           margin: 0px 2px;
@@ -153,9 +201,29 @@
       font-size: 20px;
       font-weight: 500;
     }
-    .description{
+    .description-wrapper{
       padding-top: 5px;
       font-size: 14px;
+    }
+  }
+  .banner-tags{
+    padding: 10px 15px;
+    p{
+      margin: auto;
+      font-size: 16px;
+    }
+    ul{
+      list-style: none;
+      padding: 0px 5px;
+      margin: auto;
+    }
+    li{
+      display: inline-block;
+      padding: 2px 5px;
+      margin: 5px 0px;
+      background: #AEAEAE;
+      border-radius: 5px;
+      font-size: 12px;
     }
   }
 }

@@ -4,7 +4,7 @@
 
             <div class="conversation-header">
                 <div class="title">
-                    <p><i class="fa fa-comments icon-title"></i> {{subject}}
+                    <p><i class="fa fa-comments icon-title"></i> {{shortSubject subject 20}}
                         <button id="editablePanelLauncher" class="pull-right" type="button"><i class="fa fa-pencil"></i></button>
                     </p>
                 </div>
@@ -18,11 +18,36 @@
                                     {{/each}}
                                 </ul>
                                 <p>
-                                    <span class="counter"><i class="fa fa-reply"></i> {{messages_count}}</span>
-                                    <span class="counter"><i class="fa fa-user"></i> {{members_count}}</span>
+                                    {{#if moreUsers}}
+                                        <span class="restUsers">+ {{restUsersCounter}}</span>
+                                    {{/if}}
+                                    <span class="counte pull-right"><i class="fa fa-reply"></i> {{messages_count}}</span>
+                                    <span class="counter pull-right"><i class="fa fa-user"></i> {{members_count}}</span>
                                 </p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="usersListPanel">
+                <div class="usersListWrapper">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="userList">
+                                    <ul>
+                                        {{#each members}}
+                                            {{>memberInfo}}
+                                        {{/each}}
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="helpUsersAdd">
+                        <p>To add more users to this conversation from your contacts click <i class="fa fa-pencil"></i></p>
                     </div>
                 </div>
             </div>
@@ -59,6 +84,15 @@
 <template name="memberAvatar">
     <li><img src="{{avatar}}"></li>
 </template>
+
+<template name="memberInfo">
+    <li><img src="{{avatar}}">
+        <p><span>{{username}}</span>
+            <button class="pull-right" type="button">view profile</button>
+        </p>
+    </li>
+</template>
+
 <template name="messageItem">
     <div class="row">
         <div class="col-xs-12">

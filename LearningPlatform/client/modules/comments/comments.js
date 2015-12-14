@@ -60,9 +60,8 @@ Template.comment.helpers({
 });
 
 Template.comment.events({
-	'submit form': function(e,template){
+	'submit': function(e,template){
 		e.preventDefault();
-		console.log('han hecho reply');
 		var text = $(e.currentTarget).find('textarea').val();
 		if (text){
 			var reply = {
@@ -79,6 +78,40 @@ Template.comment.events({
 			Meteor.call('incrementCommentReply',this._id);
 			$(e.currentTarget).find('textarea').val('');
 			$(template.find('.cancel-publish-reply')).click();
+		}
+		if (this.author != Meteor.userId()){
+			var paramsNotification = {
+				to: this.author,
+				from: Meteor.userId(),
+				type: Session.get('contextType'),
+				createdAt: new Date(),
+				parentContext_id: this.contextId
+			};
+			switch(Session.get('contextType')){
+				case 'channel':
+					paramsNotification.action = 'replyCommentChannel';
+					break;
+				case 'lesson':
+					paramsNotification.action = 'replyCommentLesson';
+					break;
+				case 'record':
+					paramsNotification.action = 'reply';
+					break;
+				case 'innerRecordChannel':
+					paramsNotification.parentContext_id = Records.findOne(this.context_id).context_id;
+					paramsNotification.action = 'replyCommentRecord';
+					paramsNotification.context.title = Channels.findOne(paramsNotification.context_id).title;
+					break;
+				case 'innerRecordLesson':
+					paramsNotification.parentContext_id = Records.findOne(this.context_id).context_id;
+					paramsNotification.action = 'replyCommentRecord';
+					paramsNotification.context.title = Lessons.findOne(paramsNotification.context_id).title;
+					break;
+			};
+			NotificationsCreator.createNotification(paramsNotification,function(err,result){
+				if(err) console.log('createNotification ERROR: ' + err.reason);
+				if(result) console.log('created new Notification');
+			});
 		}
 	},
 	'click .create-reply-button': function(e,template){

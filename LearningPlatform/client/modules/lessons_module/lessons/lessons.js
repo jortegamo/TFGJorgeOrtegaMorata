@@ -12,7 +12,7 @@ Template.lessons.helpers({
 });
 
 Template.lessons.events({
-    'click .image-hover i, click .card-title': function(){
+    'click .image-hover i, click .card-title, click .image-hover, click img': function(){
         Router.go('lesson',{_id: this._id}); //voy a la pagina principal del record.
     },
     'click .display-option': function(e){
@@ -59,6 +59,15 @@ Template.lessonItemHorizontal.helpers({
     }
 });
 
+Template.lessonItemHorizontal.events({
+    'click .image-hover i, click .card-title, click .image-hover, click img': function(){
+        Router.go('lesson',{_id: this._id}); //voy a la pagina principal del record.
+    },
+    'click .card-author': function(){
+        Router.go('profile',{_id: this.author});
+    }
+});
+
 Template.lessonItemHorizontal.rendered = function(){
     $('.sections-count').tooltip({placement: 'bottom', title: 'sections'});
     $('.comments-count').tooltip({placement: 'top', title: 'comments'});
@@ -72,6 +81,15 @@ Template.lessonItemVertical.helpers({
     },
     authorName: function(){
         return Meteor.users.findOne(this.author).username;
+    }
+});
+
+Template.lessonItemVertical.events({
+    'click .image-hover i, click .card-title, click .image-hover, click img': function(){
+        Router.go('lesson',{_id: this._id}); //voy a la pagina principal del record.
+    },
+    'click .card-author': function(){
+        Router.go('profile',{_id: this.author});
     }
 });
 

@@ -4,6 +4,15 @@ Template.conversation.helpers({
     },
     membersMinified: function(){
         return (this.members.length > 3)? this.members.slice(0,3): this.members;
+    },
+    shortSubject: function(s,max){
+        return ellipsis(s,max)
+    },
+    moreUsers: function(){
+        return this.members.length > 3;
+    },
+    restUsersCounter: function(){
+        return this.members.length - 3;
     }
 });
 
@@ -26,6 +35,14 @@ Template.conversation.events({
             });
         }
         $('#message-input').html('');
+    },
+    'click .restUsers': function(){
+        if($('.usersListPanel').hasClass('active')){
+            $('.usersListPanel').removeClass('active');
+        }else{
+            $('.usersListPanel').addClass('active');
+        }
+
     }
 });
 
@@ -45,6 +62,21 @@ Template.conversation.destroyed = function(){
 Template.memberAvatar.helpers({
     avatar: function(){
         return Meteor.users.findOne(this._id).avatar;
+    }
+});
+
+Template.memberInfo.helpers({
+    avatar: function(){
+        return Meteor.users.findOne(this._id).avatar;
+    },
+    username: function(){
+        return Meteor.users.findOne(this._id).username;
+    }
+});
+
+Template.memberInfo.events({
+    'click button': function(){
+        Router.go('profile',{_id: this._id});
     }
 })
 

@@ -79,7 +79,6 @@ AudioRecorder = function(){
         this.stopProgress();
         if(recorder){
             recorder.stopRecording(function(url){
-
                 recorder.getDataURL (function(data){
                     reactiveVar.set(data);
                     audioStream.stop();

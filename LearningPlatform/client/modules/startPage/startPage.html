@@ -1,19 +1,17 @@
 <template name="startPage">
     <div class="content-wrapper type-2">
-        <div class="page-banner type-2">
+        <div class="page-banner type-2 dark">
             <div>
                 <div class="container-fluid">
                     <div class="page-banner-content welcome-banner">
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="banner-description">
-                                    <p>wellcome {{username}}</p>
-                                </div>
+                                <img src="/main.png">
                             </div>
                         </div>
                         <div class="row text-center">
                             <div class="col-xs-12">
-                                {{> navbarBanner tabs=tabNamesArray }}
+                                {{> navbarBanner tabs=tabNamesArray widthType='medium'}}
                             </div>
                         </div>
                     </div>
