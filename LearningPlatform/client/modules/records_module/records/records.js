@@ -16,15 +16,21 @@ var searchParser = function(search){
 
 
 Template.records.helpers({
-	pageTitle: function(){
-		var title = 'Records';
-		return ellipsis(title,27);
-	},
 	records: function(){
-		return Records.find({},{sort: {createdAt: -1}});
+		switch(Session.get('filter-active')){
+			case 'recent-filter':
+				return Records.find({},{sort: {createdAt: -1}});
+			case 'popular-filter':
+				return Records.find({},{sort: {votes_count: -1}});
+			case 'search-filter':
+				return [];
+		}
 	},
 	listMode: function(){
 		return Session.get('horizontalMode');
+	},
+	searching: function(){
+		return Session.get('filter-active') == 'search-filter';
 	}
 });
 
@@ -43,9 +49,7 @@ Template.records.events({
 		var elem = e.currentTarget;
 		$('.filter').removeClass('active');
 		$(elem).addClass('active');
-	},
-	'click .button-circle': function(){
-		Router.go('recordSubmit');
+		Session.set('filter-active',$(elem)[0].id);
 	}
 });
 
@@ -55,7 +59,7 @@ Template.records.rendered = function(){
 };
 
 Template.records.created = function(){
-	Session.set('search', null);
+	Session.set('filter-active','recent-filter');
 }
 
 
@@ -68,6 +72,12 @@ Template.recordItemHorizontal.helpers({
 	},
 	authorName: function(){
 		return Meteor.users.findOne(this.author).username;
+	},
+	timeParser: function(duration){
+		var d = new Date(duration);
+		var min = (d.getMinutes() > 9)? '' + d.getMinutes() : '0' + d.getMinutes();
+		var sec = (d.getSeconds() > 9)? '' + d.getSeconds() : '0' + d.getSeconds();
+		return min + ':' + sec;
 	}
 });
 
@@ -93,6 +103,15 @@ Template.recordItemVertical.helpers({
 	},
 	authorName: function(){
 		return Meteor.users.findOne(this.author).username;
+	},
+	ellipsis: function(s,max){
+		return ellipsis(s,max);
+	},
+	timeParser: function(duration){
+		var d = new Date(duration);
+		var min = (d.getMinutes() > 9)? '' + d.getMinutes() : '0' + d.getMinutes();
+		var sec = (d.getSeconds() > 9)? '' + d.getSeconds() : '0' + d.getSeconds();
+		return min + ':' + sec;
 	}
 });
 

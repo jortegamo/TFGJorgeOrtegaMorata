@@ -33,6 +33,7 @@ ejson
 spacebars
 check
 fourseven:scss@2.0.0
-cfs:standard-packages
-cfs:gridfs
 davidfrancisco:twemoji
+richsilv:owl-carousel
+service-configuration
+http

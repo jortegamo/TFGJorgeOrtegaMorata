@@ -38,11 +38,16 @@ Meteor.methods({
 		return result;
 	},
 	userUpdate: function(user_id,params){
+		params.avatar = params.img;
+		params.img = null;
 		return Meteor.users.update(user_id,{$set: params});
 	}
 });
 
 Meteor.startup(function(){
+	UserStatus.events.on('connectionLogout',function(fields){
+		//aquí cada vez que se desconecte un usuario se borraran los datos pertinentes.
+	});
 	Accounts.emailTemplates.siteName = "DuckFlight";
 	Accounts.emailTemplates.from = "DuckFlight <accounts@example.com>";
 	Accounts.emailTemplates.verifyEmail.subject = function (user) {

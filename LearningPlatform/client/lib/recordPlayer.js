@@ -8,26 +8,28 @@ RecordPlayer = function(){
         $timer,
         $touchScreenWrapper,
         $playerActionsWrapper,
-        editor,
-        recordObject,
         intervalAudio,
-        intervalEditor,
-        initialDocs,
-        dynamicDocs;
+        duration,
+        editorManager,
+        ended;
 
 //FUNCTIONS
+    function getCurrentTime(){
+        var d = new Date($audio.currentTime());
+        return {
+            min: (d.getMinutes() > 9)? '' + d.getMinutes(): '0' + d.getMinutes(),
+            sec: (d.getSeconds() > 9)? '' + d.getSeconds(): '0' + d.getSeconds()
+        };
+    };
+
     function updatePlayer(){
-        var d = new Date($audio.currentTime * 1000);
-        var min = (d.getMinutes() > 9)? '' + d.getMinutes(): '0' + d.getMinutes();
-        var sec = (d.getSeconds() > 9)? '' + d.getSeconds(): '0' + d.getSeconds();
-        $timer.text(min + ':' + sec);
+        var current = getCurrentTime();
+        $timer.text(current.min + ':' + current.sec);
         $seeker.width($progress.width());
-        var progressVal = 100 * $audio.currentTime / $audio.duration;
+        var progressVal = ($audio.currentTime() * 100) / duration;
         $progress.val(progressVal);
         $playedProgress.width(($progress.width() * progressVal)/100 + 1);
-    }
-    function updateEditor(){
-
+        if(Session.get('playing')) editorManager.update($audio.currentTime());
     }
     function changeStatePlayer(){
         ($touchScreenWrapper.hasClass('active'))? $touchScreenWrapper.removeClass('active') : $touchScreenWrapper.addClass('active');
@@ -37,33 +39,30 @@ RecordPlayer = function(){
 //METHODS
 
     //INITIALIZATION
-    function initializeEditor(id){
-        editor = ace.edit(id);
-        editor.setTheme("ace/theme/monokai");
-        editor.getSession().setMode("ace/mode/javascript");
-        editor.setShowPrintMargin(false);
-        $('.ace_gutter').css('z-index','0');
-    }
 
-
-    this.initialize = function($elements,record_id,editorId,docs){
-        $audio = $elements.audioElem;
-        $audio.onloadeddata = function() {
-            alert("Browser has loaded the current frame");
-        };
+    this.initialize = function($elements,editorPlayer){
+        $audio = $elements.stream;
         $progress = $elements.progress;
         $seeker = $elements.seeker;
         $playedProgress = $elements.playedProgress;
         $timer = $elements.timer;
         $touchScreenWrapper = $elements.touchScreenWrapper;
         $playerActionsWrapper = $elements.playerActionsWrapper;
-        recordObject = Records.findOne(record_id);
         Session.set('playing',false);
+        Session.set('ended',false);
         Session.set('audioVolume','normal');
         $audio.volume = 0.4;
-        initialDocs = docs;
-        dynamicDocs = [];
-        initializeEditor(editorId);
+        duration = $elements.duration;
+        editorManager = editorPlayer;
+        var RCP = this;
+        $audio.on('finish',function(){
+            RCP.ended();
+        });
+        $audio.on('created',function(){
+            $audio.seek(0);
+            console.log('created audio');
+        });
+        ended = false;
     };
 
     //MAIN METHODS
@@ -91,42 +90,53 @@ RecordPlayer = function(){
     this.play = function(){
         changeStatePlayer();
         Session.set('playing',true);
+        Session.set('ended',false);
         $audio.play();
         if (!intervalAudio){
-            intervalAudio = window.setInterval(updatePlayer,100);
+            intervalAudio = window.setInterval(updatePlayer,20);
         }
-        intervalEditor = window.setInterval(updateEditor,100);
+        ended = false;
     };
 
     this.pause = function(){
         changeStatePlayer();
         Session.set('playing',false);
         $audio.pause();
-        window.clearInterval(intervalEditor);
     };
 
     this.seek = function(){
-        $audio.currentTime = ($seeker.val() * $audio.duration)/100;
+        $audio.seek(($seeker.val() * duration)/100);
         updatePlayer();
-        updateEditor();
+        editorManager.seek($audio.currentTime());
     };
 
     this.ended = function(){
         $touchScreenWrapper.removeClass('active');
         $playerActionsWrapper.addClass('active');
         window.clearInterval(intervalAudio);
+        editorManager.seek(0);
         intervalAudio = null;
-        window.clearInterval(intervalEditor);
-        intervalEditor = null;
         Session.set('playing',false);
+        Session.set('ended',true);
         $timer.text('00:00');
         $playedProgress.width(0);
         $progress.val(0);
+        ended = true;
+    };
+
+    this.getState = function(){
+        var state = {
+            docs: editorManager.getDocs(ended),
+            docActual: editorManager.getDocActual(),
+            currentTime: Math.round($audio.currentTime())
+        };
+        return state;
     };
 
     this.destroy = function(){
+        $audio.pause();
+        $audio = null;
         window.clearInterval(intervalAudio);
-        window.clearInterval(intervalEditor);
     };
 
 };

@@ -1,5 +1,13 @@
+Template.conversationSubmit.created = function(){
+    if(this.data.userToSend) Session.set('userToSend',this.data.userToSend);
+};
+
 Template.conversationSubmit.rendered = function(){
     Session.set('formType','conversationSubmitForm');
+};
+
+Template.conversationSubmit.destroyed = function(){
+    Session.set('userToSend',null);
 };
 
 Template.conversationSubmit.events({
@@ -12,37 +20,41 @@ Template.conversationSubmit.events({
 
         if(message && memberObjects.length > 1){
             var membersArray = [];
+            var startDate = new Date();
+
             _(memberObjects).each(function(member){
-                membersArray.push({_id: member._id, status: 'pending'});
+                membersArray.push({
+                    _id: member._id,
+                   startDate: startDate,
+                   bg_img: '/conversationBGDefault.jpg'
+                });
             });
+
             var message = {
                 author: Meteor.userId(),
                 createdAt: new Date(),
                 message: message
             };
+
             var conversation = {
                 members: membersArray,
                 members_count: membersArray.length,
                 author: membersArray[0]._id,
-                last_modified: new Date(),
-                subject: subject,
-                messages_count: 1
+                last_modified: message.createdAt,
+                subject: subject
             };
 
             Meteor.call('insertConversation',conversation,function(err,conversation_id){
-                console.log('he hecho la llamada!!!');
                 if (err) console.log('insertConversation ERROR: ' + err.reason);
                 if (conversation_id){
-                    console.log('conversation saved with Id: ' + conversation_id);
                     message.conversation_id = conversation_id;
-                    //insert message
+                    Meteor.call('insertConversationAlerts',conversation_id,Session.get('memberList'),function(err,res){
+                        if(err) console.log('insertConversationAlerts ERROR: ' + err.reason);
+                    });
                     Meteor.call('insertMessage',message,function(err,message_id){
                         if (err) console.log('insertMessage ERROR: ' + err.reason);
-                        if(message_id){
-                            Router.go('conversation',{_id: conversation_id});
-                            console.log('message saved with Id: ' + message_id);
-                        }
                     });
+                    Router.go('conversation',{_id: conversation_id});
                 }
             });
         }else{

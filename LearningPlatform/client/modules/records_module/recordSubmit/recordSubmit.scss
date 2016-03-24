@@ -1,14 +1,11 @@
-.uploading-wrapper{
-  background: #393939;
+.duckflight-panel-info-wrapper{
   padding: 30px 20px;
-  box-shadow: 0px 2px 10px grey;
-  border-radius: 40px;
-  .upload-message{
+  .panel-info-message{
     font-size: 20px;
     color: #717171;
   }
   .progress{
-    height: 7px;
+    height: 4px;
     margin: 20px 5%;
     background: #2F2F2F;
   }
@@ -19,23 +16,21 @@
   img{
     padding: 5px;
     border-radius: 50%;
-    border: 2px solid #262626;
+    border: 2px solid #706F6F;
     margin-bottom: 10px;
+    opacity: 0.5;
   }
   span{
     font-weight: normal;
   }
   button{
-    i{
-      font-size: 28px;
-      vertical-align: bottom;
-    }
+    margin-top: 10px;
     background: transparent;
     padding: 5px 17px;
-    border: 2px solid #4A4B4A;
+    border: 1px solid #5F5E5E;
     border-radius: 27px;
     font-size: 20px;
-    color: #4A4B4A;
+    color: #5F5E5E;
     transition: 0.3s ease;
     &:focus{
       outline: 0px;
@@ -205,7 +200,40 @@
 
 }
 
+.progress .loader{
+  height: 4px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #BFBDBD;
+  &:before {
+    display: block;
+    position: absolute;
+    content: "";
+    left: -200px;
+    width: 200px;
+    height: 4px;
+    background-color: #FC5959;
+    animation: uploading 2s linear infinite;
+  }
+}
+
+@keyframes uploading {
+  from {left: -200px; width: 30%;}
+  50% {width: 30%;}
+  70% {width: 70%;}
+  80% { left: 50%;}
+  95% {left: 120%;}
+  to {left: 100%;}
+}
+
 @keyframes blink{
     0%{opacity: 1;}
     70%{opacity: 0;}
+}
+
+.second-editor{
+  width: 500px;
+  height: 300px;
+  margin: 30px;
 }

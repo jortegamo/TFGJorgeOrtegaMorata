@@ -27,6 +27,11 @@ Template.channel.helpers({
     },
     hasTags: function(){
         return (this.tags)? this.tags.length : false;
+    },
+    getData: function(){
+        return function(){
+            return {saludo: 'hola'};
+        }
     }
 });
 
@@ -118,6 +123,21 @@ Template.channel.events({
             if(err) console.log('cancelSubscriptionChannel Notification ERROR: ' + err.reason);
         });
     },
+    'click .filter': function(e){
+        var elem = e.currentTarget;
+        $('.filter').removeClass('active');
+        $(elem).addClass('active');
+    },
+    'click .display-option': function(e){
+        var elem = e.currentTarget;
+        $('.display-option').removeClass('active');
+        $(elem).addClass('active');
+        if (elem.id == 'list'){
+            Session.set('horizontalMode',true);
+        }else{
+            Session.set('horizontalMode',false);
+        }
+    }
 });
 
 Template.channel.rendered = function(){
@@ -126,5 +146,5 @@ Template.channel.rendered = function(){
     $('.votes-count').tooltip({placement: 'top', title: 'votes'});
     $('.subscriptions-count').tooltip({placement: 'bottom', title: 'subscriptions'});
     Session.set('contextType','channel');
-    console.log(this);
+    Session.set('horizontalMode',true);
 }

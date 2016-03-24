@@ -1,24 +1,14 @@
 <template name="lessons">
-    <nav class="page-nav-header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-4">
-                    <div class="title">
-                        <h3>{{ pageTitle }}</h3>
-                    </div>
+    <div class="content-wrapper">
+        <div class="content-header-wrapper fade-in">
+            <div class="content-header">
+                <div class="content-header-img">
+                    <img src="/lessonDefault.png"/>
+                    <a href="{{pathFor 'lessonSubmit'}}" class="button-circle inline"><i class="fa fa-plus"></i></a>
                 </div>
-
-                <div class="col-xs-8 actions">
-                    <button class="button-circle inline"><i class="fa fa-plus"></i></button>
-                    <div class="search-box-header inline">
-                        <i class="fa fa-search"></i>
-                        <input type="text" placeholder="Search">
-                    </div>
-                </div>
+                <h3>Lessons</h3>
             </div>
         </div>
-    </nav>
-    <div class="content-wrapper">
         <div class="content-tab-wrapper type-2">
             <div class="content">
                 <div class="container-fluid">
@@ -32,25 +22,31 @@
                             </div>
                             <div class="filter-options">
                                 <ul class="tab-page">
-                                    <li id="recent-filter" class="filter active"><span>Recent</span></li>
-                                    <li id="popular-filter" class="filter"><span>Popular</span></li>
+                                    <li id="recent-filter" class="filter active"><i class="fa fa-clock-o"></i> <span>Recent</span></li>
+                                    <li id="popular-filter" class="filter"><i class="fa fa-star"></i> <span>Popular</span></li>
+                                    <li id="search-filter" class="filter"><i class="fa fa-search"></i> <span>Search</span></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div class="row text-center content-body">
                         <div class="col-xs-12 text-center">
-                            <div class="list-flex">
-                                {{#if listMode}}
+                            {{#if searching}}
+                                {{>smartSearch}}
+                            {{/if}}
+                            {{#if listMode}}
+                                <div>
                                     {{#each lessons}}
                                         {{>lessonItemHorizontal}}
                                     {{/each}}
-                                {{else}}
+                                </div>
+                            {{else}}
+                                <div class="list-flex">
                                     {{#each lessons}}
                                         {{>lessonItemVertical}}
                                     {{/each}}
-                                {{/if}}
-                            </div>
+                                </div>
+                            {{/if}}
                         </div>
                     </div>
                 </div>
@@ -58,6 +54,55 @@
         </div>
     </div>
 </template>
+
+
+<template name="smartSearch">
+    <div class="smart-search-box-wrapper text-left fade-in">
+        <div class="search-box">
+            <i class="fa fa-search search-icon"></i>
+            <div id="input-search" contenteditable="true"></div>
+            <button id="eraser-button" type="button"><i class="fa fa-eraser"></i></button>
+        </div>
+        <div class="assisted-search fade-in">
+            <h4>Assisted Search</h4>
+            <p><strong>Searching in DuckFlight is a great experience!!</strong> Narrow your search! Press the plus key
+                <span><i class="fa fa-plus"></i></span>
+                and choose the option you prefers.</p>
+        </div>
+        {{#if choosingTagFilter}}
+            <div class="helper-search">
+                <p>For all search</p>
+                <ul>
+                    <li id="author" class="search-filter">
+                        <i class="fa fa-plus-square-o"></i> <span>author</span>: filter by author
+                    </li>
+                    <li id="title" class="search-filter">
+                        <i class="fa fa-plus-square-o"></i> <span>title</span>: filter by title
+                    </li>
+                    <li id="before" class="search-filter">
+                        <i class="fa fa-plus-square-o"></i> <span>before</span>: select a date with datepicker
+                    </li>
+                    <li id="after" class="search-filter">
+                        <i class="fa fa-plus-square-o"></i> <span>after</span>: select a date with datepicker
+                    </li>
+                    <li id="tag" class="search-filter">
+                        <i class="fa fa-plus-square-o"></i> <span>tag</span>: filter by tag. Add more than one split by ','
+                    </li>
+                </ul>
+                <p>For records</p>
+                <ul>
+                    <li id="channel" class="search-filter">
+                        <i class="fa fa-plus-square-o"></i> <span>channel</span>: filter by the title channel
+                    </li>
+                    <li id="lesson" class="search-filter">
+                        <i class="fa fa-plus-square-o"></i> <span>lesson</span>: filter by the lesson channel
+                    </li>
+                </ul>
+            </div>
+        {{/if}}
+    </div>
+</template>
+
 
 <template name="lessonItemHorizontal">
     <div class="row text-left duckflight-card duckflight-card-horizontal fade-in">
@@ -94,7 +139,7 @@
         </div>
         <div class="card-caption">
             <ul>
-                <li class="card-title">{{title}}</li>
+                <li class="card-title">{{ellipsis title 15}}</li>
                 <li>by <span class="card-author">{{authorName}}</span></li>
                 <li class="card-counters text-center">
                     <span class="card-date">{{dateFrom createdAt}} · </span>

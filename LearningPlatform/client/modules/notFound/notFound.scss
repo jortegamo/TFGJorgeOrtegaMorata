@@ -1,0 +1,31 @@
+.notFound-wrapper{
+  height: 100%;
+  background-image: url('/notFoundBG.png');
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .notFound-message{
+    h1{
+      font-size: 10em;
+      color: #898989;
+      margin: auto;
+    }
+    h3{
+      font-size: 1.5em;
+      font-weight: 100;
+      color: #D6D6D7;
+      margin: auto;
+    }
+    img{
+      margin: 20px;
+      background: #D5CFCF;
+      border-radius: 50%;
+      padding: 6px;
+    }
+    p{
+      color: #898989;
+      font-size: 1.2em;
+    }
+  }
+}

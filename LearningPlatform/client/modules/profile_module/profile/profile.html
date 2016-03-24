@@ -106,14 +106,27 @@
             </div>
             <div class="filter-options">
                 <ul class="tab-page">
-                    <li id="recent-filter" class="filter"><span>Recent</span></li>
-                    <li id="popular-filter" class="filter"><span>Popular</span></li>
+                    <li id="recent-filter" class="filter active"><i class="fa fa-clock-o"></i> <span>Recent</span></li>
+                    <li id="popular-filter" class="filter"><i class="fa fa-star"></i> <span>Popular</span></li>
+                    <li id="search-filter" class="filter"><i class="fa fa-search"></i> <span>Search</span></li>
                 </ul>
             </div>
+
         </div>
     </div>
     <div class="row text-center content-body">
         <div class="col-xs-12 text-center">
+            {{#if searching}}
+                {{> smartSearch}}
+            {{else}}
+                {{#if allowCreate}}
+                    <div class="new-panel text-center">
+                        <a href="{{pathFor 'recordSubmit' query=queryParams}}"><i class="fa fa-plus-circle"></i></a>
+                        <p><i class="fa fa-film"></i> Create a new Record</p>
+                    </div>
+                {{/if}}
+            {{/if}}
+
             <div class="list-flex">
                 {{#if hasItems}}
                     {{#if listMode}}
@@ -125,8 +138,6 @@
                             {{>recordItemVertical}}
                         {{/each}}
                     {{/if}}
-                {{else}}
-                    <p>No results</p>
                 {{/if}}
             </div>
         </div>
@@ -144,14 +155,25 @@
             </div>
             <div class="filter-options">
                 <ul class="tab-page">
-                    <li id="recent-filter" class="filter"><span>Recent</span></li>
-                    <li id="popular-filter" class="filter"><span>Popular</span></li>
+                    <li id="recent-filter" class="filter active"><i class="fa fa-clock-o"></i> <span>Recent</span></li>
+                    <li id="popular-filter" class="filter"><i class="fa fa-star"></i> <span>Popular</span></li>
+                    <li id="search-filter" class="filter"><i class="fa fa-search"></i> <span>Search</span></li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="row text-center content-body">
         <div class="col-xs-12 text-center">
+            {{#if searching}}
+                {{> smartSearch}}
+            {{else}}
+                {{#if allowCreate}}
+                    <div class="new-panel text-center">
+                        <a href="{{pathFor 'teamSubmit'}}"><i class="fa fa-plus-circle"></i></a>
+                        <p><i class="fa fa-group"></i> Create a new Team</p>
+                    </div>
+                {{/if}}
+            {{/if}}
             <div class="list-flex">
                 {{#if listMode}}
                     {{#each teams}}
@@ -178,14 +200,25 @@
             </div>
             <div class="filter-options">
                 <ul class="tab-page">
-                    <li id="recent-filter" class="filter"><span>Recent</span></li>
-                    <li id="popular-filter" class="filter"><span>Popular</span></li>
+                    <li id="recent-filter" class="filter active"><i class="fa fa-clock-o"></i> <span>Recent</span></li>
+                    <li id="popular-filter" class="filter"><i class="fa fa-star"></i> <span>Popular</span></li>
+                    <li id="search-filter" class="filter"><i class="fa fa-search"></i> <span>Search</span></li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="row text-center content-body">
         <div class="col-xs-12 text-center">
+            {{#if searching}}
+                {{> smartSearch}}
+            {{else}}
+                {{#if allowCreate}}
+                    <div class="new-panel text-center">
+                        <a href="{{pathFor 'channelSubmit'}}"><i class="fa fa-plus-circle"></i></a>
+                        <p><i class="fa fa-desktop"></i> Create a new Channel</p>
+                    </div>
+                {{/if}}
+            {{/if}}
             <div class="list-flex">
                 {{#if listMode}}
                     {{#each channels}}
@@ -212,14 +245,25 @@
             </div>
             <div class="filter-options">
                 <ul class="tab-page">
-                    <li id="recent-filter" class="filter"><span>Recent</span></li>
-                    <li id="popular-filter" class="filter"><span>Popular</span></li>
+                    <li id="recent-filter" class="filter active"><i class="fa fa-clock-o"></i> <span>Recent</span></li>
+                    <li id="popular-filter" class="filter"><i class="fa fa-star"></i> <span>Popular</span></li>
+                    <li id="search-filter" class="filter"><i class="fa fa-search"></i> <span>Search</span></li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="row text-center content-body">
         <div class="col-xs-12 text-center">
+            {{#if searching}}
+                {{> smartSearch}}
+            {{else}}
+                {{#if allowCreate}}
+                    <div class="new-panel text-center">
+                        <a href="{{pathFor 'lessonSubmit'}}"><i class="fa fa-plus-circle"></i></a>
+                        <p><i class="fa fa-graduation-cap"></i> Create a new Lesson</p>
+                    </div>
+                {{/if}}
+            {{/if}}
             <div class="list-flex">
                 {{#if listMode}}
                     {{#each lessons}}

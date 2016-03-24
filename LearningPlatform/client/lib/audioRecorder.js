@@ -7,7 +7,7 @@ AudioRecorder = function(){
     var interval;
     var $timer;
 
-    this.initialize = function($timer){
+    this.initialize = function(){
 
         function d(s) {
             return decodeURIComponent(s.replace(/\+/g, ' '));
@@ -64,9 +64,18 @@ AudioRecorder = function(){
         var d = new Date(currentTime * 1000);
         var minuto = (d.getMinutes()<=9)?"0"+d.getMinutes():d.getMinutes();
         var segundo = (d.getSeconds()<=9)?"0"+d.getSeconds():d.getSeconds();
-        $timer.text(minuto + ':' + segundo);
-        currentTime ++;
-        interval = window.setInterval(this.loop,1000); //se ejecutara cada seg.
+        if (currentTime == 3600){
+            $('#stop-button').click();
+        }else{
+            $timer.text(minuto + ':' + segundo);
+            currentTime ++;
+            interval = window.setInterval(this.loop,1000); //se ejecutara cada seg.
+        }
+
+    };
+
+    this.getCurrentTime = function(){
+        return currentTime * 1000;
     };
 
     this.stopProgress = function(){
@@ -78,12 +87,10 @@ AudioRecorder = function(){
     this.stopRecording = function(reactiveVar, callback){
         this.stopProgress();
         if(recorder){
-            recorder.stopRecording(function(url){
-                recorder.getDataURL (function(data){
-                    reactiveVar.set(data);
-                    audioStream.stop();
-                    (callback)? callback() : null;
-                });
+            recorder.stopRecording(function(){
+                reactiveVar.set(recorder.blob);
+                audioStream.stop();
+                (callback)? callback() : null;
             });
         }
     };

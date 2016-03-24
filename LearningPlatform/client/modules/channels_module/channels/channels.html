@@ -1,24 +1,15 @@
 <template name="channels">
-	<nav class="page-nav-header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-4">
-                    <div class="title">
-                        <h3>{{ pageTitle }}</h3>
-                    </div>
+    <div class="content-wrapper fade-in">
+        <div class="content-header-wrapper fade-in">
+            <div class="content-header">
+                <div class="content-header-img">
+                    <img src="/channelImgDefault.jpg"/>
+                    <a href="{{pathFor 'channelSubmit'}}" class="button-circle inline"><i class="fa fa-plus"></i></a>
                 </div>
-
-                <div class="col-xs-8 actions">
-                    <button class="button-circle inline"><i class="fa fa-plus"></i></button>
-                    <div class="search-box-header inline">
-                        <i class="fa fa-search"></i>
-                        <input type="text" placeholder="Search">
-                    </div>
-                </div>
+                <h3>Channels</h3>
             </div>
         </div>
-	</nav>
-    <div class="content-wrapper fade-in">
+
         <div class="content-tab-wrapper type-2">
             <div class="content">
                 <div class="container-fluid">
@@ -32,25 +23,32 @@
                             </div>
                             <div class="filter-options">
                                 <ul class="tab-page">
-                                    <li id="recent-filter" class="filter active"><span>Recent</span></li>
-                                    <li id="popular-filter" class="filter"><span>Popular</span></li>
+                                    <li id="recent-filter" class="filter active"><i class="fa fa-clock-o"></i> <span>Recent</span></li>
+                                    <li id="popular-filter" class="filter"><i class="fa fa-star"></i> <span>Popular</span></li>
+                                    <li id="search-filter" class="filter"><i class="fa fa-search"></i> <span>Search</span></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div class="row text-center content-body">
                         <div class="col-xs-12 text-center">
-                            <div class="list-flex">
-                                {{#if listMode}}
+                            {{#if searching}}
+                                {{>smartSearch}}
+                            {{/if}}
+
+                            {{#if listMode}}
+                                <div>
                                     {{#each channels}}
                                         {{>channelItemHorizontal}}
                                     {{/each}}
-                                {{else}}
+                                </div>
+                            {{else}}
+                                <div class="list-flex">
                                     {{#each channels}}
                                         {{> channelItemVertical}}
                                     {{/each}}
-                                {{/if}}
-                            </div>
+                                </div>
+                            {{/if}}
                         </div>
                     </div>
                 </div>
@@ -96,7 +94,7 @@
         <div class="card-caption">
             <ul>
                 <li>{{order}}</li>
-                <li class="card-title">{{title}}</li>
+                <li class="card-title">{{ellipsis title 15}}</li>
                 <li>by <span class="card-author">{{authorName}}</span></li>
                 <li class="card-counters text-center">
                     <span>{{dateFrom createdAt}} · </span>

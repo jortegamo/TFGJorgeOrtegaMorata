@@ -17,14 +17,12 @@ Template.profile.helpers({
     },
     sectionActive: function(){
         //reactive selection
-        if (this.section){
-            var tabId = this.section.split('T')[0];
-            if (!$('#' + tabId).hasClass('active')){
-                $('.section').removeClass('active');
-                $('#' + tabId).addClass('active');
-            }
+        var tabId = Session.get('currentSection').split('T')[0];
+        if (!$('#' + tabId).hasClass('active')){
+            $('.section').removeClass('active');
+            $('#' + tabId).addClass('active');
         }
-        return this.section;
+        return Session.get('currentSection');
     },
     avatar: function(){
         return Meteor.users.findOne(Session.get('currentProfileId')).avatar;
@@ -36,12 +34,13 @@ Template.profile.helpers({
         return Meteor.users.findOne(Session.get('currentProfileId')).description;
     },
     tabNamesArray: function(){
-        return [{template: 'channelsTabContent', name: 'channels', icon: 'fa-desktop', initialActive: true},
+        var tabs = [{template: 'channelsTabContent', name: 'channels', icon: 'fa-desktop', initialActive: true},
                 {template: 'teamsTabContent',    name: 'teams', icon: 'fa-users'},
                 {template: 'lessonsTabContent',  name: 'lessons', icon: 'fa-graduation-cap'},
                 {template: 'recordsTabContent',  name: 'records', icon: 'fa-film'},
                 {template: 'conversationsTabContent', name: 'conversations', icon: 'fa-envelope-o', ownerOnly: true, isOwner: Session.get('currentProfileId') === Meteor.userId()},
                 {template: 'contactsTabContent', name: 'contacts', icon: 'fa-user'}];
+        return tabs;
     }
 });
 
@@ -76,7 +75,7 @@ Template.profile.events({
         Meteor.call('removeContact',Session.get('currentProfileId'));
     },
     'click #send-message': function(){
-        Router.go('conversationSubmit',{user: Session.get('currentProfileId')});
+        Router.go('conversationSubmit',{},{query: 'userToSend=' + Session.get('currentProfileId')});
     },
     'click .filter': function(e){
         var elem = e.currentTarget;
@@ -181,6 +180,12 @@ Template.channelsTabContent.helpers({
                 return Channels.find({author: this.user_id},{sort: {votes_count: -1}});
                 break;
         }
+    },
+    searching: function(){
+        return Session.get('currentFilter') == 'search-filter';
+    },
+    allowCreate: function() {
+        return Session.get('currentProfileId') == Meteor.userId();
     }
 });
 
@@ -196,6 +201,9 @@ Template.channelsTabContent.events({
             case 'popular-filter':
                 Session.set('currentFilter','populars');
                 break;
+            case 'search-filter':
+                Session.set('currentFilter','search-filter');
+                break;
         }
     }
 });
@@ -206,18 +214,30 @@ Template.channelsTabContent.rendered = function(){
 
 
 Template.recordsTabContent.helpers({
+    hasItems: function() {
+        return Records.find({}).count();
+    },
     listMode: function(){
         return Session.get('horizontalMode');
     },
     records: function(){
         switch(Session.get('currentFilter')){
             case 'recents':
-                return Records.find({author: this.user_id},{sort: {createdAt: -1}});
+                return Records.find({},{sort: {createdAt: -1}});
                 break;
             case 'populars':
-                return Records.find({author: this.user_id},{sort: {votes: -1}});
+                return Records.find({},{sort: {votes: -1}});
                 break;
         }
+    },
+    queryParams: function(){
+        return (Router.current().options.route.getName() == 'channel')? 'channel=' + Router.current().params._id : null;
+    },
+    searching: function(){
+        return Session.get('currentFilter') == 'search-filter';
+    },
+    allowCreate: function() {
+        return (Router.current().options.route.getName() == 'profile') ? Session.get('currentProfileId') == Meteor.userId() : true;
     }
 });
 
@@ -233,6 +253,8 @@ Template.recordsTabContent.events({
             case 'popular-filter':
                 Session.set('currentFilter','populars');
                 break;
+            case 'search-filter':
+                Session.set('currentFilter','search-filter');
         }
     }
 });
@@ -254,6 +276,12 @@ Template.teamsTabContent.helpers({
                 return Teams.find({author: this.user_id},{sort: {votes: -1}});
                 break;
         }
+    },
+    searching: function(){
+        return Session.get('currentFilter') == 'search-filter';
+    },
+    allowCreate: function() {
+        return Session.get('currentProfileId') == Meteor.userId();
     }
 });
 
@@ -268,6 +296,9 @@ Template.teamsTabContent.events({
                 break;
             case 'popular-filter':
                 Session.set('currentFilter','populars');
+                break;
+            case 'search-filter':
+                Session.set('currentFilter','search-filter');
                 break;
         }
     }
@@ -290,6 +321,12 @@ Template.lessonsTabContent.helpers({
                 return Lessons.find({author: this.user_id},{sort: {votes: -1}});
                 break;
         }
+    },
+    searching: function(){
+        return Session.get('currentFilter') == 'search-filter';
+    },
+    allowCreate: function() {
+        return Session.get('currentProfileId') == Meteor.userId();
     }
 });
 
@@ -304,6 +341,9 @@ Template.lessonsTabContent.events({
                 break;
             case 'popular-filter':
                 Session.set('currentFilter','populars');
+                break;
+            case 'search-filter':
+                Session.set('currentFilter','search-filter');
                 break;
         }
     }
@@ -336,15 +376,15 @@ Template.conversationItem.helpers({
         return ellipsis (field,max);
     },
     avatar: function(){
-        var message = Messages.findOne({conversation_id: this._id},{sort: {createdAt: -1}});
+        var message = Messages.findOne({conversation_id: this._id, type: {$exists: false}},{sort: {createdAt: -1}});
         return Meteor.users.findOne(message.author).avatar;
     },
     username: function(){
-        var message = Messages.findOne({conversation_id: this._id},{sort: {createdAt: -1}});
+        var message = Messages.findOne({conversation_id: this._id, type: {$exists: false}},{sort: {createdAt: -1}});
         return Meteor.users.findOne(message.author).username;
     },
     message: function(){
-        return new Handlebars.SafeString(Messages.findOne({conversation_id: this._id},{sort: {createdAt: -1}}).message);
+        return new Handlebars.SafeString(Messages.findOne({conversation_id: this._id, type: {$exists: false}},{sort: {createdAt: -1}}).message);
     }
 });
 
@@ -428,6 +468,10 @@ Template.contactItem.events({
         Session.set('currentProfileId',contactId[0]);
         Session.set('currentSection','channelsTabContent');
         Router.go('profile',{_id: contactId[0]});
+    },
+    'click .action-button': function(){
+        var user_id = _(this.users).find(function(u_id){ return u_id !== Meteor.userId()});
+        Router.go('conversationSubmit',{},{query: 'userToSend=' + user_id});
     }
 });
 

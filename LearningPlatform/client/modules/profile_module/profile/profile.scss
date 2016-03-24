@@ -40,6 +40,7 @@
     font-weight: 100;
     font-size: 12px;
     margin-left: 5px;
+    display: inline-block;
   }
   .author{
     font-size: 14px;
@@ -295,7 +296,7 @@
   }
 }
 .auto-complete-wrapper{
-  padding: 5px 40px;
+  padding: 5px 5px;
   .search-box{
     display: flex;
     padding: 5px 10px;

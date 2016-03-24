@@ -1,7 +1,6 @@
 Template.sidebar.helpers({
 	username: function(){
-		var username = Meteor.user().username;
-		return (username.length > 16) ? username.slice(0,16) + '...' : username;
+		return ellipsis(Meteor.user().username,16);
 	},
 	menuTab: function(){
 		return Session.get('menu-active');
@@ -12,22 +11,23 @@ Template.sidebar.helpers({
 	currentSidebarTab: function(){
 		return Session.get('currentSidebarTab');
 	},
-	conversations_counter: function(){return 0},
+	conversations_counter: function(){
+		return ConversationAlerts.find().count();
+	},
 	notifications_counter: function(){
 		return Notifications.find().count();
-	}
+	},
+	userId: function(){return Meteor.userId();}
 });
 
 Template.sidebar.events({
 
 	'click #logoutButton': function(){
 		Meteor.logout();
-		Router.go('/')
+		Router.go('/');
 	},
 
 	'click .tab': function(e){
-		$('.tab').removeClass('active');
-		$(e.currentTarget).addClass('active');
 		switch(e.currentTarget.id){
 			case 'menu-tab':
 				Session.set('currentSidebarTab','menuTab');
@@ -46,9 +46,11 @@ Template.sidebar.events({
 		$('#sidebar-wrapper').addClass('unactive');
 	},
 
-	'click .profile-link':function(){
-		Session.set('currentProfileId',Meteor.userId());
-		Router.go('profile',{_id: Meteor.user()._id});
+	'click .close-toggle': function(){
+		if($(window).width() <= 900){
+			$('#sidebar-wrapper').addClass('unactive');
+			$('#close-sidebar').removeClass('active');
+		}
 	}
 
 });
@@ -94,51 +96,15 @@ Template.menuTab.helpers({
 	channels: function(){return Channels.find({author: Meteor.userId()},{sort: {createdAt: -1},$limit: 3})},
 	teams:  function(){return Teams.find({author: Meteor.userId()},{sort: {createdAt: -1},$limit: 3})},
 	lessons:  function(){return Lessons.find({author: Meteor.userId()},{sort: {createdAt: -1},$limit: 3})},
-});
-
-Template.menuTab.events({
-
-	'click .section-title': function(e){
-		var elemId = e.currentTarget.id;
-
-		switch(elemId){
-			case 'sidebar-channels-browse':
-				Router.go('channels')
-				break;
-			case 'sidebar-teams-browse':
-				Router.go('teams')
-				break;
-			case 'sidebar-lessons-browse':
-				Router.go('lessons')
-				break;
-			case 'sidebar-records-browse':
-				Router.go('records')
-				break;
-		}
-	},
-
-	'click .more': function(e){
-		Session.set('currentSection', e.currentTarget.id);
-		Router.go('profile',{_id: Meteor.user()._id});
-	},
-
-	'click #my-records': function(e){
-		Session.set('currentSection','recordsTabContent');
-		Router.go('profile',{_id: Meteor.user()._id});
-	},
-
-	'click .channel-item': function(){
-		Router.go('channel',{_id: this._id});
-	},
-
-	'click .team-item': function(){
-		Router.go('team',{_id: this._id});
-	},
-
-	'click .lesson-item': function(){
-		Router.go('lesson',{_id: this._id});
+	userId: function(){
+		return Meteor.userId();
 	}
 });
+
+Template.menuTab.rendered = function(){
+	$('.tab').removeClass('active');
+	$('#menu-tab').addClass('active');
+};
 
 Template.notificationsTab.helpers({
 	counter: function(type){
@@ -158,7 +124,12 @@ Template.notificationsTab.events({
 			$('' + $('a[aria-expanded="true"]').attr('href')).collapse('hide');
 
 	}
-})
+});
+
+Template.notificationsTab.rendered = function(){
+	$('.tab').removeClass('active');
+	$('#notifications-tab').addClass('active');
+}
 
 Template.notificationItem.helpers({
 	avatar: function(){
@@ -196,5 +167,52 @@ Template.notificationItem.events ({
 	},
 	'click button':function(){
 		Notifications.remove(this._id);
+	}
+});
+
+Template.chatsTab.helpers({
+	conversations_counter: function(){
+		return ConversationAlerts.find({}).count();
+	},
+	conversationAlerts: function(){
+		return ConversationAlerts.find({});
+	}
+});
+
+Template.chatsTab.rendered = function(){
+	$('.tab').removeClass('active');
+	$('#chats-tab').addClass('active');
+};
+
+Template.conversationAlert.helpers({
+	subject: function(){
+		return ellipsis(Conversations.findOne({_id: this.conversation_id}).subject,10);
+	},
+	avatar: function(){
+		var messageObj = Messages.findOne({conversation_id: this.conversation_id,
+			createdAt: {$gte: Conversations.findOne(this.conversation_id).last_modified}});
+		return Meteor.users.findOne(messageObj.author).avatar;
+	},
+	username: function(){
+		var messageObj = Messages.findOne({conversation_id: this.conversation_id,
+			createdAt: {$gte: Conversations.findOne(this.conversation_id).last_modified}});
+		return Meteor.users.findOne(messageObj.author).username;
+	},
+	message: function(){
+		var messageObj = Messages.findOne({conversation_id: this.conversation_id,
+			createdAt: {$gte: Conversations.findOne(this.conversation_id).last_modified}});
+		var messageBody = new Handlebars.SafeString(messageObj.message);
+		return ellipsis(messageBody.string.split('&nbsp')[0],50);
+	},
+	date: function(){
+		var messageObj = Messages.findOne({conversation_id: this.conversation_id,
+			createdAt: {$gte: Conversations.findOne(this.conversation_id).last_modified}});
+		return smartDate(messageObj.createdAt);
+	}
+});
+
+Template.conversationAlert.events({
+	'click .conversation-alert-item': function(e,template){
+		Router.go('conversation',{_id: template.data.conversation_id});
 	}
 });

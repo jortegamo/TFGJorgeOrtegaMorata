@@ -1,7 +1,9 @@
 #main-page-wrapper{
   width: 100%;
   height: 100%;
-  background: #4d394b;
+  background-image: url('/MainPageBG.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
   padding-bottom: 120px;
 }
 
@@ -21,37 +23,52 @@
     background: white;
     padding: 3px;
     border-radius: 50%;
+    opacity: 0.8;
+    height: 56px;
+    width: 56px;
+    box-shadow: 0px 5px 10px rgba(0,0,0,.5);
   }
   h3{
-    color: white;
-    font-size: 28px;
+    color: rgba(255,255,255,.7);
+    font-size: 30px;
     font-family: roboto, sans-serif;
     font-weight: 100;
     font-style: italic;
     letter-spacing: .5pt;
     margin: 5px;
+    text-shadow: 0px 5px 10px rgba(0,0,0,.5);
   }
   h4{
-    color: #3B2B2B;
+    color: #D0D0D0;
     font-size: 20px;
     font-family: roboto, sans-serif;
     font-weight: 100;
     font-style: italic;
     letter-spacing: .5pt;
     margin: 5px;
+    margin-bottom: 10px;
+    opacity: .8;
+    text-shadow: 0px 5px 10px rgba(0,0,0,.5);
   }
 
   button{
-    border: 2px solid #B13D3D;
-    background: transparent;
-    color: #B13D3D;
-    border-radius: 10px;
+    border: none;
+    background: rgba(0,0,0,.8);
+    color: #54D788;
+    border-radius: 50%;
     padding: 5px 10px;
     font-size: 20px;
     margin-top: 10px;
-    &:hover{
-      color: #8FE4BF;
-      border: 2px solid #8FE4BF;
+    height: 70px;
+    width: 70px;
+    animation: upAndDown 2s infinite ease-out;
+    box-shadow: 0px 5px 10px rgba(0,0,0,.5);
+    span {
+      display: block;
+      line-height: 15px;
+      &.action {
+        font-size: 15px;
+      }
     }
 
     &:focus{
@@ -64,4 +81,22 @@
   min-height: 120px;
   padding: 20px 40px;
   background: #B13D3D;
+}
+
+@keyframes bubble{
+  0%{transform: scale(.5,.5); opacity: 0;}
+  70%{transform: scale(1.1,1.05); opacity: 1;}
+  100%{transform: scale(1,1);}
+}
+
+@keyframes bubble-inverse{
+  0%{transform: scale(1,1);}
+  30%{transform: scale(1.1,1.05); opacity: 1;}
+  100%{transform: scale(.5,.5); opacity: 0;}
+}
+
+@keyframes upAndDown{
+  0%{margin-top: 5px;}
+  55%{margin-top: 30px;}
+  100%{margin-top: 0px;}
 }

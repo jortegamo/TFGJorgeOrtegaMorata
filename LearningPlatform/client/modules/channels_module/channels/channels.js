@@ -1,13 +1,19 @@
 Template.channels.helpers({
-	pageTitle: function(){
-		var title = 'Channels';
-		return (title.length > 27) ? title.slice(0,27) + '...' : title;
-	},
 	channels: function(){
-		return Channels.find({},{sort: {createdAt: -1}});
+		switch(Session.get('filter-active')) {
+			case 'recent-filter':
+				return Channels.find({}, {sort: {createdAt: -1}});
+			case 'popular-filter':
+				return Channels.find({}, {sort: {votes_count: -1}});
+			case 'search-filter':
+				return [];
+		}
 	},
 	listMode: function(){
 		return Session.get('horizontalMode');
+	},
+	searching: function(){
+		return Session.get('filter-active') == 'search-filter';
 	}
 });
 
@@ -26,6 +32,7 @@ Template.channels.events({
 		var elem = e.currentTarget;
 		$('.filter').removeClass('active');
 		$(elem).addClass('active');
+		Session.set('filter-active',$(elem)[0].id);
 	},
 	'click .button-circle': function(){
 		Router.go('channelSubmit');
@@ -38,8 +45,8 @@ Template.channels.rendered = function(){
 };
 
 Template.channels.created = function(){
-	Session.set('search', null);
-}
+	Session.set('filter-active', 'recent-filter');
+};
 
 Template.channelItemHorizontal.helpers({
 	shortDescription: function(description,max){
@@ -75,6 +82,9 @@ Template.channelItemVertical.helpers({
 	},
 	dateFrom: function(d){
 		return smartDate(d);
+	},
+	ellipsis: function(s,max){
+		return ellipsis(s,max);
 	}
 });
 

@@ -30,9 +30,33 @@ a{
   text-indent: 0px;
 }
 .content-wrapper{
-  padding: 90px 50px;
+  padding: 60px 50px;
   &.type-2{
     padding-top: 20px;
+  }
+}
+
+.content-header-wrapper{
+  padding: 0px 15px 15px;
+  text-align: center;
+  .content-header{
+    position: relative;
+    h3{
+      font-weight: 100;
+      color: #616161;
+      font-size: 30px;
+    }
+    .content-header-img{
+      img{
+        height: 120px;
+        width: 120px;
+        border-radius: 50%;
+      }
+      a{
+        position: absolute;
+        &:focus{text-decoration: none; color: white;}
+      }
+    }
   }
 }
 
@@ -49,6 +73,23 @@ a{
 
 .content-body{
   padding: 0px 0px 20px;
+  .new-panel{
+    font-size: 16px;
+    color: #7A7979;
+    margin: 20px 25px 0px;
+    background: #E9E7E7;
+    border-radius: 10px;
+    padding: 20px 0px;
+    border: 2px dashed #8B8B8B;
+    a{
+      color: #F87474;
+      font-size: 40px;
+      &:focus, &:hover{
+        color: #FA6363;
+        outline: 0px;
+      }
+    }
+  }
 }
 
 
@@ -68,6 +109,40 @@ a{
   }
   .card-image {
     position: relative;
+    .duration-tag-cover{
+      z-index: 1;
+      position: absolute;
+      width: 100%;
+      bottom: 0px;
+      p{
+        margin: auto;
+        span{
+          font-size: 14px;
+          background: rgba(0,0,0,0.4);
+          color: #DCDCDC;
+          padding: 0px 5px;
+        }
+      }
+    }
+    .info-tags-cover{
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      padding: 5px;
+      p{margin: auto;}
+      span{
+        height: 25px;
+        color: #FCFAFA;
+        padding: 2px 10px;
+        border-radius: 36px;
+        font-size: 15px;
+        margin-left: 5px;
+
+        &.channel-tag{  background: #FB6767;  }
+        &.lesson-tag{  background: #5671FA;  }
+        &.reply-tag{  background: #56FAB8;  }
+      }
+    }
     .image-hover {
       background: rgba(0, 0, 0, .4);
       position: absolute;
@@ -120,6 +195,7 @@ a{
     }
     .card-counters{
       span{
+        display: inline-block;
         cursor: text;
         font-size: 12px;
       }
@@ -129,6 +205,20 @@ a{
     }
     .card-description{
       font-size: 13px;
+    }
+    .button-from{
+      margin: 5px;
+      border: none;
+      color: #818181;
+      border: 1px solid #818181;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: transparent;
+      &:focus{outline: 0px;}
+      &:hover{
+        color: #696868;
+        border: 1px solid #696868;
+      }
     }
   }
 }
@@ -157,7 +247,7 @@ a{
 
 @media (max-width: 990px){
   .content-wrapper{
-    padding-top: 130px;
+    padding-top: 100px;
     &.type-2{
       padding-top: 30px;
     }

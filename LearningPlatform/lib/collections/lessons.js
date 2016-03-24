@@ -1,5 +1,5 @@
 Lessons = new Mongo.Collection ('lessons');
-UsersEnrolled = new Mongo.Collection('usersEnrolledLesson');
+UsersEnrolled = new Mongo.Collection('usersEnrolled');
 
 Meteor.methods ({
     insertLesson: function(lesson){
@@ -17,8 +17,11 @@ Meteor.methods ({
     incrementLessonComment: function(lesson_id){
         Lessons.update(lesson_id,{$inc: {comments_count: 1}});
     },
-    lessonUpdate: function(lesson_id,params){
-        return Lessons.update(lesson_id,{$set: params});
+    lessonUpdate: function(lesson_id,objectUpdate){
+        _(objectUpdate.sections).each(function(section){
+            Sections.update(section._id,{$set: {order: section.order}});
+        });
+        return Lessons.update(lesson_id,{$set: _(objectUpdate).omit('sections')});
     },
     voteLesson: function(lesson_id,user_id,inc){
         Lessons.update(lesson_id,{$inc: {votes_count: inc}});

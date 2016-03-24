@@ -46,7 +46,9 @@
                 {{>member}}
             {{/each}}
             <li><button class="add-member" type="button"><i class="fa fa-plus"></i></button></li>
-            <li><button class="edit-members" type="button"><i class="fa fa-pencil"></i></button></li>
+            {{#if editMembersAllow}}
+                <li><button class="edit-members" type="button"><i class="fa fa-pencil"></i></button></li>
+            {{/if}}
         </ul>
     </div>
     <div class="col-xs-12 section-content">
@@ -71,16 +73,43 @@
             <div class="body">
                 <button id="close-emoticons" class="close-panel pull-right" type="button"><i class="fa fa-times"></i></button>
                 <div class="arrow"></div>
-                {{#emoji}}
-                    <span>:smile:</span>
-                    <span>:smiley:</span>
-                    <span>:heart_eyes:</span>
-                    <span>:flushed:</span>
-                    <span>:grin:</span>
-                    <span>:worried:</span>
-                    <span>:blush:</span>
-                    <span>:kissing_heart:</span>
-                {{/emoji}}
+                <div class="emoticons-list">
+                    {{#emoji}}
+                        <span>:smile:</span>
+                        <span>:smiley:</span>
+                        <span>:heart_eyes:</span>
+                        <span>:flushed:</span>
+                        <span>:grin:</span>
+                        <span>:worried:</span>
+                        <span>:blush:</span>
+                        <span>:kissing_heart:</span>
+                        <span>:open_mouth:</span>
+                        <span>:joy:</span>
+
+                        <span>:unamused:</span>
+                        <span>:disappointed_relieved:</span>
+                        <span>:disappointed:</span>
+                        <span>:weary:</span>
+                        <span>:confounded:</span>
+                        <span>:sweat:</span>
+                        <span>:fearful:</span>
+                        <span>:cold_sweat:</span>
+
+                        <span>:scream:</span>
+                        <span>:sob:</span>
+                        <span>:sleepy:</span>
+                        <span>:sleeping:</span>
+                        <span>:neutral_face:</span>
+                        <span>:angry:</span>
+                        <span>:rage:</span>
+                        <span>:triumph:</span>
+                        <span>:innocent:</span>
+                        <span>:zzz:</span>
+                        <span>:boom:</span>
+
+                    {{/emoji}}
+                </div>
+
             </div>
 
         </div>
@@ -103,9 +132,22 @@
     <li rel="tooltip">
         <div class="image-member">
             <img src="{{avatar}}">
-            {{#if isNotAuthor}}
+            {{#if isPossibleToDelete}}
                 <button class="delete-member-button" type="button"><i class="fa fa-times-circle"></i></button>
             {{/if}}
+        </div>
+        <p class="username-tooltip">{{username}}</p>
+        <div class="arrow-down"></div>
+    </li>
+</template>
+
+<template name="memberToChoose">
+    <li class="member-to-choose {{active}}" rel="tooltip">
+        <div class="image-member">
+            <img src="{{avatar}}">
+            <div class="choosed-cover">
+                <i class="fa fa-check"></i>
+            </div>
         </div>
         <p class="username-tooltip">{{username}}</p>
         <div class="arrow-down"></div>
@@ -130,37 +172,40 @@
 <template name="formProfileEdit">
     <form class="awesome-form form-editable">
         <!--avatar-->
-        <section id="avatar-section">
-            <p class="title-section">Avatar <span class="edit-button"><i class="fa fa-pencil"></i> edit</span></p>
-            <div class="edited-block text-center">
-                <img class="avatar avatar-img" src="{{avatar}}"/>
-                <img class="avatar avatar-img-medium" src="{{avatar}}"/>
-                <img class="avatar avatar-img-circle" src="{{avatar}}"/>
-            </div>
-            <div class="edit-block">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="checkbox-list">
-                            <div class="checkbox-item">
-                                <label><i class="fa fa-circle-o"></i> default</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <label class="checkbox-awesome"><i class="fa fa-circle-o"></i> url</label>
-                                <input type="text" autocomplete="off" placeholder="insert a url" disabled/>
-                            </div>
-                            <div class="checkbox-item">
-                                <label><i class="fa fa-circle-o"></i> file</label>
-                                <input type="file" placeholder="file" disabled/>
+        {{#if avatar}}
+            <section id="avatar-section">
+                <p class="title-section">Avatar <span class="edit-button"><i class="fa fa-pencil"></i> edit</span></p>
+                <div class="edited-block text-center">
+                    <img class="avatar avatar-img" src="{{avatar}}"/>
+                    <img class="avatar avatar-img-medium" src="{{avatar}}"/>
+                    <img class="avatar avatar-img-circle" src="{{avatar}}"/>
+                </div>
+                <div class="edit-block">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="checkbox-list">
+                                <div class="checkbox-item">
+                                    <label><i class="fa fa-circle-o"></i> default</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <label class="checkbox-awesome"><i class="fa fa-circle-o"></i> url</label>
+                                    <input type="text" autocomplete="off" placeholder="insert a url" disabled/>
+                                </div>
+                                <div class="checkbox-item">
+                                    <label><i class="fa fa-circle-o"></i> file</label>
+                                    <input type="file" placeholder="file" disabled/>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="actions text-center">
+                        <span class="action-button save">save</span>
+                        <span class="action-button discard">discard</span>
+                    </div>
                 </div>
-                <div class="actions text-center">
-                    <span class="action-button save">save</span>
-                    <span class="action-button discard">discard</span>
-                </div>
-            </div>
-        </section>
+            </section>
+        {{/if}}
+
         <!--banner-->
         {{#if banner}}
         <section id="banner-section">
@@ -194,31 +239,33 @@
             </div>
         </section>
         {{/if}}
-        <!--description-->
-        <section id="description-section">
-            <p class="title-section">Description <span class="edit-button"><i class="fa fa-pencil"></i> edit</span></p>
-            <div class="edited-block">
-                {{#if description}}
-                    <p>{{description}}</p>
-                {{else}}
-                    <p>No description</p>
-                {{/if}}
+        {{#if description}}
+            <section id="description-section">
+                <p class="title-section">Description <span class="edit-button"><i class="fa fa-pencil"></i> edit</span></p>
+                <div class="edited-block">
+                    {{#if description}}
+                        <p>{{description}}</p>
+                    {{else}}
+                        <p>No description</p>
+                    {{/if}}
 
-            </div>
-            <div class="edit-block">
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-xs-12 form-field no-label">
-                            <textarea name="description" style="resize: none"></textarea>
+                </div>
+                <div class="edit-block">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12 form-field no-label">
+                                <textarea name="description" style="resize: none"></textarea>
+                            </div>
                         </div>
                     </div>
+                    <div class="actions text-center">
+                        <span class="action-button save">save</span>
+                        <span class="action-button discard">discard</span>
+                    </div>
                 </div>
-                <div class="actions text-center">
-                    <span class="action-button save">save</span>
-                    <span class="action-button discard">discard</span>
-                </div>
-            </div>
-        </section>
+            </section>
+        {{/if}}
+        <!--description-->
         {{#if tagsAllow}}
             <section id="tags-section">
                 <p class="title-section">Tags <span class="edit-button"><i class="fa fa-pencil"></i> edit</span></p>
@@ -240,7 +287,80 @@
                 </div>
             </section>
         {{/if}}
-
+        {{#if sectionConfigAllow}}
+            <section id="sections-config-section">
+                <p class="title-section">Sections <span class="edit-button"><i class="fa fa-pencil"></i> edit</span></p>
+                <div class="edited-block">
+                    <ul>
+                        {{#each sections}}
+                            <li><i class="fa fa-bookmark"></i> {{title}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+                <div class="edit-block">
+                    {{> changeOrderSections}}
+                    <div class="actions text-center">
+                        <span class="action-button save">save</span>
+                        <span class="action-button discard">discard</span>
+                    </div>
+                </div>
+            </section>
+        {{/if}}
+        {{#if editConversation}}
+            <section id="subject-section">
+                <p class="title-section">Title
+                    {{#if isLeader}}
+                        <span class="edit-button"><i class="fa fa-pencil"></i> edit</span>
+                    {{/if}}
+                </p>
+                <div class="edited-block">
+                    <p>{{subject}}</p>
+                </div>
+                <div class="edit-block">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12 form-field no-label">
+                                <input name="subject" autocomplete="off" type="text" value="{{subject}}" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="actions text-center">
+                        <span class="action-button save">save</span>
+                        <span class="action-button discard">discard</span>
+                    </div>
+                </div>
+            </section>
+            <section id="leader-section">
+                <p class="title-section">Leader
+                    {{#if isLeader}}
+                        <span class="edit-button"><i class="fa fa-pencil"></i> edit</span>
+                    {{/if}}
+                </p>
+                <div class="edited-block">
+                    <img class="avatar avatar-img-circle" src="{{leaderAvatar}}"><span>{{leaderName}}</span>
+                </div>
+                <div class="edit-block">
+                    {{> chooseLeaderBox}}
+                    <div class="actions text-center">
+                        <span class="action-button save">save</span>
+                        <span class="action-button discard">discard</span>
+                    </div>
+                </div>
+            </section>
+            <section id="members-section">
+                <p class="title-section">Members <span class="edit-button"><i class="fa fa-users"></i> edit</span></p>
+                <div class="edited-block">
+                    {{>memberList}}
+                </div>
+                <div class="edit-block">
+                    {{>inputMemberBox storageDynamic="false"}}
+                    <div class="actions text-center">
+                        <span class="action-button save">save</span>
+                        <span class="action-button discard">discard</span>
+                    </div>
+                </div>
+            </section>
+        {{/if}}
         <div class="form-group">
             <div class="row text-center">
                 <div class="col-xs-12">
@@ -249,6 +369,51 @@
             </div>
         </div>
     </form>
+</template>
+
+<template name="memberList">
+    <div id="memberList" class="col-xs-12 section-content">
+        <ul class="users-choosed-list">
+            {{#each members}}
+                {{> member}}
+            {{/each}}
+        </ul>
+    </div>
+</template>
+
+<template name="chooseLeaderBox">
+    <div id="chooseLeaderBox" class="col-xs-12 section-content">
+        <ul class="users-choosed-list">
+            {{#each members}}
+                {{> memberToChoose}}
+            {{/each}}
+        </ul>
+    </div>
+</template>
+
+<template name="changeOrderSections">
+    <div class="list-sections">
+        {{#each sections}}
+            {{> sectionItemEdit}}
+
+        {{/each}}
+    </div>
+</template>
+
+<template name="sectionItemEdit">
+    <div class="section-item-edit">
+        <div class="title-wrapper">
+            <p>{{title}}</p>
+        </div>
+        <div class="actions-wrapper">
+            {{#if isNotFirst}}
+                <button type='button' class="action up"><i class="fa fa-arrow-circle-o-up"></i></button>
+            {{/if}}
+            {{#if isNotLast}}
+                <button type='button' class="action down"><i class="fa fa-arrow-circle-o-down"></i></button>
+            {{/if}}
+        </div>
+    </div>
 </template>
 <!-- Editor config and create form -->
 <template name="formDoc">
@@ -372,7 +537,7 @@
         <div class="tags-input">
             <div id="tags-input-box">
                 <div class="input-box">
-                    <input type="text" name="tags" autocomplete="false">
+                    <input type="text" name="tags" autocomplete="off">
                     {{#if searching}}<span><i class="fa fa-spinner fa-pulse"></i></span> {{/if}}
                     <button id="eraser-button" type="button"><i class="fa fa-eraser"></i></button>
                 </div>

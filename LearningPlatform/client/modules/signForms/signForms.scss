@@ -2,11 +2,9 @@
   display: none;
   align-content: center;
   justify-content: center;
-  &.in{display: flex !important;}
   .modal-dialog{
-    width: 400px;
     .modal-content{
-      border-radius: 5px;
+      animation: bubble .5s ease-in;
       .modal-header{
         img{
           height: 40px;

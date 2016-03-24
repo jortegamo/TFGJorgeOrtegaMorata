@@ -51,7 +51,9 @@ Template.formDoc.events({
 });
 
 
-//PROFILE EDIT//
+/**
+ * FORM PROFILE EDIT
+ */
 
 Template.formProfileEdit.helpers({
     avatar: function(){
@@ -68,6 +70,27 @@ Template.formProfileEdit.helpers({
     },
     tags: function(){
         return (Session.get('userObject').tags)? Session.get('userObject').tags : [];
+    },
+    sectionConfigAllow: function(){
+        return Session.get('userObject').sectionConfigAllow;
+    },
+    sections: function(){
+        return (Session.get('userObject').sections)? Session.get('userObject').sections : [];
+    },
+    subject: function(){
+        return Session.get('userObject').subject;
+    },
+    editConversation: function(){
+        return Session.get('userObject').editConversation;
+    },
+    leaderName: function(){
+        return (Session.get('userObject').leader)? Meteor.users.findOne(Session.get('userObject').leader).username : null;
+    },
+    leaderAvatar: function(){
+        return (Session.get('userObject').leader)? Meteor.users.findOne(Session.get('userObject').leader).avatar : null;
+    },
+    isLeader: function(){
+        return (this.author)? Meteor.userId() == this.author : false || (this.user_id)? Meteor.userId() == this.user_id : null;
     }
 });
 
@@ -194,15 +217,90 @@ Template.formProfileEdit.events({
         obj.tags = Session.get('tagsChoosen');
         Session.set('userObject',obj);
         $('#tags-section .discard').click();
+    },
+    'click #tags-section .discard': function(){
+        Session.set('tagsChoosen',Session.get('userObject').tags);
+    },
+
+    'click #sections-config-section .save': function(){
+        var obj = Session.get('userObject');
+        obj.sections = Session.get('sectionsArray');
+        Session.set('userObject',obj);
+        $('#sections-config-section .discard').click();
+    },
+
+    'click #sections-config-section .discard': function(){
+        Session.set('sectionsArray',Session.get('userObject').sections);
+    },
+
+    'click #subject-section .save': function(){
+        var obj = Session.get('userObject');
+        obj.subject = $('#subject-section input').val();
+        Session.set('userObject',obj);
+        $('#subject-section .discard').click();
+    },
+
+    'click #leader-section .save': function(){
+        var obj = Session.get('userObject');
+        obj.leader = Session.get('leaderChoosen');
+        Session.set('userObject',obj);
+        $('#leader-section .discard').click();
+    },
+
+    'click #members-section .save': function(){
+        var obj = Session.get('userObject');
+        obj.members = Session.get('memberList');
+        Session.set('userObject',obj);
+        $('#members-section .discard').click();
     }
 });
 
+
 Template.formProfileEdit.rendered = function(){
-    Session.set('tagsChoosen',Session.get('userObject').tags);
+    console.log(this.data);
+    var sections = Session.get('userObject').sections;
+    var tags = Session.get('userObject').tags;
+    var members = Session.get('userObject').members;
+    (tags)? Session.set('tagsChoosen', tags) : null;
+    (sections) ? Session.set('sectionsArray', sections) : null;
+    (members) ? Session.set('memberList', members) : null;
 };
 
+/**
+ * changeOrderSections
+ */
 
-/*CONVERSATION SUBMIT FORM*/
+Template.changeOrderSections.helpers({
+    sections: function() {
+        return Session.get('sectionsArray');
+    }
+});
+
+Template.sectionItemEdit.helpers({
+    isNotFirst: function(){
+        return this.order > 0;
+    },
+    isNotLast: function(){
+        return this.order < Session.get('sectionsArray').length -1;
+    }
+});
+
+Template.sectionItemEdit.events({
+    'click .action': function(e){
+        var sectionsArray = Session.get('sectionsArray');
+        var $button = $(e.currentTarget);
+        var currentOrder = this.order;
+        var inc = ($button.hasClass('up')) ? -1 : 1;
+        sectionsArray[currentOrder].order = currentOrder + inc;
+        sectionsArray[currentOrder + inc].order = currentOrder;
+        Session.set('sectionsArray',_(sectionsArray).sortBy('order'));
+    }
+});
+
+
+/**
+ * CONVERSATION SUBMIT FORM
+ */
 
 Template.conversationSubmitForm.created = function(){
     Session.set('memberList',[]);
@@ -213,10 +311,17 @@ Template.conversationSubmitForm.destroyed = function(){
 };
 
 
-/*INPUT MEMBER BOX*/
+/**
+ * INPUT MEMBER BOX
+ */
+
 Template.inputMemberBox.helpers({
     members: function(){
         return Session.get('memberList');
+    },
+    editMembersAllow: function(){
+        return (Router.current().route.getName() == 'conversationEdit')?
+        Conversations.findOne(Router.current().params._id).author == Meteor.userId() : true;
     }
 });
 
@@ -251,15 +356,19 @@ Template.inputMemberBox.rendered = function(){
     $('.auto-complete-wrapper').hide();
     Session.set('resultTemplate','memberResult');
     if(this.data.storageDynamic === 'true'){
-        console.log('eeeyyy');
         var members = Session.get('memberList');
         members.push(Meteor.users.findOne(Meteor.userId()));
+        if(Session.get('userToSend')){
+            members.push(Meteor.users.findOne(Session.get('userToSend')));
+        }
         Session.set('memberList',members);
     }
 };
 
 
-/*MEMBER RESULT*/
+/**
+ * MEMBER RESULT
+ */
 Template.memberResult.helpers({
     inMembers: function(){
         var members = Session.get('memberList');
@@ -268,10 +377,24 @@ Template.memberResult.helpers({
     }
 });
 
-/*MEMBER*/
+Template.memberResult.events({
+    'click .add-member-button': function(){
+        var members = Session.get('memberList');
+        members.push(this);
+        Session.set('memberList',members);
+    }
+});
+
+/**
+ * MEMBER
+ */
 Template.member.helpers({
-    isNotAuthor: function(){
-        return this._id !== Meteor.userId();
+    isPossibleToDelete: function(){
+        var isNotUserToSend = true;
+        if(Session.get('userToSend')){
+           isNotUserToSend = this._id != Session.get('userToSend');
+        }
+        return this._id !== Meteor.userId() && isNotUserToSend;
     },
     avatar: function(){
         return Meteor.users.findOne(this._id).avatar;
@@ -292,17 +415,52 @@ Template.member.events({
     }
 });
 
-Template.memberResult.events({
-    'click .add-member-button': function(){
-        console.log('click button');
-        var members = Session.get('memberList');
-        members.push(this);
-        Session.set('memberList',members);
+
+/**
+ * CHOOSE LEADER BOX
+ */
+Template.chooseLeaderBox.helpers({
+    members: function(){
+        return Session.get('memberList');
+    }
+});
+Template.chooseLeaderBox.rendered = function(){
+    Session.set('leaderChoosen',Session.get('userObject').leader);
+};
+Template.chooseLeaderBox.destroyed = function(){
+    Session.set('leaderChoosen',null);
+};
+
+/**
+ * MEMBER TO CHOOSE
+ */
+Template.memberToChoose.helpers({
+    avatar: function(){
+        return Meteor.users.findOne(this._id).avatar;
+    },
+    username: function(){
+        return Meteor.users.findOne(this._id).username;
+    },
+    active: function(){
+        return (this._id == Session.get('leaderChoosen'))? 'active' : '';
     }
 });
 
+Template.memberToChoose.events({
+    'click .member-to-choose': function(e){
+        Session.set('leaderChoosen',this._id);
+    }
+});
 
-/*INPUT MESSAGE BOX*/
+Template.memberList.helpers({
+    members: function(){
+        return Session.get('memberList');
+    }
+})
+
+/**
+ * INPUT MESSAGE BOX
+ */
 Template.inputMessageBox.helpers({
     avatar: function(){
         return Meteor.users.findOne(Meteor.userId()).avatar;
@@ -355,7 +513,9 @@ Template.inputMessageBox.rendered = function(){
 };
 
 
-//TAGS INPUT
+/**
+ * TAGS INPUT
+ */
 
 Template.tagsInput.helpers({
     tagsFounded: function(){
@@ -426,6 +586,9 @@ Template.tagsInput.destroyed = function(){
     Session.set('tagsChosen',null);
 };
 
+/**
+ * TAG RESULT
+ */
 Template.tagResult.helpers({
     choosen: function(){
         var self = this;
@@ -444,6 +607,9 @@ Template.tagResult.events({
     }
 });
 
+/**
+ * TAG CHOOSEN
+ */
 Template.tagChoosen.events({
     'click .tag-choosen .remove-tag': function(){
         var self = this;
@@ -455,4 +621,4 @@ Template.tagChoosen.events({
 
 
     }
-})
+});

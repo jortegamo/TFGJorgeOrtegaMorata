@@ -4,9 +4,13 @@
             <div>
                 <div class="container-fluid">
                     <div class="page-banner-content welcome-banner">
+                        <div class="main-title">
+                            <img src="/duck_icon.ico">
+                            <h3>DuckFlight</h3>
+                        </div>
                         <div class="row">
                             <div class="col-xs-12">
-                                <img src="/main.png">
+                                <img src="/MainPageBG.jpg">
                             </div>
                         </div>
                         <div class="row text-center">
@@ -26,13 +30,13 @@
 </template>
 
 <template name="homeTabContent">
-    <div class="content">
+    <div class="content fade-in">
         <div class="container-fluid">
             <div class="row text-center content-body">
                 <div class="col-xs-12">
                     <div class="row home-section">
                         <div class="col-xs-12 text-left head">
-                            <p>What to do first?</p>
+                            <h4><span> <i class="fa fa-tasks"></i> What to do first ?</span></h4>
                         </div>
                         {{> firstTimeTasks}}
                     </div>
@@ -40,17 +44,10 @@
             </div>
         </div>
     </div>
-    <div class="content">
+    <div class="content fade-in">
         <div class="container-fluid">
             <div class="row text-center content-body">
-                <div class="col-xs-12">
-                    <div class="row home-section">
-                        <div class="col-xs-12 text-left head">
-                            <p>What's happening?</p>
-                        </div>
-                        {{> news}}
-                    </div>
-                </div>
+                {{> exploreSection}}
             </div>
         </div>
     </div>
@@ -115,25 +112,53 @@
     </div>
 </template>
 
-<template name="news">
-    <div class="col-xs-12 text-left content-home-section">
-        <div class="row description">
-            <div class="col-xs-12">
-                <p>These are the news</p>
-            </div>
-        </div>
-        <div class="row body">
-
-        </div>
+<template name="exploreSection">
+    <div class="col-xs-12 text-left explore-content-home-section">
+        <h4><span class="recommended"> <i class="fa fa-magic"></i> Recommended for you</span></h4>
+        {{#each recommendedSections}}
+            <section>
+                <p><i class="fa {{icon}}"></i> {{title}} <button type="button"><i class="fa fa-compass"></i> browse</button></p>
+                {{> listItemsDynamicFeed listObject=listObject}}
+            </section>
+        {{/each}}
+    </div>
+    <div class="col-xs-12 text-left explore-content-home-section">
+        <h4><span> <i class="fa fa-star"></i> Most Populars</span></h4>
+        {{#each mostPopularSections}}
+            <section>
+                <p><i class="fa {{icon}}"></i> {{title}} <button type="button"><i class="fa fa-compass"></i> browse</button></p>
+                {{> listItemsDynamicFeed listObject=listObject}}
+            </section>
+        {{/each}}
     </div>
 </template>
 
-<template name="exploreTabContent">
+<template name="listItemsDynamicFeed">
+    <div class="list-content owl-carousel">
+        {{#if isType 'channel'}}
+            {{#each feed}}
+                {{> channelItemVertical}}
+            {{/each}}
+        {{else}}
+            {{#if isType 'lesson'}}
+                {{#each feed}}
+                    {{> lessonItemVertical}}
+                {{/each}}
+            {{else}}
+                {{#each feed}}
+                    {{> recordItemVertical}}
+                {{/each}}
+            {{/if}}
+        {{/if}}
+    </div>
+</template>
+
+<template name="searchTabContent">
     <div class="content">
         <div class="container-fluid">
             <div class="row text-left content-body">
                 <div class="col-xs-12">
-
+                    {{>smartSearch}}
                 </div>
             </div>
         </div>

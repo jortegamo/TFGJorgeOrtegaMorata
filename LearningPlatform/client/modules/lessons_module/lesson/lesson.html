@@ -80,6 +80,7 @@
         </div>
 
     </div>
+    {{> modalCreateSection}}
 </template>
 
 <template name="sectionsTabContent">
@@ -87,7 +88,9 @@
         <div class="col-xs-12">
             <div class="filter-options">
                 <ul class="tab-page">
-                    <li><span>Sections</span></li>
+                    <li>
+                        <span>Sections ({{sections_count}})</span>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -106,14 +109,16 @@
                 </div>
 
             {{#if isOwner}}
-                <div class="form-section">
-                    <p><i class="fa fa-plus-circle"></i> Create a new section</p>
-                    <form id="form-section">
-                        <input type="text" placeholder="write a title for a new section" required>
-                        <div class="submit-inline-box">
-                            <button class="button-input-inline" type="submit"><i class="fa fa-plus"></i> create</button>
-                        </div>
-                    </form>
+                <div class="form-section text-center">
+                    <div>
+                        <button type="button" id="create-section" data-toggle="modal" data-target="#savePanel">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-bookmark fa-stack-2x"></i>
+                                <i class="inside-icon fa fa-plus fa-stack-1x"></i>
+                            </span>
+                        </button>
+                        <p>create a new section</p>
+                    </div>
                 </div>
             {{/if}}
         </div>
@@ -125,7 +130,7 @@
         <div class="col-xs-12">
             <div class="filter-options">
                 <ul class="tab-page">
-                    <li><span>Users</span></li>
+                    <li><span>Users ({{users_count}})</span></li>
                 </ul>
             </div>
         </div>
@@ -142,42 +147,22 @@
 </template>
 
 <template name="userItem">
-    <div class="col-xs-4 userItem fade-in">
+    <div class="col-xs-4 col-md-3 col-lg-2 text-center userItem fade-in">
         <img class="avatar" src="{{avatar}}">
         <p class="username">{{username}}</p>
     </div>
 </template>
 
 <template name="sectionItem">
-    <div class="sectionItem col-xs-12 fade-in">
-        <div class="row section-header">
-            <p class="">
-                <button class="index" data-toggle="collapse" data-target="#{{order}}"><i class="fa fa-bookmark"></i> Section {{order}}</button>
-                <span>{{title}}</span>
-                {{#if isOwner}}
-                    <span class="pull-right option config-section"><i class="fa fa-cog"></i></span>
-                    <span class="pull-right option delete-section"><i class="fa fa-trash"></i></span>
-                    <span class="pull-right section-button"><i class="fa fa-plus"></i> new track</span>
-                {{/if}}
-                <span class="pull-right section-button"><i class="fa fa-play"></i> play all</span>
-                <span class="pull-right counter counter-tracks"><i class="fa fa-film"></i> {{records_count}}</span>
-
-            </p>
-        </div>
-        <div class="row collapse section-tracks" id="{{order}}">
-            {{#each tracks}}
-                {{>trackItem}}
-            {{/each}}
-        </div>
-    </div>
     <div class="sectionItem-vertical col-xs-12 fade-in">
         <div class="row section-header text-center">
+            <div class="col-xs-12 header-icon">
+                <span class="lesson-icon"><i class="fa fa-bookmark"></i></span>
+            </div>
             <div class="col-xs-12 header-indicators">
                 <span class="pull-left counter counter-tracks"><i class="fa fa-film"></i> {{records_count}}</span>
-                <span class="lesson-icon"><i class="fa fa-bookmark"></i></span>
                 {{#if isOwner}}
-                    <span class="pull-right option config-section"><i class="fa fa-cog"></i></span>
-                    <span class="pull-right option delete-section"><i class="fa fa-trash"></i></span>
+                    <button class="pull-right option delete-section"><i class="fa fa-trash"></i></button>
                 {{/if}}
             </div>
             <div class="col-xs-12">
@@ -187,30 +172,124 @@
             <div class="col-xs-12">
                 <p>
                     {{#if isOwner}}
-                        <span class="section-button"><i class="fa fa-plus"></i> new track</span>
+                        <a href="{{pathFor 'recordSubmit' query=queryObject}}" class="section-button"><i class="fa fa-plus"></i> new track</a>
                     {{/if}}
-                    <span class="section-button"><i class="fa fa-play"></i> play all</span>
+                    {{#if hasTracks}}
+                        <a href="{{pathFor 'record' data=firstTrackId}}" class="section-button"><i class="fa fa-play"></i> play all</a>
+                    {{/if}}
                 </p>
             </div>
             <div class="col-xs-12">
-                <button type="button" class="show-tracks" data-toggle="collapse" data-target="#vertical{{order}}"><i class="fa fa-film"></i></button>
+                {{#if isOwner}}
+                    <button type="button" class="tab-button tab-button-left show-tracks"><i class="fa fa-film"></i></button>
+                    <button type="button" class="tab-button tab-button-right config-section"><i class="fa fa-cog"></i></button>
+                {{else}}
+                    <button type="button" class="tab-button tab-button-alone show-tracks"><i class="fa fa-film"></i></button>
+                {{/if}}
+
             </div>
         </div>
-        <div class="row collapse section-tracks" id="vertical{{order}}">
-            {{#each tracks}}
-                {{>trackItem}}
-            {{/each}}
+
+        <div class="row section-panel section-track-list fade-in">
+            {{> sectionTracks tracks=tracks}}
+        </div>
+        <div class="row section-panel section-config-form fade-in">
+            {{> sectionConfig tracks=tracks}}
         </div>
     </div>
 </template>
 
-<template name="trackItem">
-    <div class="trackItem col-xs-12 fade-in">
-        <span class="display"><i class="fa fa-play"></i></span>
-        <span class="info">{{title}}</span>
-        <span class="pull-right counter"><i class="fa fa-comments"></i> 0</span>
-        <span class="pull-right counter"><i class="fa fa-heart"></i> 0</span>
-        <span class="pull-right counter"><i class="fa fa-eye"></i> 0</span>
-    </div>
+<template name="sectionTracks">
+    {{#if hasTracks}}
+        {{#each tracks}}
+            {{>trackItem}}
+        {{/each}}
+    {{else}}
+        <div class="not-found-message col-xs-12 text-center">
+            <img src="/duck_icon.ico"/>
+            <p>This section has not tracks yet!</p>
+        </div>
+    {{/if}}
+</template>
 
+<template name="trackItem">
+    <div class="trackItem col-xs-12 text-center fade-in">
+        <p class="title">{{title}}</p>
+        <p class="description">{{description}}</p>
+        <span class="counter"><i class="fa fa-comments"></i> {{comments_count}}</span>
+        <span class="counter"><i class="fa fa-heart"></i> {{votes_count}}</span>
+        <span class="counter"><i class="fa fa-reply"></i> {{replies_count}}</span>
+    </div>
+</template>
+
+<template name="sectionConfig">
+    {{#if hasTracks}}
+        {{#each tracks}}
+            {{>trackItemConfig}}
+        {{/each}}
+        <div class="col-xs-12 text-center panel-info-header">
+            <p><i class="fa fa-info-circle"></i> Here you can change track order or delete</p>
+        </div>
+
+    {{else}}
+        <div class="not-found-message col-xs-12 text-center">
+            <img src="/duck_icon.ico"/>
+            <p>This section has not tracks yet!</p>
+        </div>
+    {{/if}}
+
+</template>
+
+<template name="trackItemConfig">
+    <div class="trackItem-config col-xs-12 fade-in">
+        <div class="title-wrapper">
+            <p class="title">{{title}}</p>
+        </div>
+        <div class="config-actions">
+            {{#if notFirst}}
+                <button><i class="fa fa-arrow-circle-o-up change-order up"></i></button>
+            {{/if}}
+            {{#if notLast}}
+                <button><i class="fa fa-arrow-circle-o-down change-order down"></i></button>
+            {{/if}}
+            <button><i class="fa fa-trash delete-track"></i></button>
+        </div>
+    </div>
+</template>
+
+<template name="modalCreateSection">
+    <div class="modal fade modal-create-section modal-duckflight" id="savePanel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <img src="/duck_icon.ico"><h4 class="modal-title" id="exampleModalLabel">Create new section</h4>
+                </div>
+                <div class="modal-body">
+                    {{> formAwesome}}
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="createSectionForm">
+    <form id="saveForm" class="awesome-form">
+
+        <div class="form-group">
+            <div class="row">
+                <div id="inputTitle" class="col-xs-12 form-field">
+                    <label for="title" class="control-label">Title</label>
+                    <input id="title" name="title" type="text" class="form-control" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <button class="submit-button" type="submit">Done</button>
+                </div>
+            </div>
+        </div>
+    </form>
 </template>

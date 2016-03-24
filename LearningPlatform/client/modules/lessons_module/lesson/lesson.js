@@ -110,9 +110,9 @@ Template.lesson.events({
         $('.filter').removeClass('active');
         $(elem).addClass('active');
     },
-    'submit #form-section': function(e){
+    'submit #saveForm': function(e){
         e.preventDefault();
-        var sectionTitle = $(e.currentTarget).find('input').val();
+        var sectionTitle = $(e.target).find("[name=title]").val();
         var section = {
             title: sectionTitle,
             order: Sections.find().count(),
@@ -120,12 +120,11 @@ Template.lesson.events({
             createdAt: new Date(),
             records_count: 0
         };
+        $('#savePanel').modal('hide');
         Meteor.call('insertSection',section,function(err,res){
             if(err) console.log('insertSection ERROR: ' + err.reason);
             if(res) console.log(res);
         });
-        $(e.currentTarget).find('input').val('');
-        $(e.currentTarget).find('input').blur();
     },
     'submit #form-comment': function(e){
         e.preventDefault();
@@ -182,7 +181,7 @@ Template.sectionsTabContent.helpers({
         return  Sections.find({},{sort: {order: 1}});
     },
     userEnrolled: function(){
-        return this.author == Meteor.userId() || UsersEnrolledLesson.findOne({user_id: Meteor.userId()});
+        return this.author == Meteor.userId() || UsersEnrolled.findOne({user_id: Meteor.userId()});
     }
 });
 
@@ -195,6 +194,7 @@ Template.sectionsTabContent.events({
 
 Template.sectionsTabContent.rendered = function(){
     $('#sections-filter').click();
+    Session.set('formType','createSectionForm');
 };
 
 
@@ -240,45 +240,98 @@ Template.sectionItem.helpers({
         return Router.current().data().author === Meteor.userId();
     },
     tracks: function(){
-        var tracks = [];
-        t1 = {
-            title: 'functions'
+        return Records.find({section_id: this._id, isReply: false},{sort: {order: 1}});
+    },
+    queryObject: function(){
+        return {
+            lesson: Router.current().params._id,
+            section: this._id,
+            order: Records.find({lesson_id: this.lesson_id, section_id: this._id}).count()
         };
-        t2 = {
-            title: 'objects'
-        };
-        t3 = {
-            title: 'hierarchy'
-        };
-        t4 = {
-            title: 'variables'
-        };
-        tracks.push(t1);
-        tracks.push(t2);
-        tracks.push(t3);
-        tracks.push(t4);
-        return tracks;
+    },
+    hasTracks: function(){
+        return Records.find({section_id: this._id, isReply: false}).count();
+    },
+    firstTrackId: function(){
+        return {
+            _id: Records.find({section_id: this._id, isReply: false},{sort: {order: 1}}).fetch()[0]._id
+        }
     }
 });
 
 Template.sectionItem.events({
-    'click .index': function(e,template){
-        if($(template.find('.sectionItem')).hasClass('active')){
-            $(template.find('.sectionItem')).removeClass('active');
+    'click .show-tracks': function(e,template){
+        if ($(template.find('.sectionItem-vertical')).hasClass('active')){
+            if($(template.find('.section-track-list')).hasClass('active')){
+                $(template.find('.sectionItem-vertical')).removeClass('active');
+                $(template.find('.section-track-list')).removeClass('active');
+            }else{
+                $(template.find('.section-config-form')).removeClass('active');
+                $(template.find('.section-track-list')).addClass('active');
+            }
         }else{
-            $(template.find('.sectionItem')).addClass('active');
+            $(template.find('.sectionItem-vertical')).addClass('active');
+            $(template.find('.section-track-list')).addClass('active');
         }
     },
-    'click .show-tracks': function(e,template) {
-        if ($(template.find('.sectionItem-vertical')).hasClass('active')) {
-            $(template.find('.sectionItem-vertical')).removeClass('active');
-        } else {
+    'click .config-section': function(e,template){
+        if ($(template.find('.sectionItem-vertical')).hasClass('active')){
+            if($(template.find('.section-config-form')).hasClass('active')){
+                $(template.find('.sectionItem-vertical')).removeClass('active');
+                $(template.find('.section-config-form')).removeClass('active');
+            }else{
+                $(template.find('.section-track-list')).removeClass('active');
+                $(template.find('.section-config-form')).addClass('active');
+            }
+        }else{
             $(template.find('.sectionItem-vertical')).addClass('active');
+            $(template.find('.section-config-form')).addClass('active');
         }
     }
 });
-Template.sectionItem.rendered = function(template){
+
+Template.sectionItem.rendered = function(){
     $('.delete-section').tooltip({placement: 'top', title: 'delete'});
     $('.config-section').tooltip({placement: 'top',title: 'settings'});
     $('.counter-tracks').tooltip({placement: 'top',title: 'tracks'});
-}
+};
+
+Template.sectionTracks.helpers({
+    hasTracks: function(){
+        return this.tracks.count();
+    }
+});
+
+Template.trackItem.events({
+    'click .trackItem': function(){
+        Router.go('record',{_id: this._id});
+    }
+});
+
+Template.sectionConfig.helpers({
+    hasTracks: function(){
+        return this.tracks.count();
+    }
+});
+
+Template.trackItemConfig.helpers({
+    notFirst: function(){
+        return this.order > 0;
+    },
+    notLast: function(){
+        return this.order < Records.find({section_id: this.section_id}).count() - 1;
+    }
+});
+
+Template.trackItemConfig.events({
+    'click .change-order': function(e){
+        Meteor.call('changeTrackOrder',{
+            order: this.order,
+            record_id: this._id,
+            section_id: this.section_id,
+            mode: ($(e.currentTarget).hasClass('up'))? 'up' : 'down'
+        });
+    },
+
+    'click .delete-track': function(){console.log('delete');}
+});

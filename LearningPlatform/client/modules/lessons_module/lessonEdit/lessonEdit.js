@@ -15,12 +15,20 @@ Template.lessonEdit.events({
 
 Template.lessonEdit.created = function(){
     Session.set('formType','formProfileEdit');
+    var arraySections = [];
+
+    _(Sections.find({lesson_id: this.data._id},{sort: {order: 1}}).fetch()).each(function(section){
+        arraySections.push({_id: section._id, title: section.title, order: section.order});
+    });
+
     var lessonObject = {
         img: this.data.img || '/lessonDefault.png',
         description: this.data.description,
         imgDefault: '/lessonDefault.png',
         tagsAllow: this.data.tagsAllow || true,
-        tags: (this.data.tags) ? this.data.tags : []
+        tags: (this.data.tags) ? this.data.tags : [],
+        sectionConfigAllow: true,
+        sections: arraySections
     };
     Session.set('userObject',lessonObject);
 };
@@ -28,4 +36,5 @@ Template.lessonEdit.created = function(){
 Template.lessonEdit.destroyed = function(){
     Session.set('userObject',null);
     Session.set('tagsChoosen',null);
+    Session.set('sections',null);
 };

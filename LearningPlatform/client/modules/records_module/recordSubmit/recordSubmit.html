@@ -2,7 +2,6 @@
     <div class="content-wrapper">
         {{#if uploading}}
             {{>uploadPanel}}
-
         {{else}}
             <div class="editor-recorder">
                 <div class="container-fluid">
@@ -61,10 +60,19 @@
                 </div>
             </div>
 
-    {{/if}}
+        {{/if}}
     </div>
+    <!--<div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-6">
+                <div id="editor2" class="second-editor"></div>
+            </div>
+            <div class="col-xs-6">
+                <div id="editor3" class="second-editor"></div>
+            </div>
+        </div>
+    </div>-->
 	{{>modalSaveRecord}}
-
 </template>
 
 
@@ -91,6 +99,7 @@
         <span class="recording-message"><i class="fa fa-circle"></i> Recording...</span>
         <button type="button" id="stop-button"><i class="fa fa-stop"></i> Stop</button>
         <span id="timer">0</span>
+        <span>/ 60:00</span>
     </div>
 </template>
 
@@ -159,32 +168,26 @@
 </template>
 
 <template name="uploadPanel">
-    <div class="uploading-wrapper">
+    <div class="duckflight-panel-info-wrapper">
         <div class="container-fluid">
             <div class="row text-center">
                 <div class="col-xs-12">
                     <img src="/duck_icon.ico">
                     <div class="">
                         {{#if uploaded}}
-                            <p class="upload-message"><strong>Congratulations!</strong> <br>Your record has been uploaded</p>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                                     aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
-                                </div>
-                            </div>
+                            <p class="panel-info-message"><strong>Congratulations!</strong> <br>Your record has been uploaded</p>
+                            <p><button type="button"><i class="fa fa-film"></i> Play Record</button></p>
                         {{else}}
-                            <p class="upload-message"><strong>Wait please!</strong>
-                                <br>Your record is uploading <span>{{uploadProgressVal}}%</span>
+                            <p class="panel-info-message"><strong>Wait please!</strong>
+                                <br>Your record is uploading
                             </p>
                             <div class="progress">
-                                <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar"
-                                     aria-valuenow="{{uploadProgressVal}}" aria-valuemin="0" aria-valuemax="100" style="width:{{uploadProgressVal}}%">
-                                </div>
+                                <div class="loader"></div>
                             </div>
-                        {{/if}}
-
-                        {{#if uploaded}}
-                            <p><button type="button"><i class="fa fa-play-circle-o"></i> Play Record</button></p>
+                            <p class="panel-info-message">
+                                <small>It may take a few minutes</small>
+                                <br><small>Please, do not close the window!!</small>
+                            </p>
                         {{/if}}
                     </div>
                 </div>

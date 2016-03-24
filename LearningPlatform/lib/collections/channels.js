@@ -18,6 +18,9 @@ Meteor.methods ({
 	incrementChannelComment: function(channel_id){
 		Channels.update(channel_id,{$inc: {comments_count: 1}});
 	},
+	incrementChannelRecord: function(channel_id){
+		Channels.update(channel_id,{$inc: {records_count: 1}});
+	},
 	channelUpdate: function(channel_id,params){
 		return Channels.update(channel_id,{$set: params});
 	},

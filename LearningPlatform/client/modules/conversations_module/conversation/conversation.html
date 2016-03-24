@@ -1,84 +1,109 @@
 <template name="conversation">
-    <div class="content-wrapper conversation-page-wrapper">
-        <div class="conversation-wrapper">
+    {{#if exiting}}
+        {{>conversationExiting}}
+    {{else}}
+        {{#if isNotAMember}}
+            {{> conversationError}}
+        {{else}}
+            <div class="content-wrapper conversation-page-wrapper">
+                <div class="conversation-wrapper">
 
-            <div class="conversation-header">
-                <div class="title">
-                    <p><i class="fa fa-comments icon-title"></i> {{shortSubject subject 20}}
-                        <button id="editablePanelLauncher" class="pull-right" type="button"><i class="fa fa-pencil"></i></button>
-                    </p>
-                </div>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div id="membersMinified">
-                                <ul>
-                                    {{#each membersMinified}}
-                                        {{>memberAvatar}}
-                                    {{/each}}
-                                </ul>
-                                <p>
-                                    {{#if moreUsers}}
-                                        <span class="restUsers">+ {{restUsersCounter}}</span>
-                                    {{/if}}
-                                    <span class="counte pull-right"><i class="fa fa-reply"></i> {{messages_count}}</span>
-                                    <span class="counter pull-right"><i class="fa fa-user"></i> {{members_count}}</span>
-                                </p>
+                    <div class="conversation-header">
+                        <div class="title">
+                            <p><i class="fa fa-comments icon-title"></i> {{shortSubject subject 20}}
+                                <button id="edit-link" class="pull-right" type="button"><i class="fa fa-pencil"></i></button>
+                            </p>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div id="membersMinified">
+                                        <ul>
+                                            {{#each membersMinified}}
+                                                {{>memberAvatar}}
+                                            {{/each}}
+                                        </ul>
+                                        <p>
+                                            {{#if moreUsers}}
+                                                <span class="restUsers">+ {{restUsersCounter}} <i class="fa fa-user"></i></span>
+                                            {{/if}}
+                                            <button id='show-menu-button' type="button" class="pull-right"><i class="fa fa-bars"></i></button>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="usersListPanel">
-                <div class="usersListWrapper">
-                    <div class="container-fluid">
-                        <div class="row">
+                    <div class="usersListPanel">
+                        <div class="usersListWrapper">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="userList">
+                                            <ul>
+                                                {{#each members}}
+                                                    {{>memberInfo}}
+                                                {{/each}}
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="helpUsersAdd">
+                                <p>To add more users to this conversation from your contacts click <i class="fa fa-pencil"></i></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="messages-list" class="conversation-content">
+                        <img class='bg-img' src="{{banner}}">
+                        <div class="container-fluid">
                             <div class="col-xs-12">
-                                <div class="userList">
+                                {{#each messages}}
+                                    {{>messageItem}}
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="actions-sidebar-wrapper">
+                        <div class="container-fluid">
+                            <div class="actions-sidebar row">
+                                <div class="col-xs-12">
                                     <ul>
-                                        {{#each members}}
-                                            {{>memberInfo}}
-                                        {{/each}}
+                                        <li><button class="edit-conversation" type="button"><i class="fa fa-user-plus"></i> Add new member</button></li>
+                                        {{#if isLeader}}
+                                            <li><button class="edit-conversation" type="button"><i class="fa fa-user-times"></i> Expel a member</button></li>
+                                        {{/if}}
+                                        <li><button id="delete-messages-button" type="button"><i class="fa fa-trash"></i> Delete messages</button></li>
+                                        <li><button id="exit-conversation-button" type="button"><i class="fa fa-sign-out"></i> Leave conversation</button></li>
+                                        <li><button class="edit-conversation" type="button"><i class="fa fa-cog"></i> More options</button></li>
                                     </ul>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-                    <div class="helpUsersAdd">
-                        <p>To add more users to this conversation from your contacts click <i class="fa fa-pencil"></i></p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="messages-list" class="conversation-content">
-                <div class="container-fluid">
-                    <div class="col-xs-12">
-                        {{#each messages}}
-                            {{>messageItem}}
-                        {{/each}}
-                    </div>
-                </div>
-            </div>
-
-            <div class="conversation-footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div id="inputMessageBox">
-                                <div class="message-box">
-                                    {{>inputMessageBox}}
+                    <div class="conversation-footer">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div id="inputMessageBox">
+                                        <div class="message-box">
+                                            {{>inputMessageBox}}
+                                        </div>
+                                        <button id="send-button" type="button"><i class="fa fa-paper-plane"></i></button>
+                                    </div>
                                 </div>
-                                <button id="send-button" type="button"><i class="fa fa-paper-plane"></i></button>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
+        {{/if}}
+    {{/if}}
 
-        </div>
-    </div>
 </template>
 
 <template name="memberAvatar">
@@ -94,34 +119,118 @@
 </template>
 
 <template name="messageItem">
-    <div class="row">
-        <div class="col-xs-12">
-            {{#if owner}}
-                <div class="message-item owner">
-                    <div class="message-content">
-                        <p class="username">{{username}}</p>
-                        <div class="arrow"></div>
-                        {{message}}
-                        <div>
-                            <p class="date pull-right"><i class="fa fa-clock-o"></i> {{dateFrom createdAt}}</p>
-                        </div>
-                    </div>
-                    <img src="{{avatar}}">
-                </div>
-            {{else}}
-                <div class="message-item">
-                    <img src="{{avatar}}">
-                    <div class="message-content">
-                        <p class="username">{{username}}</p>
-                        <div class="arrow"></div>
-                        {{message}}
-                        <div>
-                            <p class="date pull-right"><i class="fa fa-clock-o"></i> {{dateFrom createdAt}}</p>
-                        </div>
+    {{#if type}}
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <div class="message-item-info">
+                    <div>
+                        <p>{{message}}</p>
+                        <p class="date pull-right"><i class="fa fa-clock-o"></i> {{dateFrom createdAt}}</p>
                     </div>
                 </div>
-            {{/if}}
+            </div>
+        </div>
+    {{else}}
+        <div class="row">
+            <div class="col-xs-12">
+                {{#if owner}}
+                    <div class="message-item owner">
+                        <div class="message-content">
+                            <p class="username">{{username}}</p>
+                            <div class="arrow"></div>
+                            {{message}}
+                            <div>
+                                <p class="date pull-right"><i class="fa fa-clock-o"></i> {{dateFrom createdAt}}</p>
+                            </div>
+                        </div>
+                        <img src="{{avatar}}">
+                    </div>
+                {{else}}
+                    <div class="message-item">
+                        <img src="{{avatar}}">
+                        <div class="message-content">
+                            <p class="username">{{username}}</p>
+                            <div class="arrow"></div>
+                            {{message}}
+                            <div>
+                                <p class="date pull-right"><i class="fa fa-clock-o"></i> {{dateFrom createdAt}}</p>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
 
+            </div>
+        </div>
+    {{/if}}
+
+</template>
+
+
+<template name="conversationExiting">
+    <div class="content-wrapper type-2 fade-in">
+        <div class="duckflight-panel-info-wrapper">
+            <div class="container-fluid">
+                <div class="row text-center">
+                    <div class="col-xs-12">
+                        <img src="/duck_icon.ico">
+                        <div>
+                            {{#if exited}}
+                                <p class="panel-info-message"><strong>You have left the conversation!</strong>
+                                    <br> Go to your profile page to view another conversations.
+                                </p>
+                                <p><button type="button" id="view-profile-button"><i class="fa fa-user"></i> View Profile</button></p>
+                            {{else}}
+                                {{#if isLeader}}
+                                    <p class="panel-info-message"><strong>You are trying to leave the conversation</strong>
+                                        <br>Actually you are the leader
+                                    </p>
+                                    <p class="panel-info-message">
+                                        <small>Please, choose another leader.</small>
+                                        <br><small>Go to the conversation edit page to make changes!</small>
+                                    </p>
+                                    <p><button type="button" id="view-edit-page"><i class="fa fa-pencil"></i> Make Changes</button></p>
+                                {{else}}
+                                    <p class="panel-info-message"><strong>You are trying to leave the conversation</strong>
+                                        <br>Are you sure?
+                                    </p>
+                                    <p class="panel-info-message">
+                                        <small>If you do this,</small>
+                                        <br><small>Probably you can not access it again</small>
+                                    </p>
+                                    <p>
+                                        <button type="button" id="accept-button-exit">Yes</button>
+                                        <button type="button" id="cancel-button-exit">No</button>
+                                    </p>
+                                {{/if}}
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="conversationError">
+    <div class="content-wrapper type-2 fade-in">
+        <div class="duckflight-panel-info-wrapper">
+            <div class="container-fluid">
+                <div class="row text-center">
+                    <div class="col-xs-12">
+                        <img src="/duck_icon.ico">
+                        <div>
+                            <p class="panel-info-message"><strong><i class="fa fa-lock"></i> This Conversation is Private</strong>
+                                <br> We are sorry!
+                            </p>
+                            <p class="panel-info-message">
+                                <small>Maybe, you have been expelled or you arrived by wrong way.</small>
+                                <br><small>Go to profile to view another conversations!</small>
+                            </p>
+                            <p><button type="button" id="view-profile-button"><i class="fa fa-user"></i> View Profile</button></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
