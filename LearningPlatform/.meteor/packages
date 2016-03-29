@@ -18,7 +18,6 @@ reactive-var
 mizzao:user-status
 mizzao:jquery-ui
 reywood:publish-composite
-standard-minifiers
 meteor-base
 mobile-experience
 mongo
@@ -37,3 +36,5 @@ davidfrancisco:twemoji
 richsilv:owl-carousel
 service-configuration
 http
+standard-minifier-css
+standard-minifier-js
