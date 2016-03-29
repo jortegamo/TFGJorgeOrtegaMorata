@@ -10,6 +10,7 @@ Template.lessonSubmit.events({
         var lesson = {
             author: Meteor.userId(),
             title: title,
+            img: '/lessonDefault.png',
             description: description,
             tags: Session.get('tagsChoosen'),
             createdAt: new Date(),
